@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Precix System
 
-## Getting Started
+**Precix System** é um software web desenvolvido com Next.js e Tailwind CSS para facilitar a criação, visualização e gerenciamento de orçamentos — ideal para pequenas e médias empresas que precisam de agilidade e organização.
 
-First, run the development server:
+---
+
+## Tecnologias utilizadas 
+
+- [Next.js](https://nextjs.org/) — Framework React com foco em performance
+- [Tailwind CSS](https://tailwindcss.com/) — Framework utilitário de CSS
+- [TypeScript](https://www.typescriptlang.org/) 
+
+# Arquitetura da Aplicação
+
+## Proposta: Arquitetura modular por domínio
+A arquitetura modular por domínio organiza a aplicação em módulos independentes, com base nos conceitos do DDD (Domain-Driven Design). Cada domínio da aplicação possui sua própria estrutura de pastas e arquivos, reduzindo o acoplamento e facilitando a escalabilidade.
+
+---
+
+## Vantagens
+
+- **Baixo Acoplamento**: Cada módulo (ex: orçamentos, usuários, produtos) é isolado e independente, facilitando a manutenção e testes.
+- **Organização Previsível**: Todos os domínios seguem uma estrutura padrão com `components`, `services`, `schema`, etc.
+- **Alta Coesão**: Tudo o que pertence a um domínio está no mesmo lugar.
+- **Escalável**: Ideal para projetos com múltiplos domínios.
+- **Compatível com App Router** do Next.js (`/app`), separando rotas públicas e privadas com clareza.
+
+---
+
+## 🧱 Estrutura Base
+
+
+
+## Estrutura do projeto
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+/precix-system/
+├── /src/
+│   ├── /app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx                # Página inicial
+│   │
+│   │   ├── (public)/
+│   │   │   ├── /login/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx
+│   │   │
+│   │   └── (private)/
+│   │       ├── /orcamentos/
+│   │       │   └── page.tsx
+│   │       ├── /clientes/
+│   │       │   └── page.tsx
+│   │       └── layout.tsx          # Layout com proteção de rota
+│   │
+│   ├── /modules/
+│   │   ├── /orcamentos/            #Exemplo de domínio
+│   │   │   ├── components/         # Componentes do domínio:  modularização por funcionalidade, e não por tipo técnico
+│   │   │   ├── schema/             # Validações (ex: Zod)
+│   │   │   ├── constants/          # Constantes (status, opções, etc.)
+│   │   │   ├── hooks/              # Custom hooks (useOrcamentos, etc.)
+│   │   │   ├── types.ts            # Tipos específicos
+│   │   │   ├── utils.ts            # Funções auxiliares
+│   │   │   ├── services/           # Camada de aplicação
+│   │   │   ├── repository/         # Acesso à API (fetch/axios)
+│   │   │   └── use-cases/          # Regras de negócio do domínio
+│   │   │
+│   │   ├── /clientes/              #Exemplo de domínio
+│   │   │   ├── components/
+│   │   │   ├── schema/
+│   │   │   ├── ...
+│   │   │
+│   │   └── /login/                 #Exemplo de domínio
+│   │       ├── components/
+│   │       ├── schema/
+│   │       ├── repository/
+│   │       ├── services/
+│   │       └── use-cases/
+│
+│   ├── /components/                # Componentes genéricos (botões, inputs)
+│   ├── /lib/                       # Funções globais (ex: auth, formatadores)
+│   ├── /types/                     # Tipos globais e compartilhados
+│   ├── /styles/                    # Tailwind ou CSS geral
+│   ├── /db/                        # Prisma ou conexão com banco
+│   │   └── schema.prisma
+│
+├── .env
+├── next.config.js
+├── tsconfig.json                  
+└── package.json
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
+## Instalação
+```bash
+# Clone o repositório
+git clone https://github.com/kailanesarah/precix-system.git
+cd precix-system
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Instale as dependências
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#Executando em desenvolvimento
+npm run dev
+Acesse o app em: http://localhost:3000
 
-## Learn More
+```
+## Licença
 
-To learn more about Next.js, take a look at the following resources:
+Este é um **software proprietário**. O uso, modificação, distribuição ou reprodução do código-fonte é proibido, exceto mediante autorização expressa. Todas as contribuições passam por avaliação técnica e jurídica antes de sua incorporação.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Direitos Autorais
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**© 2025 - Alex Magalhães & Kailane Sarah.** Todos os direitos reservados.
 
-## Deploy on Vercel
+Este software é propriedade intelectual de seus autores. Nenhuma parte deste projeto pode ser reproduzida, armazenada em sistema de recuperação ou transmitida, por qualquer forma ou meio, eletrônico, mecânico, fotocópia, gravação ou outro, sem permissão expressa.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Para solicitar autorização ou propor contribuições, entre em contato pelo e-mail: [kailanesarahpro@gmail.com].
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+### Autores
+- [Alex Magalhães](https://github.com/alexmagalhaes)
+- [Kailane Sarah](https://github.com/Kailanesarah)
