@@ -1,6 +1,6 @@
-# Precix System
+# CotaIndie
 
-**Precix System** é um software web desenvolvido com Next.js e Tailwind CSS para facilitar a criação, visualização e gerenciamento de orçamentos — ideal para pequenas e médias empresas que precisam de agilidade e organização.
+**CotaIndie** é um software web desenvolvido com Next.js e Tailwind CSS para facilitar a criação, visualização e gerenciamento de orçamentos — ideal para pequenas e médias empresas que precisam de agilidade e organização.
 
 ---
 
