@@ -1,4 +1,4 @@
-import { getUsersFromSheet } from "@/modules/login/repository";
+import { getUsersFromSheet } from "@/database/repository";
 import { User } from "@/types/user";
 import { userSchema } from "@/types/user";
 
@@ -23,7 +23,7 @@ export async function serviceLogin(
       .map((row) =>
         userSchema.safeParse({
           id: row[0],
-          name: row[1],
+          username: row[1],
           email: row[2],
           password: row[3],
         })
