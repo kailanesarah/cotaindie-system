@@ -21,3 +21,27 @@ export async function getSheetData(sheetId: string, range: string) {
     throw error;
   }
 }
+
+/**
+ * Adiciona (append) dados na planilha
+ * @param values Array de arrays com os dados (linhas)
+ */
+export async function appendSheetData(
+  sheetId: string,
+  range: string,
+  values: any[][]
+) {
+  try {
+    const response = await sheets.spreadsheets.values.append({
+      spreadsheetId: sheetId,
+      range,
+      valueInputOption: "RAW", // ou USER_ENTERED
+      insertDataOption: "INSERT_ROWS",
+      requestBody: { values },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao adicionar dados na planilha:", error);
+    throw error;
+  }
+}
