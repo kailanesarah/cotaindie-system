@@ -1,10 +1,10 @@
-import { getUsersFromSheet } from "@/database/repository";
+import { UsersFromSheet } from "@/modules/auth/repository";
 import { User } from "@/types/user";
 import { userSchema } from "@/types/user";
 
 export async function serviceDataGET() {
   try {
-    const data = await getUsersFromSheet();
+    const data = await UsersFromSheet();
     return data;
   } catch (error) {
     console.error("Erro no serviceDataGET:", error);
@@ -17,7 +17,7 @@ export async function serviceLogin(
   password: string
 ): Promise<User | null> {
   try {
-    const data_user: any[][] = await getUsersFromSheet();
+    const data_user: any[][] = await UsersFromSheet();
 
     const users: User[] = data_user
       .map((row) =>
