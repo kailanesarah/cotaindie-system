@@ -16,3 +16,14 @@ export function mapSheetDataToClients(data: any[][]): ClientInput[] {
     notes: row[12] ?? "",
   }));
 }
+
+export function generateCode(): string {
+  const numbers: number[] = [];
+
+  for (let i = 0; i < 5; i++) {
+    const digit = Math.floor(Math.random() * 9) + 1; // Gera número entre 1 e 9
+    numbers.push(digit);
+  }
+
+  return numbers.join('');
+}

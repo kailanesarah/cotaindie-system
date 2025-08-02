@@ -1,6 +1,7 @@
 import { GetClients, AppendClients } from "./repository";
 import { clientSchema, ClientInput } from "./schema";
 import { v4 as uuidv4 } from 'uuid';
+import { generateCode } from "./utils";
 
 export async function serviceDataGET() {
   try {
@@ -23,7 +24,8 @@ export async function serviceDataAppend(data: ClientInput) {
     }
 
     const valid_client = data_validation.data;
-    const id = uuidv4();
+    const code = generateCode()
+    const id = `c-${code}`
 
     const values_client = Object.values(valid_client).map(value => value ?? "");
     const row: string[] = [id, ...values_client];
