@@ -2,6 +2,7 @@ import { ClientInput } from "./schema";
 
 export function mapSheetDataToClients(data: any[][]): ClientInput[] {
   return data.map((row) => ({
+    id: row[0] ?? "",
     name: row[1] ?? "",
     category: row[2] ?? "",
     cpf: row[3] ?? "",
