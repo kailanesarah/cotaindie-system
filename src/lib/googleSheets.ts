@@ -1,5 +1,6 @@
 import { google, sheets_v4 } from "googleapis";
 import { JWT } from "google-auth-library";
+import { getRangeSheet } from "@/utils/utils";
 
 const auth: JWT = new JWT({
   email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -22,6 +23,37 @@ export async function getSheetData(sheetId: string, range: string) {
   }
 }
 
+export async function getSheetDatabyId(
+  sheetId: string,
+  range: string,
+  objectId: string
+): Promise<{ rowIndex: number; rowData: any[] }> {
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId,
+      range,
+    });
+
+    const data = response.data.values ?? [];
+
+    const rowIndex = data.findIndex((row) =>
+      row.some((cell) => cell?.trim() === objectId.trim())
+    );
+
+    if (rowIndex === -1) {
+      throw new Error(`objectId "${objectId}" não encontrado`);
+    }
+
+    return {
+      rowIndex,
+      rowData: data[rowIndex],
+    };
+  } catch (error) {
+    console.error("Erro ao buscar dados da planilha:", error);
+    throw error;
+  }
+}
+
 /**
  * Adiciona (append) dados na planilha
  * @param values Array de arrays com os dados (linhas)
@@ -35,13 +67,45 @@ export async function appendSheetData(
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
       range,
-      valueInputOption: "RAW", // ou USER_ENTERED
+      valueInputOption: "RAW",
       insertDataOption: "INSERT_ROWS",
       requestBody: { values },
     });
     return response.data;
   } catch (error) {
     console.error("Erro ao adicionar dados na planilha:", error);
+    throw error;
+  }
+}
+
+export async function updateSheetDatabyId(
+  sheetId: string,
+  range: string,
+  objectId: string,
+  values: any[][],
+) {
+  try {
+    const { rowIndex } = await getSheetDatabyId(sheetId, range, objectId);
+
+    if (rowIndex === -1 || typeof rowIndex !== "number") {
+      console.log("Linha não encontrada na tabela");
+      return;
+    }
+    const updateRange = await getRangeSheet(range, rowIndex);
+
+    const updateResponse = await sheets.spreadsheets.values.update({
+      spreadsheetId: sheetId,
+      range: updateRange,
+      valueInputOption: "RAW",
+      requestBody: {
+        values,
+      },
+    });
+
+    return updateResponse.data;
+
+  } catch (error) {
+    console.error("Erro ao atualizar dados da planilha:", error);
     throw error;
   }
 }
