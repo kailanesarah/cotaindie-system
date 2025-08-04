@@ -1,15 +1,27 @@
-import { GetClients, AppendClients } from "./repository";
+import { GetClients, AppendClients, GetClientsById, updateClientbyId} from "./repository";
 import { clientSchema, ClientInput } from "./schema";
-import { v4 as uuidv4 } from 'uuid';
-import { generateCode } from "./utils";
+import { generateCode, mapSheetDataToClients} from "./utils";
+import {  } from './utils'; 
 
 export async function serviceDataGET() {
   try {
     const data = await GetClients();
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Erro no serviceDataGET:", error);
+    throw error;
+  }
+}
+
+
+export async function serviceDataById(clientId: string) {
+  try {
+    const { rowIndex, rowData } = await GetClientsById(clientId);
+    const [mappedClient] = mapSheetDataToClients([rowData]);
+
+    return { ...mappedClient, rowIndex }; 
+  } catch (error) {
+    console.error("Erro no serviceDataById:", error);
     throw error;
   }
 }
@@ -34,5 +46,31 @@ export async function serviceDataAppend(data: ClientInput) {
   } catch (error) {
     console.error("Erro ao adicionar cliente:", error);
     throw error; 
+  }
+}
+
+export async function serviceDataUpdate(data: ClientInput) {
+  try {
+    const validation = clientSchema.safeParse(data);
+    if (!validation.success) {
+      console.error("Erro na validação dos dados:", validation.error.format());
+      throw new Error("Dados inválidos");
+    }
+
+    const validClient = validation.data;
+    console.log("dados atualizados: " + validClient);
+    const { rowIndex } = await GetClientsById(validClient.id!);
+
+    if (typeof rowIndex !== "number" || rowIndex < 0) {
+      throw new Error("Cliente não encontrado na planilha.");
+    }
+
+    const updatedValues = [Object.values(validClient).map(value => value ?? "")];
+
+    await updateClientbyId(validClient.id!, updatedValues);
+
+  } catch (error) {
+    console.error("Erro ao atualizar cliente:", error);
+    throw error;
   }
 }

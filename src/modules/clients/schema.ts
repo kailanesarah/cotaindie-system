@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const clientSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   category: z.enum(["Pessoa física", "Pessoa jurídica"]),
   cpf: z
