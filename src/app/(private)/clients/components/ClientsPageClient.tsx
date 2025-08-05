@@ -4,7 +4,12 @@ import { useState } from "react";
 import { ClientsTable } from "@/app/(private)/clients/components/UI/clients-table";
 import { ClientModal } from "./UI/modal-client";
 import { ClientInput } from "@/modules/clients/schema";
-import { appendClientsAction, updateClientsAction, getClientByIdAction } from "../actions/clients-actions";
+import {
+  appendClientsAction,
+  updateClientsAction,
+  getClientByIdAction,
+  deleteClientsAction,
+} from "../actions/clients-actions";
 
 interface ClientsPageClientProps {
   clients: ClientInput[];
@@ -19,12 +24,11 @@ export function ClientsPageClient({ clients }: ClientsPageClientProps) {
     setClientToEdit(null);
   }
 
-
   async function handleEdit(client: ClientInput) {
     try {
-      const clientData = await getClientByIdAction(client.id!);  // pega dados completos
-      setClientToEdit(clientData);  // preenche formulário
-      setShowModal(true);           // abre modal
+      const clientData = await getClientByIdAction(client.id!); // pega dados completos
+      setClientToEdit(clientData); // preenche formulário
+      setShowModal(true); // abre modal
     } catch (error) {
       console.error("Erro ao buscar cliente para edição:", error);
     }
@@ -37,14 +41,13 @@ export function ClientsPageClient({ clients }: ClientsPageClientProps) {
         return;
       }
       try {
-        await updateClientsAction(data); // atualiza com dados completos + id
+        await updateClientsAction(data);
         console.log("Cliente atualizado com sucesso!");
         setShowModal(false);
         setClientToEdit(null);
       } catch (error) {
         console.error("Erro ao atualizar cliente:", error);
       }
-
     } else {
       try {
         await appendClientsAction(data);
@@ -54,6 +57,27 @@ export function ClientsPageClient({ clients }: ClientsPageClientProps) {
       } catch (err) {
         console.error("Erro ao criar cliente:", err);
       }
+    }
+  }
+
+  async function handleDelete(client: ClientInput) {
+    if (!client.id) {
+      console.error("ID do cliente não encontrado!");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir este cliente?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteClientsAction(client);
+      console.log("Cliente excluído com sucesso!");
+      setShowModal(false);
+      setClientToEdit(null);
+    } catch (error) {
+      console.error("Erro ao excluir cliente:", error);
     }
   }
 
@@ -74,7 +98,11 @@ export function ClientsPageClient({ clients }: ClientsPageClientProps) {
         </div>
 
         <div className="overflow-x-auto rounded-lg border border-gray-200">
-          <ClientsTable clients={clients} onEdit={handleEdit} onDelete={handleEdit} />
+          <ClientsTable
+            clients={clients}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         </div>
       </section>
 
