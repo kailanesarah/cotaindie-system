@@ -1,7 +1,8 @@
-import { GetClients, AppendClients, GetClientsById, updateClientbyId} from "./repository";
+import { GetClients, AppendClients, GetClientsById, updateClientbyId, deleteClientRow } from "./repository";
 import { clientSchema, ClientInput } from "./schema";
-import { generateCode, mapSheetDataToClients} from "./utils";
-import {  } from './utils'; 
+import { mapSheetDataToClients } from "./utils";
+import { nanoid } from "nanoid";
+
 
 export async function serviceDataGET() {
   try {
@@ -13,13 +14,12 @@ export async function serviceDataGET() {
   }
 }
 
-
 export async function serviceDataById(clientId: string) {
   try {
     const { rowIndex, rowData } = await GetClientsById(clientId);
     const [mappedClient] = mapSheetDataToClients([rowData]);
 
-    return { ...mappedClient, rowIndex }; 
+    return { ...mappedClient, rowIndex };
   } catch (error) {
     console.error("Erro no serviceDataById:", error);
     throw error;
@@ -36,29 +36,41 @@ export async function serviceDataAppend(data: ClientInput) {
     }
 
     const valid_client = data_validation.data;
-    const code = generateCode()
-    const id = `c-${code}`
+    const id = `c-${nanoid(8)}`;
 
-    const values_client = Object.values(valid_client).map(value => value ?? "");
-    const row: string[] = [id, ...values_client];
+    const row: string[] = [
+      id,
+      valid_client.name ?? "",
+      valid_client.category ?? "",
+      valid_client.cpf ?? "",
+      valid_client.cnpj ?? "",
+      valid_client.phone ?? "",
+      valid_client.email ?? "",
+      valid_client.city ?? "",
+      valid_client.zipCode ?? "",
+      valid_client.neighborhood ?? "",
+      valid_client.address ?? "",
+      valid_client.complement ?? "",
+      valid_client.notes ?? "",
+    ];
 
     await AppendClients([row]);
   } catch (error) {
     console.error("Erro ao adicionar cliente:", error);
-    throw error; 
+    throw error;
   }
 }
 
 export async function serviceDataUpdate(data: ClientInput) {
   try {
     const validation = clientSchema.safeParse(data);
+
     if (!validation.success) {
       console.error("Erro na validação dos dados:", validation.error.format());
       throw new Error("Dados inválidos");
     }
 
     const validClient = validation.data;
-    console.log("dados atualizados: " + validClient);
     const { rowIndex } = await GetClientsById(validClient.id!);
 
     if (typeof rowIndex !== "number" || rowIndex < 0) {
@@ -71,6 +83,34 @@ export async function serviceDataUpdate(data: ClientInput) {
 
   } catch (error) {
     console.error("Erro ao atualizar cliente:", error);
+    throw error;
+  }
+}
+
+export async function serviceDataDelete(data: ClientInput) {
+  try {
+
+    const validation = clientSchema.safeParse(data);
+
+    if (!validation.success) {
+      console.error("Erro na validação dos dados:", validation.error.format());
+      throw new Error("Dados inválidos");
+    }
+
+    const validClient = validation.data;
+
+
+    const { rowIndex } = await GetClientsById(validClient.id!);
+
+    if (typeof rowIndex !== "number" || rowIndex < 0) {
+      throw new Error("Cliente não encontrado na planilha.");
+    }
+
+    await deleteClientRow(validClient.id!);
+    console.log(`Cliente com ID ${validClient.id} excluído com sucesso.`);
+
+  } catch (error) {
+    console.error("Erro ao deletar cliente:", error);
     throw error;
   }
 }
