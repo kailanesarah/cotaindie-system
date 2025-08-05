@@ -54,10 +54,6 @@ export async function getSheetDatabyId(
   }
 }
 
-/**
- * Adiciona (append) dados na planilha
- * @param values Array de arrays com os dados (linhas)
- */
 export async function appendSheetData(
   sheetId: string,
   range: string,
@@ -82,7 +78,7 @@ export async function updateSheetDatabyId(
   sheetId: string,
   range: string,
   objectId: string,
-  values: any[][],
+  values: any[][]
 ) {
   try {
     const { rowIndex } = await getSheetDatabyId(sheetId, range, objectId);
@@ -103,9 +99,68 @@ export async function updateSheetDatabyId(
     });
 
     return updateResponse.data;
-
   } catch (error) {
     console.error("Erro ao atualizar dados da planilha:", error);
+    throw error;
+  }
+}
+
+export async function deleteRowFromSheet(
+  sheetId: string,
+  sheetName: string,
+  objectId: string,
+  range: string
+) {
+  try {
+    const { rowIndex } = await getSheetDatabyId(sheetId, range, objectId);
+
+    if (rowIndex === -1 || typeof rowIndex !== "number") {
+      console.log("Linha não encontrada.");
+      return;
+    }
+
+    if (rowIndex === 0) {
+      throw new Error(
+        "Tentativa de deletar o cabeçalho da planilha. Operação abortada."
+      );
+      return;
+    }
+
+    const metadata = await sheets.spreadsheets.get({
+      spreadsheetId: sheetId,
+    });
+
+    const sheet = metadata.data.sheets?.find(
+      (s) => s.properties?.title === sheetName
+    );
+
+    if (!sheet || sheet.properties?.sheetId === undefined) {
+      throw new Error(`Aba "${sheetName}" não encontrada.`);
+    }
+
+    const numericSheetId = sheet.properties.sheetId;
+
+    const response = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: sheetId,
+      requestBody: {
+        requests: [
+          {
+            deleteDimension: {
+              range: {
+                sheetId: numericSheetId,
+                dimension: "ROWS",
+                startIndex: rowIndex,
+                endIndex: rowIndex + 1,
+              },
+            },
+          },
+        ],
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao excluir linha:", error);
     throw error;
   }
 }
