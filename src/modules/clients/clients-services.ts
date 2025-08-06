@@ -1,12 +1,17 @@
-import { GetClients, AppendClients, GetClientsById, updateClientbyId, deleteClientRow } from "./repository";
-import { clientSchema, ClientInput } from "./schema";
-import { mapSheetDataToClients } from "./utils";
+import {
+  getClientsRepository,
+  appendClientsRepository,
+  getClientsByIdRepository,
+  updateClientbyIdRepository,
+  deleteClientRowRepository,
+} from "./clients-repository";
+import { clientSchema, ClientInput } from "./clients-schema";
+import { mapSheetDataToClients } from "./clients-utils";
 import { nanoid } from "nanoid";
 
-
-export async function serviceDataGET() {
+export async function dataGETService() {
   try {
-    const data = await GetClients();
+    const data = await getClientsRepository();
     return data;
   } catch (error) {
     console.error("Erro no serviceDataGET:", error);
@@ -14,9 +19,9 @@ export async function serviceDataGET() {
   }
 }
 
-export async function serviceDataById(clientId: string) {
+export async function dataByIdService(clientId: string) {
   try {
-    const { rowIndex, rowData } = await GetClientsById(clientId);
+    const { rowIndex, rowData } = await getClientsByIdRepository(clientId);
     const [mappedClient] = mapSheetDataToClients([rowData]);
 
     return { ...mappedClient, rowIndex };
@@ -26,12 +31,15 @@ export async function serviceDataById(clientId: string) {
   }
 }
 
-export async function serviceDataAppend(data: ClientInput) {
+export async function dataAppendService(data: ClientInput) {
   try {
     const data_validation = clientSchema.safeParse(data);
 
     if (!data_validation.success) {
-      console.error("Erro na validação dos dados:", data_validation.error.format());
+      console.error(
+        "Erro na validação dos dados:",
+        data_validation.error.format()
+      );
       throw new Error("Dados inválidos");
     }
 
@@ -54,14 +62,14 @@ export async function serviceDataAppend(data: ClientInput) {
       valid_client.notes ?? "",
     ];
 
-    await AppendClients([row]);
+    await appendClientsRepository([row]);
   } catch (error) {
     console.error("Erro ao adicionar cliente:", error);
     throw error;
   }
 }
 
-export async function serviceDataUpdate(data: ClientInput) {
+export async function dataUpdateService(data: ClientInput) {
   try {
     const validation = clientSchema.safeParse(data);
 
@@ -71,25 +79,25 @@ export async function serviceDataUpdate(data: ClientInput) {
     }
 
     const validClient = validation.data;
-    const { rowIndex } = await GetClientsById(validClient.id!);
+    const { rowIndex } = await getClientsByIdRepository(validClient.id!);
 
     if (typeof rowIndex !== "number" || rowIndex < 0) {
       throw new Error("Cliente não encontrado na planilha.");
     }
 
-    const updatedValues = [Object.values(validClient).map(value => value ?? "")];
+    const updatedValues = [
+      Object.values(validClient).map((value) => value ?? ""),
+    ];
 
-    await updateClientbyId(validClient.id!, updatedValues);
-
+    await updateClientbyIdRepository(validClient.id!, updatedValues);
   } catch (error) {
     console.error("Erro ao atualizar cliente:", error);
     throw error;
   }
 }
 
-export async function serviceDataDelete(data: ClientInput) {
+export async function dataDeleteService(data: ClientInput) {
   try {
-
     const validation = clientSchema.safeParse(data);
 
     if (!validation.success) {
@@ -99,16 +107,14 @@ export async function serviceDataDelete(data: ClientInput) {
 
     const validClient = validation.data;
 
-
-    const { rowIndex } = await GetClientsById(validClient.id!);
+    const { rowIndex } = await getClientsByIdRepository(validClient.id!);
 
     if (typeof rowIndex !== "number" || rowIndex < 0) {
       throw new Error("Cliente não encontrado na planilha.");
     }
 
-    await deleteClientRow(validClient.id!);
+    await deleteClientRowRepository(validClient.id!);
     console.log(`Cliente com ID ${validClient.id} excluído com sucesso.`);
-
   } catch (error) {
     console.error("Erro ao deletar cliente:", error);
     throw error;
