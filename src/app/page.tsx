@@ -1,5 +1,5 @@
 import React from "react";
-import { requireSession } from "@/modules/auth/api/utils";
+import { requireSession } from "@/modules/auth/auth-utils";
 
 const WelcomePage = async () => {
   const session = await requireSession();

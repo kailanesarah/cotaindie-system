@@ -1,4 +1,4 @@
-import { SignOutForm } from "@/app/(public)/signout/components/UI/signout-form";
+import { SignOutForm } from "@/app/signout/components/UI/signout-form";
 
 export default function SignOutPage() {
   return (
