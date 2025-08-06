@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import type { Provider } from "next-auth/providers"
-import { serviceLogin } from "../services"
+import { loginService } from "../auth-services"
 
 
 const providers: Provider[] = [
@@ -18,7 +18,7 @@ const providers: Provider[] = [
         return null
       }
 
-      const data_user = await serviceLogin(credentials.email, credentials.password)
+      const data_user = await loginService(credentials.email, credentials.password)
       console.log(data_user)
 
       if (data_user) {

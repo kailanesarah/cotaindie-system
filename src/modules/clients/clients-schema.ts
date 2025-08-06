@@ -37,4 +37,5 @@ export const clientSchema = z.object({
   notes: z.string().optional(),
 });
 
+
 export type ClientInput = z.infer<typeof clientSchema>;
