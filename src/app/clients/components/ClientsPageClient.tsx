@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ClientsTable } from "@/app/(private)/clients/components/UI/clients-table";
+import { ClientsTable } from "@/app/clients/components/UI/clients-table";
 import { ClientModal } from "./UI/modal-client";
-import { ClientInput } from "@/modules/clients/schema";
+import { ClientInput } from "@/modules/clients/clients-schema";
 import {
   appendClientsAction,
   updateClientsAction,

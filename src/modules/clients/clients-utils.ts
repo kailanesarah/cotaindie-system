@@ -1,4 +1,4 @@
-import { ClientInput } from "./schema";
+import { ClientInput } from "./clients-schema";
 
 export function mapSheetDataToClients(data: any[][]): ClientInput[] {
   return data.map((row) => ({
