@@ -1,6 +1,6 @@
 "use client"; 
 
-import { logout } from "@/app/(public)/signout/actions/logout-action";
+import { logout } from "@/app/signout/actions/logout-action";
 
 export function SignOutForm() {
   return (

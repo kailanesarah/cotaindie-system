@@ -1,5 +1,5 @@
 import SignInForm from "./components/UI/signin-form";
-import { requireSession } from "@/modules/auth/api/utils";
+import { requireSession } from "@/modules/auth/auth-utils";
 import { redirect } from "next/navigation";
 
 export default async function SignInPage({

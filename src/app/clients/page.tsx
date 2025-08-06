@@ -1,5 +1,5 @@
-import { getClientsAction } from "@/app/(private)/clients/actions/clients-actions";
-import { requireSession } from "@/modules/auth/api/utils";
+import { getClientsAction } from "@/app/clients/actions/clients-actions";
+import { requireSession } from "@/modules/auth/auth-utils";
 import { ClientsPageClient } from "./components/ClientsPageClient";
 
 export default async function ClientsPage() {

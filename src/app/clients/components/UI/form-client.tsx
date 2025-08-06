@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ClientInput, clientSchema } from "@/modules/clients/schema";
+import { ClientInput, clientSchema } from "@/modules/clients/clients-schema";
 import { useEffect } from "react";
 
 

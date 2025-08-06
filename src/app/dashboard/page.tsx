@@ -1,5 +1,5 @@
-import { requireSession } from "@/modules/auth/api/utils";
-import { SignoutButton } from "@/app/(public)/signout/components/UI/btt-logout";
+import { requireSession } from "@/modules/auth/auth-utils";
+import { SignoutButton } from "@/app/signout/components/UI/btt-logout";
 
 export default async function WelcomePage() {
   const session = await requireSession();
