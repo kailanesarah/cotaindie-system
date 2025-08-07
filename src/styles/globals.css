@@ -1,0 +1,111 @@
+/* globals.css */
+
+@import "tailwindcss";
+
+:root {
+   /* Red */
+  --color-red-50: #FFE9E7;
+  --color-red-100: #F5C1BA;
+  --color-red-300: #D44E3D;
+  --color-red-500: #B0261A;
+  --color-red-700: #8A1F14;
+  --color-red-900: #61160E;
+
+  /* Green */
+  --color-green-50: #E6F7EC;
+  --color-green-100: #B7EFC9;
+  --color-green-300: #4ECB71;
+  --color-green-500: #008C23;
+  --color-green-700: #006C1B;
+  --color-green-900: #004513;
+
+  /* Yellow */
+  --color-yellow-50: #FFF9E6;
+  --color-yellow-100: #FFECB3;
+  --color-yellow-300: #FFD54F;
+  --color-yellow-500: #9B7400;
+  --color-yellow-700: #6B5100;
+  --color-yellow-900: #3F3200;
+
+  /* Neutrals */
+  --color-white: #ffffff;
+  --color-gray-50: #f9f9f9;
+  --color-gray-100: #f2f2f2;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #cccccc;
+  --color-gray-500: #999999;
+  --color-gray-700: #666666;
+  --color-gray-900: #333333;
+  --color-black: #000000;
+
+  /* Fonts */
+  --color-b-light: rgba(69, 71, 71, 0.3);
+  --font-body: "Aspekta", sans-serif;
+  --font-heading: "Aspekta", sans-serif;
+  
+}
+
+html {
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  @apply leading-[1.5] font-medium text-sm;
+  color: var(--color-black-800);
+  user-select: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  color: var(--color-black-900);
+  line-height: 1.2;
+}
+
+h1,
+.heading-h1 {
+  font-size: 2rem;
+}
+
+h2,
+.heading-h2 {
+  font-size: 1.75rem;
+}
+
+h3,
+.heading-h3 {
+  font-size: 1.5rem;
+}
+
+h4,
+.heading-h4 {
+  font-size: 1.375rem;
+}
+
+h5,
+.heading-h5 {
+  font-size: 1.25rem;
+}
+
+h6,
+.heading-h6 {
+  font-size: 1.125rem;
+}
+
+div[role="status"][aria-live="polite"] {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none;
+}
