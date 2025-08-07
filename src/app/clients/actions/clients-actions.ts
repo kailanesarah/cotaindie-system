@@ -10,6 +10,7 @@ import {
 import { mapSheetDataToClients } from "@/modules/clients/clients-utils";
 import { ClientInput } from "@/modules/clients/clients-schema";
 import { revalidatePath } from "next/cache";
+import { ROUTES } from "@/constants/urls";
 
 export async function getClientsAction() {
   const sheetData = await dataGETService();
@@ -24,18 +25,17 @@ export async function getClientByIdAction(clientId: string) {
 
 export async function appendClientsAction(data: ClientInput) {
   const sheetData = await dataAppendService(data);
-
-  revalidatePath("/clients");
+  revalidatePath(ROUTES.PRIVATE.CLIENTS);
 }
 
 export async function updateClientsAction(data: ClientInput) {
   const sheetData = await dataUpdateService(data);
-  revalidatePath("/clients");
+  revalidatePath(ROUTES.PRIVATE.CLIENTS);
   return sheetData;
 }
 
 export async function deleteClientsAction(data: ClientInput) {
   const sheetData = await dataDeleteService(data);
-  revalidatePath("/clients");
+  revalidatePath(ROUTES.PRIVATE.CLIENTS);
   return sheetData;
 }
