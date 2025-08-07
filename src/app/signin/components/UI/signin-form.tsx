@@ -1,3 +1,5 @@
+"use client";
+
 import { login } from "@/app/signin/actions/signin-action";
 
 export default function SignInForm() {

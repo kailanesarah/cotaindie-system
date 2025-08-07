@@ -1,5 +1,6 @@
+
 import { requireSession } from "@/modules/auth/auth-utils";
-import { SignoutButton } from "@/app/signout/components/UI/btt-logout";
+import SignoutButton from "../signout/components/UI/btt-logout";
 
 export default async function WelcomePage() {
   const session = await requireSession();
@@ -15,7 +16,7 @@ export default async function WelcomePage() {
           Obrigado por visitar nossa aplicação. Esperamos que você tenha uma ótima experiência!
         </p>
 
-        <div className="pt-4">
+        <div className="pt-6">
           <SignoutButton />
         </div>
       </div>

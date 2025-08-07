@@ -44,7 +44,7 @@ export async function dataAppendService(data: ClientInput) {
     }
 
     const valid_client = data_validation.data;
-    const id = `c-${nanoid(8)}`;
+    const id = `C-${nanoid(8)}`;
 
     const row: string[] = [
       id,

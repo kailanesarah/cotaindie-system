@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/urls';
 
-export default function SignoutButton() {
+export default function LoginButton() {
   const router = useRouter();
 
   const handleLogin = () => {
-    router.push(ROUTES.PUBLIC.SIGNOUT); 
+    router.push(ROUTES.PUBLIC.SIGNIN); 
   };
 
   return <button onClick={handleLogin}>Sair</button>;
