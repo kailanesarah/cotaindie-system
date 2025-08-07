@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import type { Provider } from "next-auth/providers"
 import { loginService } from "../auth-services"
+import { ROUTES } from "@/constants/urls"
 
 
 const providers: Provider[] = [
@@ -60,8 +61,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   }
   },
   pages: {
-    signIn: "/signin",
-    signOut: "/signout",
+    signIn: ROUTES.PUBLIC.SIGNIN,
+    signOut: ROUTES.PUBLIC.SIGNOUT,
     error: "/error",
   },
 })
