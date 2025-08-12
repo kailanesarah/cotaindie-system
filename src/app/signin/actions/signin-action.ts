@@ -2,6 +2,7 @@
 
 import { signIn } from "@/modules/auth/api/auth";
 import { redirect } from "next/navigation";
+import { ROUTES } from "@/constants/urls";
 
 export async function login(formData: FormData) {
   const email = formData.get("email")?.toString();
@@ -13,9 +14,9 @@ export async function login(formData: FormData) {
     redirect: false,
   });
 
-  if (result?.error) {
-    redirect(`/signin?error=${result.error}`);
-  }
+  const destination = result?.error
+    ? `${ROUTES.PUBLIC.SIGNIN}?error=${encodeURIComponent(result.error)}`
+    : ROUTES.PRIVATE.DASHBOARD;
 
-  redirect("/dashboard");
+  redirect(destination);
 }
