@@ -1,19 +1,29 @@
-import type { Metadata } from "next";
+"use client";
+
+import { usePathname } from "next/navigation";
+import SidebarComponent from "@/components/sidebar-component";
+import { ReactNode } from "react";
 import "@/styles/globals.css";
 
-export const metadata: Metadata = {
-  title: "Meu Projeto",
-  description: "Descrição do projeto",
-};
+export default function RootLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const mostrarSidebar = pathname !== "/signin";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="pt-BR">
+      <body>
+        {mostrarSidebar && (
+          <>
+            <SidebarComponent />
+            <div className="sm:ml-64">
+              {/* Espaço do navbar fixo */}
+              <div className="pt-16">{children}</div>
+            </div>
+          </>
+        )}
+
+        {!mostrarSidebar && <main>{children}</main>}
+      </body>
     </html>
   );
 }
