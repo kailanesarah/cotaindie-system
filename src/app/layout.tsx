@@ -1,29 +1,24 @@
 "use client";
-
-import { usePathname } from "next/navigation";
 import SidebarComponent from "@/components/sidebar-component";
-import { ReactNode } from "react";
 import "@/styles/globals.css";
+import { ROUTES } from "@/constants/urls";
+import { usePathname } from "next/navigation";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const mostrarSidebar = pathname !== "/signin";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+  const mostrarSidebar = pathname !== ROUTES.PUBLIC.SIGNIN;
 
   return (
-    <html lang="pt-BR">
-      <body>
-        {mostrarSidebar && (
-          <>
-            <SidebarComponent />
-            <div className="sm:ml-64">
-              {/* Espaço do navbar fixo */}
-              <div className="pt-16">{children}</div>
-            </div>
-          </>
-        )}
-
-        {!mostrarSidebar && <main>{children}</main>}
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        {mostrarSidebar && <SidebarComponent />}
+      <div className={mostrarSidebar ? "sm:ml-64" : ""}>
+        <div className={mostrarSidebar ? "mt-16" : ""}>{children}</div>
+      </div>
       </body>
     </html>
   );
 }
+
+
