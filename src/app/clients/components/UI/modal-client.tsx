@@ -1,5 +1,3 @@
-"use client";
-
 import { ClientInput } from "@/modules/clients/clients-schema";
 import { ClientForm } from "./form-client";
 import { X } from "lucide-react";

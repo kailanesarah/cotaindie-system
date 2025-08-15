@@ -1,0 +1,4 @@
+GOOGLE_CLIENT_EMAIL = ""
+GOOGLE_PRIVATE_KEY = ""
+AUTH_SECRET="" # Added by `npx auth`. Read more: https://cli.authjs.dev
+SHEET_ID = ""
