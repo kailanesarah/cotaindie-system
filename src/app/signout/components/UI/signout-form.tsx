@@ -1,5 +1,3 @@
-"use client"; 
-
 import { logout } from "@/app/signout/actions/logout-action";
 
 export function SignOutForm() {
