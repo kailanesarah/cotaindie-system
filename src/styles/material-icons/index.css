@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined");
 
 .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-weight: 200;
+  font-family: "Material Symbols Outlined";
+  font-weight: 300;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 1.25rem; /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
