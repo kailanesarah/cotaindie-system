@@ -3,7 +3,6 @@ export const ROUTES = {
     SIGNIN: "/signin",
     SIGNOUT: "/signout",
     HOME: "/",
-    
   },
   PRIVATE: {
     DASHBOARD: "/dashboard",

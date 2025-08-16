@@ -1,19 +1,9 @@
-import Image from "next/image";
 import Logo from "@/assets/imgs/logo.svg";
+import Image from "next/image";
 
 const HeaderLogin = () => {
   return (
-    <header className="
-    flex 
-    flex-col 
-    items-center 
-    text-center 
-    gap-6 
-    space-y-6 
-    px-4 py-6 
-    p-8 
-    border-b 
-    border-(--color-gray-300)">
+    <header className="flex flex-col items-center gap-6 space-y-6 border-b border-(--color-gray-300) p-8 px-4 py-6 text-center">
       <Image
         src={Logo}
         alt="Logo da aplicação"

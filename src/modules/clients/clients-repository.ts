@@ -1,5 +1,11 @@
-import { getSheetDataService, appendSheetDataService, getSheetDatabyIdService, updateSheetDatabyIdService, deleteRowFromSheetService} from "@/modules/google-sheets/sheets-service";
-import { Sheet } from "../google-sheets/sheets-schema";
+import {
+  appendSheetDataService,
+  deleteRowFromSheetService,
+  getSheetDatabyIdService,
+  getSheetDataService,
+  updateSheetDatabyIdService,
+} from "@/modules/google-sheets/sheets-service";
+import type { Sheet } from "../google-sheets/sheets-schema";
 
 const BASE_SHEET: Omit<Sheet, "sheetObjectId" | "sheetValues"> = {
   sheetId: process.env.SHEET_ID!,
@@ -25,7 +31,10 @@ export async function appendClientsRepository(values: string[][]) {
   });
 }
 
-export async function updateClientbyIdRepository(clientId: string, values: string[][]) {
+export async function updateClientbyIdRepository(
+  clientId: string,
+  values: string[][],
+) {
   await updateSheetDatabyIdService({
     ...BASE_SHEET,
     sheetObjectId: clientId,

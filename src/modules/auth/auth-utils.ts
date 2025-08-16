@@ -1,10 +1,7 @@
+import { ROUTES } from "@/constants/urls";
 import { auth } from "@/modules/auth/api/auth";
 import { redirect } from "next/navigation";
-import { ROUTES } from "@/constants/urls";
 
-/**
- * Retorna a sessão, e redireciona para /signin caso `redirectIfUnauthenticated` seja true.
- */
 export async function requireSession({
   redirectIfUnauthenticated = true,
 }: { redirectIfUnauthenticated?: boolean } = {}) {

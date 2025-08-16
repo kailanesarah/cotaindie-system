@@ -14,7 +14,7 @@ export default async function SignInPage({
   }
 
   return (
-    <main className="min-h-screen flex justify-center items-center px-4 py-12 bg-(--color-gray-200)">
+    <main className="flex min-h-screen items-center justify-center bg-(--color-gray-200) px-4 py-12">
       <LayoutLogin />
     </main>
   );

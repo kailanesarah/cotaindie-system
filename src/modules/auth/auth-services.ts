@@ -1,6 +1,5 @@
 import { usersFromSheetRepository } from "@/modules/auth/auth-repository";
-import { User } from "@/types/user";
-import { userSchema } from "@/types/user";
+import { type User, userSchema } from "@/types/user";
 
 export async function dataGETService() {
   try {
@@ -14,7 +13,7 @@ export async function dataGETService() {
 
 export async function loginService(
   email: string,
-  password: string
+  password: string,
 ): Promise<User | null> {
   try {
     const data_user: any[][] = await usersFromSheetRepository();
@@ -26,15 +25,15 @@ export async function loginService(
           username: row[1],
           email: row[2],
           password: row[3],
-        })
+        }),
       )
       .filter(
-        (result): result is { success: true; data: User } => result.success
+        (result): result is { success: true; data: User } => result.success,
       )
       .map((result) => result.data);
 
     const user = users.find(
-      (user) => user.email === email && user.password.trim() === password
+      (user) => user.email === email && user.password.trim() === password,
     );
 
     return user || null;

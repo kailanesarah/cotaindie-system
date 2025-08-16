@@ -1,9 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import {
-  QuestionIcon,
-  ForumIcon,
-  ArrowDownIcon
-} from "@/components/UI/icons";
+import { ArrowDownIcon, ForumIcon, QuestionIcon } from "@/components/ui/icons";
+import { useEffect, useRef, useState } from "react";
 
 const MenuDesktop = () => {
   const [dropdownAberto, setDropdownAberto] = useState(false);
@@ -26,15 +22,15 @@ const MenuDesktop = () => {
   }, []);
 
   return (
-    <div className="hidden lg:ml-auto lg:mr-2 lg:block">
+    <div className="hidden lg:mr-2 lg:ml-auto lg:block">
       <ul className="m-2 flex flex-col gap-x-6 gap-y-1 lg:m-0 lg:flex-row lg:items-center">
         <li>
-          <a href="#" className="flex justify-center items-center gap-2">
+          <a href="#" className="flex items-center justify-center gap-2">
             <QuestionIcon /> Dúvidas e perguntas
           </a>
         </li>
         <li>
-          <a href="#" className="flex justify-center items-center gap-2">
+          <a href="#" className="flex items-center justify-center gap-2">
             <ForumIcon /> Ajuda e suporte
           </a>
         </li>
@@ -47,26 +43,28 @@ const MenuDesktop = () => {
                 setDropdownAberto(!dropdownAberto);
                 console.log("Botão clicado, abre/fecha:", !dropdownAberto);
               }}
-              className="relative   px-5 py-2.5 inline-flex items-start  gap-3"
+              className="relative inline-flex items-start gap-3 px-5 py-2.5"
               type="button"
               aria-haspopup="true"
               aria-expanded={dropdownAberto}
             >
-              <div className="p-2 bg-(--color-red-50) rounded-(--corners-rounded) flex items-center justify-center w-10 h-10 text-sm font-bold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-(--corners-rounded) bg-(--color-red-50) p-2 text-sm font-bold">
                 FC
               </div>
               <div className="flex flex-col text-left leading-tight">
                 <span className="font-semibold">Paulo Cesar</span>
-                <span className="text-xs text-[var(--color-gray-500)] lowercase">Administrador</span>
+                <span className="text-xs text-[var(--color-gray-500)] lowercase">
+                  Administrador
+                </span>
               </div>
 
               <div>
-                <ArrowDownIcon/>
+                <ArrowDownIcon />
               </div>
             </button>
 
             {dropdownAberto && (
-              <div className="z-10 absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700">
+              <div className="absolute right-0 z-10 mt-2 w-44 divide-y divide-gray-100 rounded-lg bg-white shadow-sm dark:bg-gray-700">
                 <ul
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownButton"
@@ -98,7 +96,7 @@ const MenuDesktop = () => {
                   <li>
                     <a
                       href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-red-500"
+                      className="block px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Sign out
                     </a>

@@ -1,13 +1,13 @@
-import {
-  getClientsRepository,
-  appendClientsRepository,
-  getClientsByIdRepository,
-  updateClientbyIdRepository,
-  deleteClientRowRepository,
-} from "./clients-repository";
-import { clientSchema, ClientInput } from "./clients-schema";
-import { mapSheetDataToClients } from "./clients-utils";
 import { nanoid } from "nanoid";
+import {
+  appendClientsRepository,
+  deleteClientRowRepository,
+  getClientsByIdRepository,
+  getClientsRepository,
+  updateClientbyIdRepository,
+} from "./clients-repository";
+import { type ClientInput, clientSchema } from "./clients-schema";
+import { mapSheetDataToClients } from "./clients-utils";
 
 export async function dataGETService() {
   try {
@@ -38,7 +38,7 @@ export async function dataAppendService(data: ClientInput) {
     if (!data_validation.success) {
       console.error(
         "Erro na validação dos dados:",
-        data_validation.error.format()
+        data_validation.error.format(),
       );
       throw new Error("Dados inválidos");
     }

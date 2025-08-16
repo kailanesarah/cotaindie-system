@@ -1,5 +1,5 @@
+import type { ReactNode } from "react";
 import { z } from "zod";
-import { ReactNode } from "react";
 
 const buttonPropsSchema = z.object({
   text_button: z.string(),

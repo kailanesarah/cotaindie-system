@@ -8,23 +8,23 @@ export const clientSchema = z.object({
     .string()
     .regex(
       /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
-      "Invalid CPF. Example: 123.456.789-00"
+      "Invalid CPF. Example: 123.456.789-00",
     )
-    .or(z.literal("")) 
+    .or(z.literal(""))
     .optional(),
   cnpj: z
     .string()
     .regex(
       /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/,
-      "Invalid CNPJ. Example: 12.345.678/0001-00"
+      "Invalid CNPJ. Example: 12.345.678/0001-00",
     )
-    .or(z.literal("")) 
+    .or(z.literal(""))
     .optional(),
   phone: z
     .string()
     .regex(
       /^\(\d{2}\)\s?\d{4,5}-\d{4}$/,
-      "Invalid phone number. Example: (88) 99999-8888 or (88) 8888-8888"
+      "Invalid phone number. Example: (88) 99999-8888 or (88) 8888-8888",
     ),
   email: z.email("Invalid email"),
   city: z.string().min(1, "City is required"),
@@ -36,6 +36,5 @@ export const clientSchema = z.object({
   complement: z.string().optional(),
   notes: z.string().optional(),
 });
-
 
 export type ClientInput = z.infer<typeof clientSchema>;
