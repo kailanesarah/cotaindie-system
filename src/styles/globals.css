@@ -19,6 +19,16 @@
   --color-red-default: #b0261a;
   --color-red-lightest: #ffe9e7;
 
+  /* Blue */
+  --color-blue-default: #067ea9;
+
+  /* Red */
+  --color-yellow-darker: #9b7400;
+  --color-yellow-light: #ffe5c0;
+
+  /* Green */
+  --color-green-default: #158f52;
+
   /* Black */
   --color-black-default: #040309;
   --color-black-light: #1d1c21;
