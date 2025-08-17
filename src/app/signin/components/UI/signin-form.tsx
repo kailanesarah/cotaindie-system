@@ -1,6 +1,6 @@
 import { login } from "@/app/signin/actions/signin-action";
-import ButtonPrimary from "@/components/ui/button-primary";
-import { LoginIcon } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 
 export default function SignInForm() {
   return (
@@ -33,7 +33,10 @@ export default function SignInForm() {
         />
       </div>
 
-      <ButtonPrimary text_button="Acessar o sistema" icon={<LoginIcon />} />
+      <Button>
+        Entrar no sistema
+        <Icon name="login" />
+      </Button>
     </form>
   );
 }
