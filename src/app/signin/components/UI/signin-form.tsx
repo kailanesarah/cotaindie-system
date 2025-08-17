@@ -1,42 +1,68 @@
-import { login } from "@/app/signin/actions/signin-action";
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { InputPassword } from "@/components/ui/input-password";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import z from "zod";
 
 export default function SignInForm() {
+  const formSchema = z.object({
+    email: z.email("Insira um email válido"),
+    password: z.string("Senha é obrigatório"),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+  }
+
   return (
-    <form action={login} className="mx-auto w-full max-w-md space-y-6 p-8">
-      <div className="flex flex-col gap-[8px]">
-        <label htmlFor="email" className="font-semibold">
-          Email *
-        </label>
-        <input
-          type="email"
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
           name="email"
-          id="email"
-          placeholder="Ex:seu@email.com"
-          required
-          className="w-full rounded-(--corners-rounded) border border-(--color-gray-300) px-4 py-2 shadow-sm focus:ring-1 focus:ring-(--color-gray-500) focus:outline-none"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-
-      <div className="flex flex-col gap-[8px]">
-        <label htmlFor="password" className="font-semibold">
-          Senha *
-        </label>
-        <input
-          type="password"
+        <FormField
+          control={form.control}
           name="password"
-          id="password"
-          placeholder="••••••••"
-          required
-          className="w-full rounded-(--corners-rounded) border border-(--color-gray-300) px-4 py-2 shadow-sm focus:ring-1 focus:ring-(--color-gray-500) focus:outline-none"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Senha</FormLabel>
+              <FormControl>
+                <InputPassword {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-
-      <Button>
-        Entrar no sistema
-        <Icon name="login" />
-      </Button>
-    </form>
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
   );
 }
