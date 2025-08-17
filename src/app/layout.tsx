@@ -3,6 +3,7 @@
 import SidebarComponent from "@/components/sidebar-component";
 import { ROUTES } from "@/constants/urls";
 import "@/styles/globals.css";
+import "@/styles/material-icons/index.css";
 import localFont from "next/font/local";
 import { usePathname } from "next/navigation";
 
