@@ -1,11 +1,6 @@
-"use client";
-
-import SidebarComponent from "@/components/sidebar-component";
-import { ROUTES } from "@/constants/urls";
 import "@/styles/globals.css";
 import "@/styles/material-icons/index.css";
 import localFont from "next/font/local";
-import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 
 const fontAspektaVariable = localFont({
@@ -18,15 +13,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const mostrarSidebar = pathname !== ROUTES.PUBLIC.SIGNIN;
-
   return (
     <html lang="pt-BR">
       <body className={`${fontAspektaVariable.variable} antialiased`}>
-        {mostrarSidebar && <SidebarComponent />}
         <aside>
-          {" "}
           <Toaster
             gutter={16}
             position="bottom-right"
@@ -48,9 +38,7 @@ export default function RootLayout({
             }}
           />
         </aside>
-        <div className={mostrarSidebar ? "sm:ml-64" : ""}>
-          <div className={mostrarSidebar ? "mt-16" : ""}>{children}</div>
-        </div>
+        <div className="flex min-h-screen flex-col">{children}</div>
       </body>
     </html>
   );
