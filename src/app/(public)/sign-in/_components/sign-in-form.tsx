@@ -43,7 +43,7 @@ export const SignInForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input placeholder="Ex: sistema@cotaindie.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

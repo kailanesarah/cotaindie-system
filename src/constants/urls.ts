@@ -1,6 +1,6 @@
 export const ROUTES = {
   PUBLIC: {
-    SIGNIN: "/signin",
+    SIGNIN: "/sign-in",
     SIGNOUT: "/signout",
     HOME: "/",
   },

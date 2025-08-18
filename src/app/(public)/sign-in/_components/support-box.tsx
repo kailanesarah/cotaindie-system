@@ -1,4 +1,6 @@
+import { SupportDialog } from "@/app/_components/support-dialog";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import Link from "next/link";
 
@@ -10,10 +12,15 @@ export const SupportBox = () => {
         <p className="mt-2 mb-6">
           Envie uma mensagem ao suporte para receber atendimento.
         </p>
-        <Button variant="secondary">
-          <Icon name="forum" />
-          Ajuda e suporte
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="secondary">
+              <Icon name="forum" />
+              Ajuda e suporte
+            </Button>
+          </DialogTrigger>
+          <SupportDialog />
+        </Dialog>
       </div>
       <div className="text-body-lighter p-6 text-xs/normal">
         <p>
