@@ -13,7 +13,7 @@ export function InputPassword(props: React.ComponentProps<"input">) {
       <button
         type="button"
         onClick={() => setShow(!show)}
-        className="absolute right-0 z-[1] flex h-full items-center px-3"
+        className="absolute right-0 z-10 flex h-full cursor-pointer items-center px-3"
       >
         <Icon name={show ? "visibility_off" : "visibility"} />
       </button>

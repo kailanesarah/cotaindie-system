@@ -101,7 +101,7 @@ function FormLabel({
     <Label
       data-slot="form-label"
       data-error={!!error}
-      className={cn("flex gap-[0.25rem]", className)}
+      className={cn("text-title-light flex gap-[0.25rem]", className)}
       htmlFor={formItemId}
       {...props}
     >
