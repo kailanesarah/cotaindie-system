@@ -37,8 +37,8 @@ const eslintConfig = [
       "react/function-component-definition": [
         "error",
         {
-          namedComponents: "arrow-function",
-          unnamedComponents: "arrow-function",
+          namedComponents: "function-declaration",
+          unnamedComponents: "function-declaration",
         },
       ],
 

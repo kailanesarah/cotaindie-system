@@ -1,6 +1,6 @@
-import { ClientInput } from "@/modules/clients/clients-schema";
-import { ClientForm } from "./form-client";
+import type { ClientInput } from "@/modules/clients/clients-schema";
 import { X } from "lucide-react";
+import { ClientForm } from "./form-client";
 
 interface ClientModalProps {
   show: boolean;
@@ -14,7 +14,7 @@ export function ClientModal({
   onClose,
   clientData,
   onSubmit,
-}: ClientModalProps) {
+}: Readonly<ClientModalProps>) {
   if (!show) return null;
 
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -26,13 +26,13 @@ export function ClientModal({
   return (
     <div
       onClick={handleBackgroundClick}
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
+      className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black px-4"
     >
-      <div className="relative bg-white rounded-2xl w-full max-w-3xl shadow-xl p-6 sm:p-8">
+      <div className="relative w-full max-w-3xl rounded-2xl bg-white p-6 shadow-xl sm:p-8">
         {/* Botão de fechar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
+          className="absolute top-4 right-4 text-gray-500 transition hover:text-gray-700"
           aria-label="Fechar modal"
         >
           <X size={24} />

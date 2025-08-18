@@ -4,17 +4,30 @@
 @theme {
   --color-*: initial;
 
-  /*Radius*/
   --radius-default: 0.25rem;
+
+  /* Neutrals */
+  --color-white: #fff;
 
   /* Border */
   --color-b-light: #b8b8b8;
   --color-b-dark: #ffffff25;
 
   /* Red */
-  --color-red-dark: #9e2217;
+  --color-red-darker: #9e2217;
+  --color-red-dark: #a82419;
   --color-red-default: #b0261a;
   --color-red-lightest: #ffe9e7;
+
+  /* Blue */
+  --color-blue-default: #067ea9;
+
+  /* Red */
+  --color-yellow-darker: #9b7400;
+  --color-yellow-light: #ffe5c0;
+
+  /* Green */
+  --color-green-default: #158f52;
 
   /* Black */
   --color-black-default: #040309;

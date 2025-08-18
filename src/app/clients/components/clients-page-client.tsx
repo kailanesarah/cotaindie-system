@@ -1,21 +1,23 @@
 "use client";
 
+import { ClientsTable } from "@/app/clients/components/ui/clients-table";
+import type { ClientInput } from "@/modules/clients/clients-schema";
 import { useState } from "react";
-import { ClientsTable } from "@/app/clients/components/UI/clients-table";
-import { ClientModal } from "./UI/modal-client";
-import { ClientInput } from "@/modules/clients/clients-schema";
 import {
   appendClientsAction,
-  updateClientsAction,
-  getClientByIdAction,
   deleteClientsAction,
+  getClientByIdAction,
+  updateClientsAction,
 } from "../actions/clients-actions";
+import { ClientModal } from "./ui/modal-client";
 
 interface ClientsPageClientProps {
   clients: ClientInput[];
 }
 
-export function ClientsPageClient({ clients }: ClientsPageClientProps) {
+export function ClientsPageClient({
+  clients,
+}: Readonly<ClientsPageClientProps>) {
   const [showModal, setShowModal] = useState(false);
   const [clientToEdit, setClientToEdit] = useState<ClientInput | null>(null);
 
@@ -67,7 +69,7 @@ export function ClientsPageClient({ clients }: ClientsPageClientProps) {
     }
 
     const confirmDelete = window.confirm(
-      "Tem certeza que deseja excluir este cliente?"
+      "Tem certeza que deseja excluir este cliente?",
     );
     if (!confirmDelete) return;
 
@@ -83,15 +85,15 @@ export function ClientsPageClient({ clients }: ClientsPageClientProps) {
 
   return (
     <>
-      <section className="bg-white shadow-md rounded-2xl p-4 sm:p-6 space-y-8">
-        <div className="flex justify-between items-center mb-4">
+      <section className="space-y-8 rounded-2xl bg-white p-4 shadow-md sm:p-6">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">Clientes</h2>
           <button
             onClick={() => {
               setClientToEdit(null);
               setShowModal(true);
             }}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
           >
             Novo Cliente
           </button>

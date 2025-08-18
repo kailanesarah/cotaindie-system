@@ -1,5 +1,5 @@
-import { google, sheets_v4 } from "googleapis";
 import { JWT } from "google-auth-library";
+import { google, sheets_v4 } from "googleapis";
 
 export const auth: JWT = new JWT({
   email: process.env.GOOGLE_CLIENT_EMAIL,

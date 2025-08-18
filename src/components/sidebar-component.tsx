@@ -1,15 +1,14 @@
+import logo from "@/assets/imgs/logo-white.svg";
+import { ROUTES } from "@/constants/urls";
+import Image from "next/image";
 import NavbarComponent from "./navbar-component";
 import {
-  DashboardIcon,
   ClientsIcon,
+  DashboardIcon,
   DocumentScannerIcon,
   InventoryIcon,
   LogoutIcon,
-} from "./UI/icons";
-import Image from "next/image";
-import logo from "@/assets/imgs/logo-white.svg";
-import {ROUTES} from "@/constants/urls";
-import { RotateCwSquare } from "lucide-react";
+} from "./ui/icons";
 
 const SidebarComponent = () => {
   return (
@@ -20,7 +19,7 @@ const SidebarComponent = () => {
         data-drawer-toggle="logo-sidebar"
         aria-controls="logo-sidebar"
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        className="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none sm:hidden"
       >
         <span className="sr-only">Open sidebar</span>
       </button>
@@ -28,12 +27,12 @@ const SidebarComponent = () => {
       {/* Sidebar */}
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className="fixed top-0 left-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full py-4 bg-[var(--color-dark-500)] flex flex-col">
+        <div className="flex h-full flex-col bg-[var(--color-dark-500)] py-4">
           {/* Logo */}
-          <div className="px-8 pb-4 border-b border-[var(--color-gray-200)]">
+          <div className="border-b border-[var(--color-gray-200)] px-8 pb-4">
             <a href="#" className="flex items-center justify-start">
               <Image src={logo} alt="Logo" width={150} height={150} />
             </a>
@@ -41,31 +40,43 @@ const SidebarComponent = () => {
 
           {/* Menu com rolagem */}
           <div className="flex-1 overflow-y-auto border-b border-[var(--color-gray-200)]">
-            <ul className="space-y-2 font-medium px-2 py-3">
+            <ul className="space-y-2 px-2 py-3 font-medium">
               <li>
-                <a href={ROUTES.PRIVATE.DASHBOARD} className="flex items-center p-2 text-white hover:bg-gray-700 group">
-                  <span className="flex items-center gap-4 ms-3 whitespace-nowrap">
+                <a
+                  href={ROUTES.PRIVATE.DASHBOARD}
+                  className="group flex items-center p-2 text-white hover:bg-gray-700"
+                >
+                  <span className="ms-3 flex items-center gap-4 whitespace-nowrap">
                     <DashboardIcon /> Dashboard
                   </span>
                 </a>
               </li>
               <li>
-                <a href="#" className="flex items-center p-2 text-white hover:bg-gray-700 group">
-                  <span className="flex items-center gap-4 ms-3 whitespace-nowrap">
+                <a
+                  href="#"
+                  className="group flex items-center p-2 text-white hover:bg-gray-700"
+                >
+                  <span className="ms-3 flex items-center gap-4 whitespace-nowrap">
                     <DocumentScannerIcon /> Orçamentos
                   </span>
                 </a>
               </li>
               <li>
-                <a href="#" className="flex items-center p-2 text-white hover:bg-gray-700 group">
-                  <span className="flex items-center gap-4 ms-3 whitespace-nowrap">
+                <a
+                  href="#"
+                  className="group flex items-center p-2 text-white hover:bg-gray-700"
+                >
+                  <span className="ms-3 flex items-center gap-4 whitespace-nowrap">
                     <InventoryIcon /> Materiais
                   </span>
                 </a>
               </li>
               <li>
-                <a href={ROUTES.PRIVATE.CLIENTS} className="flex items-center p-2 text-white hover:bg-gray-700 group">
-                  <span className="flex items-center gap-4 ms-3 whitespace-nowrap">
+                <a
+                  href={ROUTES.PRIVATE.CLIENTS}
+                  className="group flex items-center p-2 text-white hover:bg-gray-700"
+                >
+                  <span className="ms-3 flex items-center gap-4 whitespace-nowrap">
                     <ClientsIcon /> Clientes
                   </span>
                 </a>
@@ -77,8 +88,11 @@ const SidebarComponent = () => {
           <div className="mt-auto px-2 pt-3">
             <ul>
               <li>
-                <a href={ROUTES.PUBLIC.SIGNOUT} className="flex items-center p-2 text-white hover:bg-gray-700 group">
-                  <span className="flex items-center gap-4 ms-3 whitespace-nowrap">
+                <a
+                  href={ROUTES.PUBLIC.SIGNOUT}
+                  className="group flex items-center p-2 text-white hover:bg-gray-700"
+                >
+                  <span className="ms-3 flex items-center gap-4 whitespace-nowrap">
                     <LogoutIcon /> Logout
                   </span>
                 </a>
@@ -92,7 +106,6 @@ const SidebarComponent = () => {
       <div className="sm:ml-64">
         {/* Navbar fixa */}
         <NavbarComponent />
-        
       </div>
     </>
   );
