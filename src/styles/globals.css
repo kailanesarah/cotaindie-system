@@ -1,52 +1,52 @@
-/* globals.css */
-
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-   /* Red */
-  --color-red-50: #FFE9E7;
-  --color-red-100: #F5C1BA;
-  --color-red-300: #D44E3D;
-  --color-red-500: #B0261A;
-  --color-red-700: #8A1F14;
-  --color-red-900: #61160E;
+@theme {
+  --color-*: initial;
 
-  /* Green */
-  --color-green-50: #E6F7EC;
-  --color-green-100: #B7EFC9;
-  --color-green-300: #4ECB71;
-  --color-green-500: #008C23;
-  --color-green-700: #006C1B;
-  --color-green-900: #004513;
-
-  /* Yellow */
-  --color-yellow-50: #FFF9E6;
-  --color-yellow-100: #FFECB3;
-  --color-yellow-300: #FFD54F;
-  --color-yellow-500: #9B7400;
-  --color-yellow-700: #6B5100;
-  --color-yellow-900: #3F3200;
+  --radius-default: 0.25rem;
 
   /* Neutrals */
-  --color-white: #ffffff;
-  --color-gray-50: #f9f9f9;
-  --color-gray-100: #f2f2f2;
-  --color-gray-200: #e5e5e5;
-  --color-gray-300: #cccccc;
-  --color-gray-500: #999999;
-  --color-gray-700: #666666;
-  --color-gray-900: #333333;
-  --color-dark-500: #040309;
-  --color-black: #000000;
+  --color-white: #fff;
 
-  /*Radius*/
-  --corners-rounded: 4px;
+  /* Border */
+  --color-b-light: #b8b8b8;
+  --color-b-dark: #ffffff25;
+
+  /* Red */
+  --color-red-darker: #9e2217;
+  --color-red-dark: #a82419;
+  --color-red-default: #b0261a;
+  --color-red-lightest: #ffe9e7;
+
+  /* Blue */
+  --color-blue-default: #067ea9;
+
+  /* Red */
+  --color-yellow-darker: #9b7400;
+  --color-yellow-light: #ffe5c0;
+
+  /* Green */
+  --color-green-default: #158f52;
+
+  /* Black */
+  --color-black-default: #040309;
+  --color-black-light: #1d1c21;
+
+  /* Beige */
+  --color-beige-light: #e5e5e2;
 
   /* Fonts */
-  --color-b-light: rgba(69, 71, 71, 0.3);
-  --font-body: "Aspekta", sans-serif;
-  --font-heading: "Aspekta", sans-serif;
-  
+  --font-body: "fontAspektaVariable", sans-serif;
+  --font-heading: "fontAspektaVariable", sans-serif;
+
+  --color-title-light: #040309;
+  --color-body-light: #3d4040;
+  --color-body-lighter: #4d4d4d;
+
+  --color-title-dark: #fff;
+  --color-body-dark: #e5e5e5;
+  --color-body-darker: #cccccc;
 }
 
 html {
@@ -57,9 +57,7 @@ html {
 
 body {
   font-family: var(--font-body);
-  @apply leading-[1.5] font-medium text-sm;
-  color: var(--color-black-800);
-  user-select: none;
+  @apply text-body-light bg-beige-light text-sm leading-[1.5] font-medium;
 }
 
 h1,
@@ -69,9 +67,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  font-weight: bold;
-  color: var(--color-black-900);
-  line-height: 1.2;
+  @apply text-title-light leading-[1.25] font-semibold;
 }
 
 h1,

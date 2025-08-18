@@ -1,7 +1,7 @@
 // src/domains/google-sheets/sheets.service.ts
-import { sheets } from "./sheets-client";
 import { getRangeSheet } from "@/modules/google-sheets/sheets-utils";
-import { Sheet } from "./sheets-schema";
+import { sheets } from "./sheets-client";
+import type { Sheet } from "./sheets-schema";
 
 export async function getSheetDataService({ sheetId, sheetRange }: Sheet) {
   try {
@@ -33,7 +33,7 @@ export async function getSheetDatabyIdService({
     const data = response.data.values ?? [];
 
     const rowIndex = data.findIndex((row) =>
-      row.some((cell) => cell?.trim() === sheetObjectId.trim())
+      row.some((cell) => cell?.trim() === sheetObjectId.trim()),
     );
 
     if (rowIndex === -1)
@@ -122,7 +122,7 @@ export async function deleteRowFromSheetService({
 
     const metadata = await sheets.spreadsheets.get({ spreadsheetId: sheetId });
     const sheet = metadata.data.sheets?.find(
-      (s) => s.properties?.title === sheetName
+      (s) => s.properties?.title === sheetName,
     );
 
     if (!sheet || sheet.properties?.sheetId === undefined)

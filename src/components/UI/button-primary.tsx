@@ -1,7 +1,4 @@
-import { blockchainnodeengine_v1 } from "googleapis";
-import { ReactNode } from "react";
-import {ButtonProps} from "../schema";
-
+import type { ButtonProps } from "../schema";
 
 const ButtonPrimary = ({
   text_button,
@@ -11,25 +8,7 @@ const ButtonPrimary = ({
 }: ButtonProps) => {
   return (
     <button
-      className="
-      bg-(--color-red-500) 
-      h-(46px) 
-      w-full 
-      px-[16px] 
-      py-[18px] 
-      flex 
-      justify-center 
-      items-center
-      gap-4 
-      self-stretch 
-      rounded-(--corners-rounded) 
-      text-(--color-white)
-      hover:bg-(--color-red-700)
-      transition-all 
-      duration-300 
-      ease-in-out
-      cursor-pointer
-      "
+      className="h-(46px) flex w-full cursor-pointer items-center justify-center gap-4 self-stretch rounded-(--corners-rounded) bg-(--color-red-500) px-[16px] py-[18px] text-(--color-white) transition-all duration-300 ease-in-out hover:bg-(--color-red-700)"
       type={type}
       disabled={disabled}
     >

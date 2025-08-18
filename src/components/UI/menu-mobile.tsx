@@ -8,10 +8,10 @@ const MenuMobile = () => {
   return (
     <>
       {/* Botão mobile */}
-      <div className="ml-auto lg:hidden cursor-pointer">
+      <div className="ml-auto cursor-pointer lg:hidden">
         <button
           onClick={() => setMenuAberto(!menuAberto)}
-          className="grid place-items-center border rounded-md min-w-[34px] min-h-[34px] bg-transparent hover:bg-slate-200/10"
+          className="grid min-h-[34px] min-w-[34px] place-items-center rounded-md border bg-transparent hover:bg-slate-200/10"
           aria-expanded={menuAberto}
         >
           <svg
@@ -54,10 +54,26 @@ const MenuMobile = () => {
         }}
       >
         <ul className="m-2 flex flex-col gap-y-1">
-          <li><a href="#" className="p-1 block">Pages</a></li>
-          <li><a href="#" className="p-1 block">Account</a></li>
-          <li><a href="#" className="p-1 block">Blocks</a></li>
-          <li><a href="#" className="p-1 block">Docs</a></li>
+          <li>
+            <a href="#" className="block p-1">
+              Pages
+            </a>
+          </li>
+          <li>
+            <a href="#" className="block p-1">
+              Account
+            </a>
+          </li>
+          <li>
+            <a href="#" className="block p-1">
+              Blocks
+            </a>
+          </li>
+          <li>
+            <a href="#" className="block p-1">
+              Docs
+            </a>
+          </li>
         </ul>
       </div>
     </>
