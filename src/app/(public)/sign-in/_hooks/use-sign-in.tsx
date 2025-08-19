@@ -1,21 +1,27 @@
 "use client";
 
 import { ToastCard } from "@/components/ui/toast-card";
+import { ROUTES } from "@/constants/urls";
 import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { signInAction } from "../_actions/sign-in-action";
 
 export function useSignIn() {
+  const router = useRouter();
+
   const { execute, isPending } = useAction(signInAction, {
     onSuccess: () => {
       toast((t) => (
         <ToastCard
           id={t.id}
           status="success"
-          title="Usuário cadastrado com sucesso!"
+          title="Login realizado com sucesso!"
           text="Bem-vindo(a) ao Rotas da Ibiapaba! Faça seu login."
         />
       ));
+
+      router.push(ROUTES.PRIVATE.DASHBOARD);
     },
     onError: () => {
       toast((t) => (
