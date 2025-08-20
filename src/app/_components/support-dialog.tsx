@@ -4,6 +4,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogHeaderContent,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SupportForm } from "./support-form";
@@ -11,11 +12,13 @@ import { SupportForm } from "./support-form";
 export const SupportDialog = () => {
   return (
     <DialogContent size="small">
-      <DialogHeader className="flex-col gap-2">
-        <DialogTitle>Envie uma mensagem para o suporte</DialogTitle>
-        <DialogDescription>
-          Algum problema técnico? A nossa equipe irá resolver o mais rápido!
-        </DialogDescription>
+      <DialogHeader>
+        <DialogHeaderContent>
+          <DialogTitle>Envie uma mensagem para o suporte</DialogTitle>
+          <DialogDescription>
+            Algum problema técnico? A nossa equipe irá resolver o mais rápido!
+          </DialogDescription>
+        </DialogHeaderContent>
       </DialogHeader>
       <DialogBody>
         <SupportForm />
