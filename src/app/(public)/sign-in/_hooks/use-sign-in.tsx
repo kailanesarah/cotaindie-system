@@ -17,7 +17,7 @@ export function useSignIn() {
           id={t.id}
           status="success"
           title="Login realizado com sucesso!"
-          text="Bem-vindo(a) ao Rotas da Ibiapaba! Faça seu login."
+          text="Acesso realizado. Bem-vindo(a) novamente."
         />
       ));
 

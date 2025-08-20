@@ -111,3 +111,7 @@ div[role="status"][aria-live="polite"] {
   padding: 0 !important;
   box-shadow: none;
 }
+
+* {
+  @apply transition-none;
+}

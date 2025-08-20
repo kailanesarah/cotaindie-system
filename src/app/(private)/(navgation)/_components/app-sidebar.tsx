@@ -3,6 +3,7 @@
 import { useSignOut } from "@/app/(private)/_hooks/use-sign-out";
 import LogoSymbol from "@/assets/imgs/logo-symbol.svg";
 import LogoTitle from "@/assets/imgs/logo-title.svg";
+import { Icon } from "@/components/ui/icon";
 import {
   Sidebar,
   SidebarContent,
@@ -15,11 +16,6 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { ROUTES } from "@/constants/urls";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Icon } from "./icon";
 import {
   SidebarButton,
   SidebarLink,
@@ -27,7 +23,11 @@ import {
   SidebarLinkDescription,
   SidebarLinkIcon,
   SidebarLinkTitle,
-} from "./sidebar-button";
+} from "@/components/ui/sidebar-button";
+import { ROUTES } from "@/constants/urls";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type TAppSidebarItem = {
   title: string;
