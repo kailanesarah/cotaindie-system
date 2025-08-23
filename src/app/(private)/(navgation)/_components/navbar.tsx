@@ -1,12 +1,16 @@
 import { SupportDialog } from "@/app/_components/support-dialog";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { auth } from "@/modules/auth/api/auth";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { NavbarBreadcrumb } from "./navbar-breadcrump";
 import { NavbarProfile } from "./navbar-profile";
 import { QuestionsDialog } from "./questions-dialog";
 
-export const Navbar = () => {
+export const Navbar = async () => {
+  const session = await auth();
+  const user = session?.user;
+
   return (
     <nav className="border-b-light flex h-[4.5625rem] items-center border-b bg-white px-6 py-4">
       <div className="flex grow items-center justify-between gap-6">
@@ -30,7 +34,10 @@ export const Navbar = () => {
             </DialogTrigger>
             <SupportDialog />
           </Dialog>
-          <NavbarProfile name="Kailane Sarah" role="administrador" />
+          <NavbarProfile
+            name={user?.name || "user_name"}
+            role="administrador"
+          />
         </div>
       </div>
     </nav>
