@@ -46,7 +46,7 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "placeholder:body-lighter border-b-light rounded-default flex h-[2.875rem] w-full cursor-pointer items-center justify-between gap-2 border px-5 pb-0.5 text-sm shadow-[inset_0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.04)] focus:outline-1",
+        "group placeholder:body-lighter border-b-light rounded-default flex h-[2.875rem] w-full cursor-pointer items-center justify-between gap-2 border px-5 pb-0.5 shadow-[inset_0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.04)]",
         className,
       )}
       {...props}
@@ -56,7 +56,11 @@ function SelectTrigger({
         className="truncate text-left"
       />
       <SelectPrimitive.Icon asChild>
-        <Icon name="keyboard_arrow_down" size={20} className="-mr-1" />
+        <Icon
+          name="keyboard_arrow_down"
+          size={20}
+          className="-mr-1 transition-transform duration-200 group-data-[state=open]:rotate-180"
+        />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
