@@ -7,5 +7,7 @@ import { redirect } from "next/navigation";
 export const onlyGuestAction = async () => {
   const session = await auth();
 
-  if (session?.user) redirect(ROUTES.PUBLIC.SIGNIN);
+  if (session?.user) {
+    redirect(ROUTES.PRIVATE.DASHBOARD);
+  }
 };

@@ -3,7 +3,7 @@ import { SupportBox } from "./_components/support-box";
 
 export default function SignInPage() {
   return (
-    <main className="flex grow items-center justify-center py-6">
+    <main className="flex grow items-center justify-center">
       <div className="flex max-w-[30rem] flex-col gap-6">
         <SignInBox />
         <SupportBox />
