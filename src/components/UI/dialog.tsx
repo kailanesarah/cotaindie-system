@@ -127,9 +127,22 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-header"
       className={cn(
-        "border-b-b-light flex border-b px-6 py-4 pr-16",
+        "border-b-b-light flex items-center gap-4 border-b px-6 py-4 pr-16",
         className,
       )}
+      {...props}
+    />
+  );
+}
+
+function DialogHeaderContent({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-header"
+      className={cn("flex flex-col gap-2", className)}
       {...props}
     />
   );
@@ -196,6 +209,7 @@ export {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogHeaderContent,
   DialogIcon,
   DialogOverlay,
   DialogPortal,

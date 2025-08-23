@@ -5,31 +5,31 @@ import { ROUTES } from "@/constants/urls";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { signInAction } from "../_actions/sign-in-action";
+import { signOutAction } from "../_actions/sign-out-action";
 
-export function useSignIn() {
+export function useSignOut() {
   const router = useRouter();
 
-  const { execute, isPending } = useAction(signInAction, {
+  const { execute, isPending } = useAction(signOutAction, {
     onSuccess: () => {
       toast((t) => (
         <ToastCard
           id={t.id}
           status="success"
-          title="Login realizado com sucesso!"
-          text="Acesso realizado. Bem-vindo(a) novamente."
+          title="Sessão encerrada com sucesso!"
+          text="Você precisará logar novamente para acessar."
         />
       ));
 
-      router.push(ROUTES.PRIVATE.DASHBOARD);
+      router.push(ROUTES.PUBLIC.SIGNIN);
     },
     onError: () => {
       toast((t) => (
         <ToastCard
           id={t.id}
           status="error"
-          title="Erro ao entrar no sistema!"
-          text="Verifique se sua senha ou email estão válidos."
+          title="Erro ao sair do sistema!"
+          text="Verifique se você já está deslogado."
         />
       ));
     },
