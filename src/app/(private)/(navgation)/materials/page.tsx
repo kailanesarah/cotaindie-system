@@ -1,13 +1,27 @@
+import { AddMaterialButton } from "../_components/add-button";
+import { EmptyDataBox } from "../_components/empty-data-box";
 import { PageContent } from "../_components/page-content";
 import {
   PageHeader,
+  PageHeaderAction,
   PageHeaderContent,
   PageHeaderDescription,
   PageHeaderHeading,
   PageHeaderIcon,
   PageHeaderTitle,
 } from "../_components/page-header";
-import { FilterInputTags } from "../_components/seach";
+import {
+  SearchBar,
+  SearchProvider,
+  SearchSortPeriod,
+  SearchSortWrap,
+  SearchTextFilter,
+  SelectFilter,
+} from "../_components/search-bar";
+import { categories } from "../_constants/categories";
+import { MaterialDialog } from "./_components/material-dialog";
+import { ResultGrid } from "./_components/material-grid";
+import { materials } from "./_constants/material-list";
 
 export default async function MaterialsPage() {
   return (
@@ -25,42 +39,25 @@ export default async function MaterialsPage() {
             </PageHeaderDescription>
           </PageHeaderHeading>
         </PageHeaderContent>
+        <PageHeaderAction>
+          <AddMaterialButton text="Novo material">
+            <MaterialDialog />
+          </AddMaterialButton>
+        </PageHeaderAction>
       </PageHeader>
-      <FilterInputTags data={materials} />
-      <PageContent>wqqwqw</PageContent>
+      <SearchProvider data={materials}>
+        <SearchBar>
+          <SearchTextFilter name="search" />
+          <SearchSortWrap>
+            <SelectFilter name="Categoria" options={categories} />
+            <SearchSortPeriod />
+          </SearchSortWrap>
+        </SearchBar>
+        <PageContent>
+          <ResultGrid />
+          <EmptyDataBox />
+        </PageContent>
+      </SearchProvider>
     </main>
   );
 }
-
-const materials: Material[] = [
-  {
-    id: "1",
-    category: "Piso",
-    name: "Porcelanato",
-    description: "Porcelanato polido 60x60cm",
-    measureType: "m2",
-    wasteTax: 0.1,
-    baseValue: 50,
-    measure: [0.36],
-  },
-  {
-    id: "2",
-    category: "Tinta",
-    name: "Tinta Acrílica",
-    description: "Tinta branca fosca",
-    measureType: "ml",
-    wasteTax: 0.05,
-    baseValue: 25,
-    measure: [18, 3.6],
-  },
-  {
-    id: "3",
-    category: "Revestimento",
-    name: "Azulejo",
-    description: "Azulejo 20x20cm azul",
-    measureType: "m2",
-    wasteTax: 0.08,
-    baseValue: 30,
-    measure: [0.04, 0.05],
-  },
-];
