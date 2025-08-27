@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { cx } from "class-variance-authority";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Icon } from "./icon";
 
 function Select({
@@ -46,7 +45,7 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "group placeholder:body-lighter border-b-light rounded-default flex h-[2.875rem] w-full cursor-pointer items-center justify-between gap-2 border px-5 pb-0.5 shadow-[inset_0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.04)]",
+        "group placeholder:body-lighter border-b-light rounded-default flex h-[2.875rem] w-full cursor-pointer items-center justify-between gap-2 border bg-[#E5E5E235] px-5 pb-0.5 shadow-[inset_0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.04)]",
         className,
       )}
       {...props}
@@ -77,7 +76,7 @@ function SelectContent({
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 border-b-light rounded-default relative z-50 mt-1 flex max-h-(--radix-select-content-available-height) w-full origin-(--radix-select-content-transform-origin) flex-col overflow-x-hidden overflow-y-auto border bg-white p-0",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 border-b-light rounded-default relative z-50 mt-1 flex max-h-[20rem] w-full origin-(--radix-select-content-transform-origin) flex-col overflow-x-hidden overflow-y-auto border bg-white p-0",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className,
@@ -159,12 +158,12 @@ function SelectScrollUpButton({
     <SelectPrimitive.ScrollUpButton
       data-slot="select-scroll-up-button"
       className={cn(
-        "flex cursor-default items-center justify-center py-1",
+        "rounded-default border-b-light text-title-light mx-1 mt-1 flex cursor-default items-center justify-center border bg-[#F4F4F0] py-1 shadow-[inset_0_-0.25rem_1.25rem_0_rgba(0,0,0,0.04),0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.05)] hover:bg-[#F0F0EC]",
         className,
       )}
       {...props}
     >
-      <ChevronUpIcon className="size-4" />
+      <Icon name="keyboard_arrow_up" />
     </SelectPrimitive.ScrollUpButton>
   );
 }
@@ -177,12 +176,12 @@ function SelectScrollDownButton({
     <SelectPrimitive.ScrollDownButton
       data-slot="select-scroll-down-button"
       className={cn(
-        "flex cursor-default items-center justify-center py-1",
+        "rounded-default border-b-light text-title-light mx-1 mb-1 flex cursor-default items-center justify-center border bg-[#F4F4F0] py-1 shadow-[inset_0_-0.25rem_1.25rem_0_rgba(0,0,0,0.04),0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.05)] hover:bg-[#F0F0EC]",
         className,
       )}
       {...props}
     >
-      <ChevronDownIcon className="text-title-dark size-4" />
+      <Icon name="keyboard_arrow_down" />
     </SelectPrimitive.ScrollDownButton>
   );
 }

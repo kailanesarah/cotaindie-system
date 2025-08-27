@@ -93,7 +93,7 @@ function DialogContent({
             >
               <DialogPrimitive.Content
                 className={cn(
-                  "rounded-default relative bg-white focus:outline-none",
+                  "rounded-default relative overflow-clip bg-white focus:outline-none",
                   "data-[state=open]:animate-in data-[state=closed]:animate-out",
                   "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
                   "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
@@ -150,22 +150,33 @@ function DialogHeaderContent({
 
 function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div data-slot="dialog-body" className={cn("p-6", className)} {...props} />
+    <div
+      data-slot="dialog-body"
+      className={cn("border-b-light border-b p-6", className)}
+      {...props}
+    />
   );
 }
 
-function DialogIcon({ name }: Readonly<{ name: string }>) {
-  return <Icon name={name} size={24} className="text-red-default" />;
+function DialogIcon({
+  name,
+  className,
+  size = 24,
+}: Readonly<{ name: string; className?: string; size?: number }>) {
+  return (
+    <Icon
+      name={name}
+      size={size}
+      className={cn("text-red-default", className)}
+    />
+  );
 }
 
 function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn(
-        "border-t-b-light flex flex-col border-t px-6 py-4",
-        className,
-      )}
+      className={cn("flex flex-col px-6 py-4", className)}
       {...props}
     />
   );
