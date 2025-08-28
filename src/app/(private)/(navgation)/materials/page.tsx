@@ -10,6 +10,8 @@ import {
   PageHeaderIcon,
   PageHeaderTitle,
 } from "../_components/page-header";
+import { PageMain } from "../_components/page-main";
+import { Pagination } from "../_components/pagination";
 import {
   SearchBar,
   SearchProvider,
@@ -25,7 +27,7 @@ import { materials } from "./_constants/material-list";
 
 export default async function MaterialsPage() {
   return (
-    <main>
+    <PageMain>
       <PageHeader>
         <PageHeaderContent>
           <PageHeaderIcon name="inventory_2" />
@@ -57,7 +59,8 @@ export default async function MaterialsPage() {
           <ResultGrid />
           <EmptyDataBox />
         </PageContent>
+        <Pagination />
       </SearchProvider>
-    </main>
+    </PageMain>
   );
 }
