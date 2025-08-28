@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 
-export const Pagination = () => {
+export const SearchPagination = () => {
   const [pagination, setPagination] = useState("5");
 
   return (
-    <div className="border-b-light flex items-center justify-end gap-6 border-t bg-white px-6 py-4">
+    <div className="border-b-light sticky bottom-0 flex items-center justify-end gap-6 border-t bg-white px-6 py-4">
       <div className="flex items-center gap-4 whitespace-nowrap">
         Itens mostrados
         <Select value={pagination} onValueChange={setPagination}>

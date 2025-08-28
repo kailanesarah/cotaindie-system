@@ -46,7 +46,7 @@ export const SearchProvider = <T extends Record<string, any>>({
 };
 
 export const SearchBar = ({ children }: { children: ReactNode }) => (
-  <div className="border-b-light flex gap-6 border-b bg-white p-6">
+  <div className="border-b-light top-0 flex gap-6 border-b bg-white p-6">
     {children}
   </div>
 );
@@ -168,7 +168,7 @@ export const SelectFilter = ({
   options,
 }: {
   name: string;
-  options: { id: string; name: string }[];
+  options: string[];
 }) => {
   const { filters, setFilter } = useFilterContext();
 
@@ -190,8 +190,8 @@ export const SelectFilter = ({
       <SelectContent align="end">
         <SelectItem value="all">{name}</SelectItem>
         {options.map((opt) => (
-          <SelectItem key={opt.id} value={opt.id}>
-            {opt.name}
+          <SelectItem key={opt} value={opt}>
+            {opt}
           </SelectItem>
         ))}
       </SelectContent>

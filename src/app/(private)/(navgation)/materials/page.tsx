@@ -11,7 +11,7 @@ import {
   PageHeaderTitle,
 } from "../_components/page-header";
 import { PageMain } from "../_components/page-main";
-import { Pagination } from "../_components/pagination";
+import { SearchPagination } from "../_components/pagination";
 import {
   SearchBar,
   SearchProvider,
@@ -59,7 +59,7 @@ export default async function MaterialsPage() {
           <ResultGrid />
           <EmptyDataBox />
         </PageContent>
-        <Pagination />
+        <SearchPagination />
       </SearchProvider>
     </PageMain>
   );

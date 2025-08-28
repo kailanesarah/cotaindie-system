@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
-import { cutMap } from "../../_constants/cut-map";
 
 export const MaterialCutFields = () => {
   const form = useFormContext();
@@ -26,8 +25,7 @@ export const MaterialCutFields = () => {
 
   if (measureType !== "m2") return;
 
-  const cutDirection = form.watch("cutDirection") as "v" | "vh" | undefined;
-  const cutLabel = cutMap[cutDirection ?? "vh"];
+  const cutDirection = form.watch("cutDirection");
 
   return (
     <DialogBody className="grid grid-cols-2 items-start gap-3">
@@ -63,7 +61,7 @@ export const MaterialCutFields = () => {
               : "calendar_view_week"
           }
         />
-        {cutLabel}
+        {cutDirection}
       </InputDisabled>
     </DialogBody>
   );
