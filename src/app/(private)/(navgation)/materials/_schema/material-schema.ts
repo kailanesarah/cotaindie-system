@@ -23,19 +23,21 @@ export const materialSchema = z.object({
   cutDirection: z.enum(["v", "vh"]).optional(),
 });
 
-export const materialDefaultValues: z.infer<typeof materialSchema> = {
-  id: "",
-  category: "",
-  name: "",
-  description: "",
-  measureType: "m2",
-  unit: "cm",
-  wasteTax: 0,
-  baseValue: 0,
-  measure: [0, 0],
-  cutDirection: "vh",
+export const getMaterialDefaultValues = (
+  material?: Material,
+): z.infer<typeof materialSchema> => {
+  return {
+    id: material?.id ?? "",
+    category: material?.category?.id ?? "",
+    name: material?.name ?? "",
+    description: material?.description ?? "",
+    measureType: material?.measureType ?? "m2",
+    unit: material?.unit ?? "cm",
+    wasteTax: material?.wasteTax ?? 0,
+    baseValue: material?.baseValue ?? 0,
+    measure: material?.measure
+      ? (material.measure.map((v) => Number(v)) as [number] | [number, number])
+      : [0, 0],
+    cutDirection: material?.cutDirection ?? "vh",
+  };
 };
-
-export interface IMaterialDialog {
-  material?: z.infer<typeof materialSchema>;
-}

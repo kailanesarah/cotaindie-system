@@ -168,7 +168,7 @@ export const SelectFilter = ({
   options,
 }: {
   name: string;
-  options: string[];
+  options: Category[];
 }) => {
   const { filters, setFilter } = useFilterContext();
 
@@ -190,8 +190,8 @@ export const SelectFilter = ({
       <SelectContent align="end">
         <SelectItem value="all">{name}</SelectItem>
         {options.map((opt) => (
-          <SelectItem key={opt} value={opt}>
-            {opt}
+          <SelectItem key={opt.id} value={opt.id}>
+            {opt.name}
           </SelectItem>
         ))}
       </SelectContent>

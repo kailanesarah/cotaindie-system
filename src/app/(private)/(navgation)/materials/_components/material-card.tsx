@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { getCategoryNameById } from "../../_utils/get-category-by-id";
 import { parseCurency } from "../../_utils/parse-currency";
 import { formatMeasure } from "../_utils/format-mesure";
 import { MaterialDialog } from "./material-dialog";
@@ -33,9 +32,7 @@ export const MaterialCard = ({ material }: { material: Material }) => {
               {formatMeasure(material.measure, material.unit)})
             </span>
             <div className="flex gap-2">
-              <Badge variant="secondary">
-                {getCategoryNameById(material.category)}
-              </Badge>
+              <Badge variant="secondary">{material.category.name}</Badge>
               <Badge>{material.id}</Badge>
             </div>
           </div>

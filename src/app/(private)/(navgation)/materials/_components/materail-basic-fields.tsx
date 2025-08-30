@@ -51,8 +51,8 @@ export const MaterialBasicFields = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -108,9 +108,9 @@ export const MaterialBasicFields = () => {
             <FormLabel>Taxa de desperdício</FormLabel>
             <FormControl>
               <NumericFormat
-                value={field.value}
+                value={field.value * 100}
                 onValueChange={(values) =>
-                  field.onChange(values.floatValue ?? 0)
+                  field.onChange((values.floatValue ?? 0) / 100)
                 }
                 decimalScale={0}
                 fixedDecimalScale={false}
