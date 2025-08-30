@@ -2,11 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { useFilterContext } from "../_context/filter-context";
+import { useSearchContext } from "../_context/seach-provider";
 
 export const EmptyDataBox = () => {
-  const { resetFilters, data } = useFilterContext();
-  const handleReset = () => resetFilters();
+  const { reset, data } = useSearchContext<Material[]>();
 
   if (data.length > 0) return;
 
@@ -22,7 +21,7 @@ export const EmptyDataBox = () => {
           a busca.
         </p>
       </div>
-      <Button onClick={handleReset} variant="secondary">
+      <Button onClick={reset} variant="secondary">
         <Icon name="filter_alt_off" />
         Limpar filtros
       </Button>

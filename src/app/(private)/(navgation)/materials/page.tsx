@@ -14,16 +14,15 @@ import { PageMain } from "../_components/page-main";
 import { SearchPagination } from "../_components/pagination";
 import {
   SearchBar,
-  SearchProvider,
   SearchSortPeriod,
   SearchSortWrap,
   SearchTextFilter,
   SelectFilter,
 } from "../_components/search-bar";
 import { categories } from "../_constants/categories";
+import { SearchProvider } from "../_context/seach-provider";
 import { MaterialDialog } from "./_components/material-dialog";
 import { ResultGrid } from "./_components/material-grid";
-import { materials } from "./_constants/material-list";
 
 export default async function MaterialsPage() {
   return (
@@ -47,11 +46,11 @@ export default async function MaterialsPage() {
           </AddMaterialButton>
         </PageHeaderAction>
       </PageHeader>
-      <SearchProvider data={materials}>
+      <SearchProvider>
         <SearchBar>
-          <SearchTextFilter name="search" />
+          <SearchTextFilter />
           <SearchSortWrap>
-            <SelectFilter name="Categoria" options={categories} />
+            <SelectFilter options={categories} />
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
