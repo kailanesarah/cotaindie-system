@@ -1,5 +1,6 @@
 import { AddMaterialButton } from "../_components/add-button";
 import { EmptyDataBox } from "../_components/empty-data-box";
+import { LoadingBox } from "../_components/loading-box";
 import { PageContent } from "../_components/page-content";
 import {
   PageHeader,
@@ -20,7 +21,7 @@ import {
   SelectFilter,
 } from "../_components/search-bar";
 import { categories } from "../_constants/categories";
-import { SearchProvider } from "../_context/seach-provider";
+import { SearchProvider } from "../_context/search-provider";
 import { MaterialDialog } from "./_components/material-dialog";
 import { ResultGrid } from "./_components/material-grid";
 
@@ -56,6 +57,7 @@ export default async function MaterialsPage() {
         </SearchBar>
         <PageContent>
           <ResultGrid />
+          <LoadingBox />
           <EmptyDataBox />
         </PageContent>
         <SearchPagination />

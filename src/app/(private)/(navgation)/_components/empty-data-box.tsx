@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { useSearchContext } from "../_context/seach-provider";
+import { useSearchContext } from "../_context/search-provider";
 
 export const EmptyDataBox = () => {
-  const { reset, data } = useSearchContext<Material[]>();
+  const { reset, data, loading } = useSearchContext<Material[]>();
 
-  if (data.length > 0) return;
+  if (data.length > 0 || loading) return;
 
   return (
     <div className="rounded-default border-b-light flex flex-col items-center gap-6 border bg-white p-6 pb-10">

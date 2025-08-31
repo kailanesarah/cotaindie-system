@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@/components/ui/icon";
-import { useSearchContext } from "../_context/seach-provider";
+import { useSearchContext } from "../_context/search-provider";
 
 export const LoadingBox = () => {
   const { loading } = useSearchContext();
