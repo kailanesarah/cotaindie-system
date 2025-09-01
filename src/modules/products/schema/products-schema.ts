@@ -11,11 +11,7 @@ export const productSchema = z.object({
   product_description: z.string()
     .min(1, "Product description is required")
     .trim(),
-  product_category: z.enum([
-    "Chapas de madeira",
-    "Ferragens",
-    "Itens de consumo"
-  ]),
+  product_category: z.string().min(1).trim(),
 
   // Tipo de medida
   product_measurements: z.enum([
