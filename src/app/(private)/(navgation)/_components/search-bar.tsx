@@ -183,8 +183,8 @@ export const SearchSortPeriod = () => {
         </SelectTrigger>
       </Button>
       <SelectContent>
-        <SelectItem value="DESC">Mais Recentes</SelectItem>
-        <SelectItem value="ASC">Mais Antigos</SelectItem>
+        <SelectItem value="DESC">Recentes</SelectItem>
+        <SelectItem value="ASC">Antigos</SelectItem>
       </SelectContent>
     </Select>
   );
