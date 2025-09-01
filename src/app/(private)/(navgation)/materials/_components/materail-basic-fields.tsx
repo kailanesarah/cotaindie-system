@@ -50,9 +50,9 @@ export const MaterialBasicFields = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map(({ id, name }) => (
-                    <SelectItem key={id} value={id.toString()}>
-                      {name}
+                  {categories.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
                     </SelectItem>
                   ))}
                 </SelectContent>
