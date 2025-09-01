@@ -22,7 +22,7 @@ export const sidebarLinks = [
   {
     title: "Clientes",
     description: "Carteira de clientes",
-    href: "#",
+    href: ROUTES.PRIVATE.CLIENTS,
     icon: "article_person",
   },
 ];

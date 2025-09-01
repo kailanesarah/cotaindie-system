@@ -9,13 +9,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useFilterContext } from "../../_context/seach-provider";
+import { useSearch } from "../../_hooks/use-search";
+import { clients } from "../_constants/clients-list";
+import { clientTypeMap } from "../_utils/client-type-map";
 import { ClientTableActions } from "./client-table-actions";
 
 export const ClientsTable = () => {
-  const { data: clients } = useFilterContext<Client>();
+  const { data } = useSearch<Client>({
+    action: async (filters) => {
+      console.log("Filtros recebidos:", filters);
+      return {
+        items: clients,
+        totalPages: 2,
+        page: 2,
+      };
+    },
+  });
 
-  if (clients.length === 0 || !clients) return;
+  if (data.length === 0 || !data) return;
 
   return (
     <Table>
@@ -31,7 +42,7 @@ export const ClientsTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {clients.map((client) => (
+        {data.map((client) => (
           <TableRow key={client.code}>
             <TableCell>
               <Badge className="text-xs">{client.code}</Badge>
@@ -47,10 +58,10 @@ export const ClientsTable = () => {
               </span>
             </TableCell>
             <TableCell>
-              <Badge variant="secondary">{client.type}</Badge>
+              <Badge variant="secondary">{clientTypeMap[client.type]}</Badge>
             </TableCell>
             <TableCell className="text-right">
-              <ClientTableActions />
+              <ClientTableActions client={client} />
             </TableCell>
           </TableRow>
         ))}

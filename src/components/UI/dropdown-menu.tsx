@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { ChevronRightIcon } from "lucide-react";
+import { forwardRef } from "react";
 
 function DropdownMenu({
   ...props
@@ -79,6 +80,29 @@ function DropdownMenuItem({
     />
   );
 }
+
+interface DropdownMenuStyleButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+}
+
+const DropdownMenuStyleButton = forwardRef<
+  HTMLButtonElement,
+  DropdownMenuStyleButtonProps
+>(({ className, children, ...props }, ref) => {
+  return (
+    <button
+      ref={ref}
+      {...props}
+      className={cn(
+        "hover:bg-beige-light/40 text-title-light relative flex h-[2.875rem] cursor-pointer items-center gap-2 px-5 py-1.5 outline-none select-none",
+        className,
+      )}
+    >
+      {children}
+    </button>
+  );
+});
 
 function DropdownMenuLabel({
   className,
@@ -164,6 +188,7 @@ export {
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuStyleButton,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
