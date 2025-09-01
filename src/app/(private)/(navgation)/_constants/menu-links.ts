@@ -2,7 +2,7 @@ import { ROUTES } from "@/constants/urls";
 
 export const sidebarLinks = [
   {
-    title: "Playground",
+    title: "Dashboard",
     description: "Dados gerais e números",
     href: ROUTES.PRIVATE.DASHBOARD,
     icon: "dashboard_customize",
@@ -16,7 +16,7 @@ export const sidebarLinks = [
   {
     title: "Materiais",
     description: "Materia prima usada",
-    href: "#",
+    href: ROUTES.PRIVATE.PRODUCTS,
     icon: "inventory_2",
   },
   {

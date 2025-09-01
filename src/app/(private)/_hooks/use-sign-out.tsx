@@ -21,6 +21,7 @@ export function useSignOut() {
         />
       ));
 
+      router.refresh();
       router.push(ROUTES.PUBLIC.SIGNIN);
     },
     onError: () => {

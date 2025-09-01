@@ -27,17 +27,23 @@ export function Button({
   className,
   variant,
   asChild = false,
+  square = false,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    square?: boolean;
   }) {
   const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, className }))}
+      className={cn(
+        buttonVariants({ variant }),
+        square && "max-w-[2.875rem] min-w-[2.875rem] p-0",
+        className,
+      )}
       {...props}
     />
   );
