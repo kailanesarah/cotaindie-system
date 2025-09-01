@@ -15,35 +15,9 @@ import {
   type ChangeEvent,
   type KeyboardEvent,
   type ReactNode,
-  useMemo,
   useState,
 } from "react";
-import { FilterContext, useFilterContext } from "../_context/filter-context";
-import { useFilter } from "../_hooks/use-filter";
-
-export const SearchProvider = <T extends Record<string, any>>({
-  data,
-  children,
-}: {
-  data: T[];
-  children: React.ReactNode;
-}) => {
-  const { filters, setFilter, resetFilters, filteredData } = useFilter(data);
-
-  const value = useMemo(
-    () => ({
-      filters,
-      setFilter,
-      resetFilters,
-      data: filteredData,
-    }),
-    [filters, setFilter, resetFilters, filteredData],
-  );
-
-  return (
-    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
-  );
-};
+import { useSearchContext } from "../_context/seach-provider";
 
 export const SearchBar = ({ children }: { children: ReactNode }) => (
   <div className="border-b-light top-0 flex gap-6 border-b bg-white p-6">
@@ -103,32 +77,28 @@ const SearchBadgeGroup = ({
 };
 
 export const SearchTextFilter = ({
-  name,
   placeholder = "Pesquise por termos...",
 }: {
-  name: string;
   placeholder?: string;
 }) => {
   const MAX_TAGS = 3;
-
-  const { filters, setFilter } = useFilterContext();
+  const { state, dispatch } = useSearchContext();
   const [input, setInput] = useState("");
-  const currentFilters: string[] = filters[name] || [];
 
   const addFilter = () => {
     const val = input.trim();
     if (!val) return;
-    if (!currentFilters.includes(val)) {
-      setFilter(name, [...currentFilters, val]);
+    if (!state.text.includes(val)) {
+      dispatch({ type: "SET_TEXT", payload: [...state.text, val] });
       setInput("");
     }
   };
 
   const removeFilter = (term: string) => {
-    setFilter(
-      name,
-      currentFilters.filter((f) => f !== term),
-    );
+    dispatch({
+      type: "SET_TEXT",
+      payload: state.text.filter((f) => f !== term),
+    });
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -150,7 +120,7 @@ export const SearchTextFilter = ({
           onKeyDown={handleKeyDown}
         />
         <SearchBadgeGroup
-          filters={currentFilters}
+          filters={state.text}
           removeFilter={removeFilter}
           maxVisible={MAX_TAGS}
         />
@@ -164,34 +134,28 @@ export const SearchTextFilter = ({
 };
 
 export const SelectFilter = ({
-  name,
   options,
 }: {
-  name: string;
-  options: string[];
+  options: { id: string; name: string }[];
 }) => {
-  const { filters, setFilter } = useFilterContext();
+  const { state, dispatch } = useSearchContext();
 
   const handleChange = (value: string) => {
-    if (value === "all") {
-      setFilter(name, "");
-    } else {
-      setFilter(name, value);
-    }
+    dispatch({ type: "SET_CATEGORY", payload: value === "all" ? "" : value });
   };
 
   return (
-    <Select value={filters[name] || "all"} onValueChange={handleChange}>
+    <Select value={state.category || "all"} onValueChange={handleChange}>
       <Button variant="secondary" asChild>
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
       </Button>
       <SelectContent align="end">
-        <SelectItem value="all">{name}</SelectItem>
+        <SelectItem value="all">Todas as categorias</SelectItem>
         {options.map((opt) => (
-          <SelectItem key={opt} value={opt}>
-            {opt}
+          <SelectItem key={opt.id} value={opt.id}>
+            {opt.name}
           </SelectItem>
         ))}
       </SelectContent>
@@ -200,12 +164,14 @@ export const SelectFilter = ({
 };
 
 export const SearchSortPeriod = () => {
-  const { filters, setFilter } = useFilterContext();
+  const { state, dispatch } = useSearchContext();
 
   return (
     <Select
-      value={filters["order"] || "asc"}
-      onValueChange={(value) => setFilter("order", value)}
+      value={state.sort}
+      onValueChange={(value) =>
+        dispatch({ type: "SET_SORT", payload: value as "DESC" | "ASC" })
+      }
     >
       <Button variant="secondary" asChild>
         <SelectTrigger>
@@ -213,8 +179,8 @@ export const SearchSortPeriod = () => {
         </SelectTrigger>
       </Button>
       <SelectContent>
-        <SelectItem value="asc">Recentes</SelectItem>
-        <SelectItem value="desc">Antigos</SelectItem>
+        <SelectItem value="DESC">Mais Recentes</SelectItem>
+        <SelectItem value="ASC">Mais Antigos</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
+import { cutDirectionMap } from "../_utils/cut-direction-map";
 
 export const MaterialCutFields = () => {
   const form = useFormContext();
@@ -25,7 +26,7 @@ export const MaterialCutFields = () => {
 
   if (measureType !== "m2") return;
 
-  const cutDirection = form.watch("cutDirection");
+  const cutDirection = form.watch("cutDirection") as "vh" | "v";
 
   return (
     <DialogBody className="grid grid-cols-2 items-start gap-3">
@@ -44,8 +45,8 @@ export const MaterialCutFields = () => {
                   <SelectValue placeholder="Selecione o sentido de corte" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="vh">Vertical e horizontal</SelectItem>
-                  <SelectItem value="v">Vertical</SelectItem>
+                  <SelectItem value="vh">{cutDirectionMap["vh"]}</SelectItem>
+                  <SelectItem value="v">{cutDirectionMap["v"]}</SelectItem>
                 </SelectContent>
               </Select>
             </FormControl>
@@ -61,7 +62,7 @@ export const MaterialCutFields = () => {
               : "calendar_view_week"
           }
         />
-        {cutDirection}
+        {cutDirectionMap[cutDirection]}
       </InputDisabled>
     </DialogBody>
   );

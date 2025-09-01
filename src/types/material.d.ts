@@ -1,6 +1,6 @@
 interface Material {
   id: string;
-  category: string;
+  category: Category;
   name: string;
   description: string;
   measureType: "m2" | "ml" | "un";

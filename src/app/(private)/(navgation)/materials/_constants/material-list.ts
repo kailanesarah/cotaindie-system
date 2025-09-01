@@ -1,7 +1,7 @@
 export const materials: Material[] = [
   {
     id: "1",
-    category: "MDF",
+    category: { id: "1", name: "MDF" },
     name: "Painel MDF 18mm",
     description:
       "Painel de MDF cru, espessura 18mm, dimensões 275x183cm, ideal para móveis e interiores.",
@@ -13,7 +13,7 @@ export const materials: Material[] = [
   },
   {
     id: "2",
-    category: "Compensado",
+    category: { id: "2", name: "Compensado" },
     name: "Compensado Naval",
     description:
       "Compensado naval de 12mm, resistente à água, adequado para ambientes úmidos e projetos externos.",
@@ -25,7 +25,7 @@ export const materials: Material[] = [
   },
   {
     id: "3",
-    category: "Ferragens",
+    category: { id: "3", name: "Ferragens" },
     name: "Dobradiça 35mm",
     description:
       "Dobradiça metálica de 35mm para portas e móveis, garantindo abertura suave e durabilidade.",
@@ -37,7 +37,7 @@ export const materials: Material[] = [
   },
   {
     id: "4",
-    category: "Material de consumo",
+    category: { id: "4", name: "Material de consumo" },
     name: "Parafuso 4x40mm",
     description:
       "Parafuso zincado 4x40mm, resistente à corrosão, ideal para fixação em madeira.",
@@ -49,7 +49,7 @@ export const materials: Material[] = [
   },
   {
     id: "5",
-    category: "Fita de borda",
+    category: { id: "5", name: "Fita de borda" },
     name: "Fita de borda PVC",
     description:
       "Fita de borda em PVC branca de 22mm, para acabamento de móveis e painéis.",
