@@ -17,7 +17,7 @@ import {
   type ReactNode,
   useState,
 } from "react";
-import { useSearchContext } from "../_context/seach-provider";
+import { useSearchContext } from "../_context/search-provider";
 
 export const SearchBar = ({ children }: { children: ReactNode }) => (
   <div className="border-b-light top-0 flex gap-6 border-b bg-white p-6">
@@ -125,7 +125,6 @@ export const SearchTextFilter = ({
           maxVisible={MAX_TAGS}
         />
       </div>
-
       <Button onClick={addFilter} square>
         <Icon name="search" />
       </Button>
@@ -135,17 +134,22 @@ export const SearchTextFilter = ({
 
 export const SelectFilter = ({
   options,
+  filterKey = "category",
 }: {
   options: { id: string; name: string }[];
+  filterKey?: string;
 }) => {
   const { state, dispatch } = useSearchContext();
+  const currentValue =
+    state.extras.find((e) => e.key === filterKey)?.value || "";
 
   const handleChange = (value: string) => {
-    dispatch({ type: "SET_CATEGORY", payload: value === "all" ? "" : value });
+    if (value === "all") dispatch({ type: "REMOVE_EXTRA", payload: filterKey });
+    else dispatch({ type: "SET_EXTRA", payload: { key: filterKey, value } });
   };
 
   return (
-    <Select value={state.category || "all"} onValueChange={handleChange}>
+    <Select value={currentValue || "all"} onValueChange={handleChange}>
       <Button variant="secondary" asChild>
         <SelectTrigger>
           <SelectValue />
@@ -179,8 +183,8 @@ export const SearchSortPeriod = () => {
         </SelectTrigger>
       </Button>
       <SelectContent>
-        <SelectItem value="DESC">Mais Recentes</SelectItem>
-        <SelectItem value="ASC">Mais Antigos</SelectItem>
+        <SelectItem value="DESC">Recentes</SelectItem>
+        <SelectItem value="ASC">Antigos</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -1,15 +1,18 @@
 "use client";
 
-import { useSearch } from "../../_hooks/use-seach";
+import { useSearch } from "../../_hooks/use-search";
 import { materials } from "../_constants/material-list";
 import { MaterialCard } from "./material-card";
 
 export const ResultGrid = () => {
-  const { data: items } = useSearch<Material[]>({
+  const { data: items } = useSearch<Material>({
     action: async (filters) => {
-      console.log(filters);
-
-      return materials;
+      console.log("Filtros recebidos:", filters);
+      return {
+        items: materials,
+        totalPages: 2,
+        page: 2,
+      };
     },
   });
 

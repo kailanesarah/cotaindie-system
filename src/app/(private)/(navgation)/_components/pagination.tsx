@@ -9,16 +9,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useSearchContext } from "../_context/search-provider";
 
 export const SearchPagination = () => {
-  const [pagination, setPagination] = useState("5");
+  const { state, dispatch } = useSearchContext();
+
+  const { page, perPage, totalPages } = state.pagination;
+
+  const changePage = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    dispatch({ type: "SET_PAGE", payload: newPage });
+  };
+
+  const changePerPage = (newPerPage: number) => {
+    dispatch({ type: "SET_PER_PAGE", payload: newPerPage });
+  };
 
   return (
     <div className="border-b-light sticky bottom-0 flex items-center justify-end gap-6 border-t bg-white px-6 py-4">
       <div className="flex items-center gap-4 whitespace-nowrap">
         Itens mostrados
-        <Select value={pagination} onValueChange={setPagination}>
+        <Select
+          value={String(perPage)}
+          onValueChange={(value) => changePerPage(Number(value))}
+        >
           <Button variant="secondary" asChild>
             <SelectTrigger>
               <SelectValue placeholder="Ordenar" />
@@ -32,13 +46,22 @@ export const SearchPagination = () => {
           </SelectContent>
         </Select>
       </div>
+
       <div className="flex items-center gap-4 whitespace-nowrap">
-        Página 1 de 5
+        Página {page} de {totalPages}
         <div className="flex gap-3">
-          <Button variant="secondary" square>
+          <Button
+            variant="secondary"
+            square
+            onClick={() => changePage(page - 1)}
+          >
             <Icon name="arrow_back_ios_new" />
           </Button>
-          <Button variant="secondary" square>
+          <Button
+            variant="secondary"
+            square
+            onClick={() => changePage(page + 1)}
+          >
             <Icon name="arrow_forward_ios" />
           </Button>
         </div>

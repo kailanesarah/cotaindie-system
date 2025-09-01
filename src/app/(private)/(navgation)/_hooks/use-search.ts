@@ -1,12 +1,18 @@
+"use client";
+
 import { useEffect } from "react";
-import { useSearchContext } from "../_context/seach-provider";
+import {
+  type ExtraFilter,
+  useSearchContext,
+} from "../_context/search-provider";
 
 interface IUseSearch<T> {
   action: (params: {
     text: string[];
-    category: string;
     sort: "DESC" | "ASC";
-  }) => Promise<T>;
+    pagination: { page: number; perPage: number };
+    extras: ExtraFilter[];
+  }) => Promise<{ items: T[]; totalPages: number }>;
 }
 
 export function useSearch<T>({ action }: IUseSearch<T>) {
@@ -15,11 +21,11 @@ export function useSearch<T>({ action }: IUseSearch<T>) {
     setData,
     setLoading,
     setError,
+    dispatch,
+    reset,
     data,
     loading,
     error,
-    dispatch,
-    reset,
   } = useSearchContext<T>();
 
   useEffect(() => {
@@ -32,11 +38,15 @@ export function useSearch<T>({ action }: IUseSearch<T>) {
       try {
         const result = await action({
           text: state.text,
-          category: state.category,
           sort: state.sort,
+          pagination: state.pagination,
+          extras: state.extras,
         });
 
-        if (!canceled) setData(result);
+        if (!canceled) {
+          setData(result.items);
+          dispatch({ type: "SET_TOTAL_PAGES", payload: result.totalPages });
+        }
       } catch {
         if (!canceled) setError("Erro ao buscar dados");
       } finally {
@@ -45,11 +55,16 @@ export function useSearch<T>({ action }: IUseSearch<T>) {
     };
 
     fetchData();
-
     return () => {
       canceled = true;
     };
-  }, [state.text, state.category, state.sort]);
+  }, [
+    state.text,
+    state.sort,
+    state.pagination.page,
+    state.pagination.perPage,
+    state.extras.map((e) => `${e.key}:${e.value}`).join(","),
+  ]);
 
   return {
     state,

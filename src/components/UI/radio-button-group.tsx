@@ -48,7 +48,7 @@ export const RadioButton = ({
       <Label
         htmlFor={id}
         className={cn(
-          "rounded-default border-b-light text-title-light relative inline-flex h-[2.875rem] cursor-pointer items-center justify-start gap-2 border bg-[#E5E5E235] px-5 font-semibold whitespace-nowrap shadow-[inset_0_-0.25rem_1.25rem_0_rgba(0,0,0,0.04),0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.05)] transition-all",
+          "rounded-default border-b-light text-title-light relative inline-flex h-[2.875rem] cursor-pointer items-center justify-start gap-2 border bg-[#E5E5E235] px-5 whitespace-nowrap shadow-[inset_0_-0.25rem_1.25rem_0_rgba(0,0,0,0.04),0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.05)] transition-all",
           "peer-data-[state=checked]:border-red-default peer-data-[state=checked]:text-red-default peer-data-[state=checked]:bg-red-lightest w-full grow peer-data-[state=checked]:z-10",
           className,
         )}

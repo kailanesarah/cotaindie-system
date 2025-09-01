@@ -1,6 +1,5 @@
 import { AddMaterialButton } from "../_components/add-button";
 import { EmptyDataBox } from "../_components/empty-data-box";
-import { LoadingBox } from "../_components/loading-box";
 import { PageContent } from "../_components/page-content";
 import {
   PageHeader,
@@ -20,30 +19,27 @@ import {
   SearchTextFilter,
   SelectFilter,
 } from "../_components/search-bar";
-import { categories } from "../_constants/categories";
 import { SearchProvider } from "../_context/search-provider";
-import { MaterialDialog } from "./_components/material-dialog";
-import { ResultGrid } from "./_components/material-grid";
+import { ClientDialog } from "./_components/client-dialog";
+import { ClientsTable } from "./_components/client-table";
+import { clientsCategories } from "./_constants/clients-categories";
 
-export default async function MaterialsPage() {
+export default async function ClientsPage() {
   return (
     <PageMain>
       <PageHeader>
         <PageHeaderContent>
-          <PageHeaderIcon name="inventory_2" />
+          <PageHeaderIcon name="article_person" />
           <PageHeaderHeading>
-            <PageHeaderTitle>
-              Materiais disponíveis para clientes
-            </PageHeaderTitle>
+            <PageHeaderTitle>Clientes cadastrados</PageHeaderTitle>
             <PageHeaderDescription>
-              Gerencie os itens disponíveis, seus valores e tamanhos, que
-              servirão como base para os orçamentos.
+              Gerencie a lista de clientes para orçamento.
             </PageHeaderDescription>
           </PageHeaderHeading>
         </PageHeaderContent>
         <PageHeaderAction>
-          <AddMaterialButton text="Novo material">
-            <MaterialDialog />
+          <AddMaterialButton text="Novo cliente">
+            <ClientDialog />
           </AddMaterialButton>
         </PageHeaderAction>
       </PageHeader>
@@ -51,14 +47,13 @@ export default async function MaterialsPage() {
         <SearchBar>
           <SearchTextFilter />
           <SearchSortWrap>
-            <SelectFilter options={categories} />
+            <SelectFilter options={clientsCategories} />
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
-        <PageContent>
-          <ResultGrid />
-          <LoadingBox />
-          <EmptyDataBox />
+        <PageContent className="px-0">
+          <ClientsTable />
+          <EmptyDataBox className="mx-6" />
         </PageContent>
         <SearchPagination />
       </SearchProvider>
