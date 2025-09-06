@@ -135,9 +135,11 @@ export const SearchTextFilter = ({
 export const SelectFilter = ({
   options,
   filterKey = "category",
+  deafultText = "Todas as categorias",
 }: {
   options: { id: string; name: string }[];
   filterKey?: string;
+  deafultText?: string;
 }) => {
   const { state, dispatch } = useSearchContext();
   const currentValue =
@@ -156,7 +158,7 @@ export const SelectFilter = ({
         </SelectTrigger>
       </Button>
       <SelectContent align="end">
-        <SelectItem value="all">Todas as categorias</SelectItem>
+        <SelectItem value="all">{deafultText}</SelectItem>
         {options.map((opt) => (
           <SelectItem key={opt.id} value={opt.id}>
             {opt.name}

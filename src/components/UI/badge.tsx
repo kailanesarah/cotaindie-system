@@ -2,13 +2,15 @@ import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const badgeVariants = cva(
+export const badgeVariants = cva(
   "rounded-default inline-flex h-[1.625rem] items-center justify-center gap-[0.375rem] border px-[0.625rem] text-[0.8125rem] font-semibold  whitespace-nowrap",
   {
     variants: {
       variant: {
         primary: "border-red-default/50 text-red-default bg-red-lightest",
         secondary: "bg-white border-b-light text-body-light",
+        alert: "bg-yellow-light border-yellow-darker/25 text-yellow-darker",
+        success: "bg-green-light text-green-default border-green-default/25",
       },
     },
     defaultVariants: {
