@@ -12,7 +12,7 @@ import { Pie, PieChart, ResponsiveContainer } from "recharts";
 
 export const MetricCard = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="rounded-default border-l-red-default overflow-clip border-l-[0.1875rem] bg-white">
+    <div className="rounded-default border-l-red-default grow overflow-clip border-l-[0.1875rem] bg-white">
       <div className="border-b-light rounded-tr-default rounded-br-default flex h-full items-start justify-between gap-6 border border-l-0 px-6 py-4">
         {children}
       </div>

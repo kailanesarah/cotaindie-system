@@ -19,6 +19,8 @@ import {
   MetricWrap,
   MetricWrapper,
 } from "./_components/chart";
+import { ChartAreaInteractive } from "./_components/graph-card";
+import { graphData } from "./_constant/graph-data";
 
 export default async function DashboardPage() {
   return (
@@ -34,42 +36,48 @@ export default async function DashboardPage() {
           </PageHeaderHeading>
         </PageHeaderContent>
       </PageHeader>
-      <PageContent className="grid grid-cols-3 items-start gap-4">
-        <MetricCard>
-          <MetricWrapper>
+      <PageContent className="flex flex-col gap-4">
+        <div className="flex gap-4">
+          <MetricCard>
+            <MetricWrapper>
+              <MetricWrap>
+                <MetricLabel>Pedidos finalizados</MetricLabel>
+                <MetricTitle>
+                  42{" "}
+                  <span className="text-title-light ml-[0.375rem] text-sm">
+                    Vendas
+                  </span>
+                </MetricTitle>
+                <MetricFooter className="flex gap-3">
+                  <MetricPoint className="bg-black-default" text="Total - 67" />
+                  <MetricPoint
+                    className="bg-b-light"
+                    text="Apenas orçados - 33"
+                  />
+                </MetricFooter>
+              </MetricWrap>
+              <MetricPieChart values={{ sold: 40, quoted: 21 }} />
+            </MetricWrapper>
+            <MetricIcon name="order_approve" />
+          </MetricCard>
+          <MetricCard>
             <MetricWrap>
-              <MetricLabel>Pedidos finalizados</MetricLabel>
-              <MetricTitle>
-                42{" "}
-                <span className="text-title-light ml-[0.375rem] text-sm">
-                  Vendas
-                </span>
-              </MetricTitle>
-              <MetricFooter className="flex gap-3">
-                <MetricPoint className="bg-black-default" text="Total - 67" />
-                <MetricPoint className="bg-b-light" text="Orçados - 33" />
-              </MetricFooter>
+              <MetricLabel>Receita de vendas</MetricLabel>
+              <MetricTitle>R$ 86.842,43</MetricTitle>
+              <MetricFooter>Pedidos fechados - últimos 30 dias</MetricFooter>
             </MetricWrap>
-            <MetricPieChart values={{ sold: 40, quoted: 21 }} />
-          </MetricWrapper>
-          <MetricIcon name="order_approve" />
-        </MetricCard>
-        <MetricCard>
-          <MetricWrap>
-            <MetricLabel>Receita de vendas</MetricLabel>
-            <MetricTitle>R$ 86.842,43</MetricTitle>
-            <MetricFooter>Pedidos fechados - últimos 30 dias</MetricFooter>
-          </MetricWrap>
-          <MetricIcon name="bar_chart_4_bars" />
-        </MetricCard>
-        <MetricCard>
-          <MetricWrap>
-            <MetricLabel>Lucro estimado</MetricLabel>
-            <MetricTitle>R$ 23.842,43</MetricTitle>
-            <MetricFooter>Lucro estimado - últimos 30 dias</MetricFooter>
-          </MetricWrap>
-          <MetricIcon name="trending_up" />
-        </MetricCard>
+            <MetricIcon name="bar_chart_4_bars" />
+          </MetricCard>
+          <MetricCard>
+            <MetricWrap>
+              <MetricLabel>Lucro bruto estimado</MetricLabel>
+              <MetricTitle>R$ 23.842,43</MetricTitle>
+              <MetricFooter>Lucro estimado - últimos 30 dias</MetricFooter>
+            </MetricWrap>
+            <MetricIcon name="trending_up" />
+          </MetricCard>
+        </div>
+        <ChartAreaInteractive data={graphData} />
       </PageContent>
     </PageMain>
   );
