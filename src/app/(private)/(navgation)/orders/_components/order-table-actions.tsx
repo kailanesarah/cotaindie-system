@@ -25,7 +25,7 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button square variant="link" className="size-7">
+          <Button square variant="link" className="size-[1.375rem]">
             <Icon name="more_vert" />
           </Button>
         </DropdownMenuTrigger>

@@ -1,5 +1,6 @@
 interface Material {
   id: string;
+  code: string;
   category: Category;
   name: string;
   description: string;
