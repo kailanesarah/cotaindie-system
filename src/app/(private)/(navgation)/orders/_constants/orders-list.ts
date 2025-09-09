@@ -1,0 +1,51 @@
+export const orders: Order[] = [
+  {
+    id: "P-03832",
+    code: "C-3412",
+    name: "Armário Planejado Quarto Casal",
+    client: { code: "C-3412", name: "Carla Ferreira" },
+    status: "open",
+  },
+  {
+    id: "P-43436",
+    code: "C-2289",
+    name: "Cozinha Completa com Ilha Central",
+    client: { code: "C-2289", name: "Felipe Rocha" },
+    status: "approved",
+  },
+  {
+    id: "P-98543",
+    code: "C-7771",
+    name: "Estante Sob Medida para Escritório",
+    client: { code: "C-7771", name: "Escritório Ana Lima" },
+    status: "open",
+  },
+  {
+    id: "P-13345",
+    code: "C-5120",
+    name: "Guarda-Roupas Infantil com Nichos",
+    client: { code: "C-5120", name: "Diego Amaral" },
+    status: "open",
+  },
+  {
+    id: "P-85332",
+    code: "C-0981",
+    name: "Closet com Portas de Correr",
+    client: { code: "C-0981", name: "Marisa Silva" },
+    status: "approved",
+  },
+  {
+    id: "P-66321",
+    code: "C-3344",
+    name: "Painel para TV com Iluminação LED",
+    client: { code: "C-3344", name: "Jorge Batista" },
+    status: "open",
+  },
+  {
+    id: "P-55895",
+    code: "C-4532",
+    name: "Armário Suspenso para Lavanderia",
+    client: { code: "C-4532", name: "Bruno Teixeira" },
+    status: "open",
+  },
+];

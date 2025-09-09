@@ -10,7 +10,7 @@ export const sidebarLinks = [
   {
     title: "Orçamentos",
     description: "Pedidos finalizados e cotados",
-    href: "#",
+    href: ROUTES.PRIVATE.ORDERS,
     icon: "document_scanner",
   },
   {
