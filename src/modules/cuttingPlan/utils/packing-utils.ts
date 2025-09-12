@@ -1,12 +1,14 @@
-// Algoritmo Maximal Rectangles
-// Item/peça
 export interface Piece {
   w: number;
   h: number;
   name: string;
+  category_id: string;
+  product_id?: {
+    product_id: string;
+    product_category: string;
+  };
 }
 
-// Retângulo usado ou livre na chapa
 export interface Rect {
   x: number;
   y: number;
@@ -15,9 +17,9 @@ export interface Rect {
   name?: string;
   rotated?: boolean;
   oversize?: boolean;
+  margin?: number; // margem de segurança
 }
 
-// Chapa/Sheet
 export interface Sheet {
   w: number;
   h: number;
@@ -25,96 +27,67 @@ export interface Sheet {
   usedRects: Rect[];
 }
 
-/**
- * Função principal do Maximal Rectangles
- */
+// Packing MaxRects com margem
 export function packMaxRects(
   sheetW: number,
   sheetH: number,
   items: Piece[],
-  allowRotate: boolean,
-  margin: number,
+  margin = 0,
+  allowRotate = true,
 ): Sheet[] {
   const sheets: Sheet[] = [];
+  const epsilon = 1e-6;
 
-  // Cria uma nova folha
   function createSheet(): Sheet {
     return {
       w: sheetW,
       h: sheetH,
-      freeRects: [
-        {
-          x: margin,
-          y: margin,
-          w: sheetW - 2 * margin,
-          h: sheetH - 2 * margin,
-        },
-      ],
+      freeRects: [{ x: 0, y: 0, w: sheetW, h: sheetH }],
       usedRects: [],
     };
   }
 
-  // Verifica se o retângulo cabe na área livre
-  function rectFits(freeRect: Rect, w: number, h: number): boolean {
-    return w <= freeRect.w + 1e-9 && h <= freeRect.h + 1e-9;
+  function fits(freeRect: Rect, w: number, h: number) {
+    return w <= freeRect.w + epsilon && h <= freeRect.h + epsilon;
   }
 
-  // Verifica se dois retângulos se intersectam
-  function rectIntersect(a: Rect, b: Rect): boolean {
-    return !(
-      a.x + a.w <= b.x + 1e-9 ||
-      b.x + b.w <= a.x + 1e-9 ||
-      a.y + a.h <= b.y + 1e-9 ||
-      b.y + b.h <= a.y + 1e-9
-    );
-  }
-
-  // Divide um retângulo livre após colocar um retângulo
-  function splitFreeRect(freeRect: Rect, placedRect: Rect): Rect[] {
+  function splitFreeRect(freeRect: Rect, placed: Rect): Rect[] {
     const splits: Rect[] = [];
-    if (!rectIntersect(freeRect, placedRect)) return [freeRect];
-
-    // Cima
-    if (placedRect.y > freeRect.y)
+    if (placed.x > freeRect.x + epsilon) {
+      splits.push({
+        x: freeRect.x,
+        y: freeRect.y,
+        w: placed.x - freeRect.x,
+        h: freeRect.h,
+      });
+    }
+    if (placed.x + placed.w < freeRect.x + freeRect.w - epsilon) {
+      splits.push({
+        x: placed.x + placed.w,
+        y: freeRect.y,
+        w: freeRect.x + freeRect.w - (placed.x + placed.w),
+        h: freeRect.h,
+      });
+    }
+    if (placed.y > freeRect.y + epsilon) {
       splits.push({
         x: freeRect.x,
         y: freeRect.y,
         w: freeRect.w,
-        h: placedRect.y - freeRect.y,
+        h: placed.y - freeRect.y,
       });
-    // Baixo
-    const bottomY = placedRect.y + placedRect.h;
-    const freeBottomY = freeRect.y + freeRect.h;
-    if (bottomY < freeBottomY)
+    }
+    if (placed.y + placed.h < freeRect.y + freeRect.h - epsilon) {
       splits.push({
         x: freeRect.x,
-        y: bottomY,
+        y: placed.y + placed.h,
         w: freeRect.w,
-        h: freeBottomY - bottomY,
+        h: freeRect.y + freeRect.h - (placed.y + placed.h),
       });
-    // Esquerda
-    if (placedRect.x > freeRect.x)
-      splits.push({
-        x: freeRect.x,
-        y: freeRect.y,
-        w: placedRect.x - freeRect.x,
-        h: freeRect.h,
-      });
-    // Direita
-    const rightX = placedRect.x + placedRect.w;
-    const freeRightX = freeRect.x + freeRect.w;
-    if (rightX < freeRightX)
-      splits.push({
-        x: rightX,
-        y: freeRect.y,
-        w: freeRightX - rightX,
-        h: freeRect.h,
-      });
-
-    return splits.filter((r) => r.w > 1e-9 && r.h > 1e-9);
+    }
+    return splits.filter((r) => r.w > epsilon && r.h > epsilon);
   }
 
-  // Remove retângulos livres que estão totalmente contidos em outro
   function pruneFreeRects(freeRects: Rect[]) {
     for (let i = freeRects.length - 1; i >= 0; i--) {
       const a = freeRects[i];
@@ -122,10 +95,10 @@ export function packMaxRects(
         if (i === j) continue;
         const b = freeRects[j];
         if (
-          a.x >= b.x &&
-          a.y >= b.y &&
-          a.x + a.w <= b.x + b.w &&
-          a.y + a.h <= b.y + b.h
+          a.x >= b.x - epsilon &&
+          a.y >= b.y - epsilon &&
+          a.x + a.w <= b.x + b.w + epsilon &&
+          a.y + a.h <= b.y + b.h + epsilon
         ) {
           freeRects.splice(i, 1);
           break;
@@ -134,103 +107,91 @@ export function packMaxRects(
     }
   }
 
-  // Encontra a melhor posição para um novo retângulo
-  function findPositionForNewNode(
-    sheet: Sheet,
-    w: number,
-    h: number,
-    allowRotate: boolean,
-  ): Rect | null {
-    let bestNode: Rect | null = null;
-    let bestShortSideFit = Infinity;
-    let bestLongSideFit = Infinity;
-
-    for (const freeRect of sheet.freeRects) {
-      const rotations = allowRotate
-        ? [
-            [w, h],
-            [h, w],
-          ]
-        : [[w, h]];
-      for (const [rw, rh] of rotations) {
-        if (!rectFits(freeRect, rw, rh)) continue;
-        const leftoverHoriz = Math.abs(freeRect.w - rw);
-        const leftoverVert = Math.abs(freeRect.h - rh);
-        const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
-        const longSideFit = Math.max(leftoverHoriz, leftoverVert);
-        if (
-          shortSideFit < bestShortSideFit ||
-          (shortSideFit === bestShortSideFit && longSideFit < bestLongSideFit)
-        ) {
-          bestNode = {
-            x: freeRect.x,
-            y: freeRect.y,
-            w: rw,
-            h: rh,
-            rotated: rw !== w,
-          };
-          bestShortSideFit = shortSideFit;
-          bestLongSideFit = longSideFit;
-        }
-      }
-    }
-
-    return bestNode;
-  }
-
-  // Coloca o retângulo na folha e atualiza retângulos livres
   function placeRect(sheet: Sheet, rect: Rect) {
     sheet.usedRects.push(rect);
     let newFreeRects: Rect[] = [];
-    for (const freeRect of sheet.freeRects) {
-      newFreeRects.push(...splitFreeRect(freeRect, rect));
-    }
+    sheet.freeRects.forEach((fr) => {
+      if (
+        fr.x < rect.x + rect.w - epsilon &&
+        fr.x + fr.w > rect.x + epsilon &&
+        fr.y < rect.y + rect.h - epsilon &&
+        fr.y + fr.h > rect.y + epsilon
+      ) {
+        newFreeRects.push(...splitFreeRect(fr, rect));
+      } else {
+        newFreeRects.push(fr);
+      }
+    });
+    pruneFreeRects(newFreeRects);
     sheet.freeRects = newFreeRects;
-    pruneFreeRects(sheet.freeRects);
   }
 
-  // Ordena itens do maior para o menor
-  items = items.slice().sort((a, b) => b.w * b.h - a.w * a.h);
+  function findPosition(sheet: Sheet, w: number, h: number): Rect | null {
+    let best: Rect | null = null;
+    let bestScore = Infinity;
 
-  for (const it of items) {
+    const options = allowRotate
+      ? [
+          { w, h, rotated: false },
+          { w: h, h: w, rotated: true },
+        ]
+      : [{ w, h, rotated: false }];
+
+    for (const fr of sheet.freeRects) {
+      for (const opt of options) {
+        const totalW = opt.w + 2 * margin;
+        const totalH = opt.h + 2 * margin;
+        if (fits(fr, totalW, totalH)) {
+          const leftover = (fr.w - totalW) * (fr.h - totalH);
+          if (leftover < bestScore) {
+            bestScore = leftover;
+            best = {
+              ...opt,
+              x: fr.x + margin,
+              y: fr.y + margin,
+              margin: margin,
+            };
+          }
+        }
+      }
+    }
+    return best;
+  }
+
+  items = items.slice().sort((a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h));
+
+  for (const item of items) {
     let placed = false;
     for (const sheet of sheets) {
-      const node = findPositionForNewNode(sheet, it.w, it.h, allowRotate);
+      const node = findPosition(sheet, item.w, item.h);
       if (node) {
-        placeRect(sheet, { ...node, name: it.name });
+        node.name = item.name;
+        placeRect(sheet, node);
         placed = true;
         break;
       }
     }
     if (!placed) {
       const newSheet = createSheet();
-      const node = findPositionForNewNode(newSheet, it.w, it.h, allowRotate);
-      if (node) placeRect(newSheet, { ...node, name: it.name });
-      else
+      const node = findPosition(newSheet, item.w, item.h);
+      if (node) {
+        node.name = item.name;
+        placeRect(newSheet, node);
+      } else {
+        // Caso não caiba, adiciona como oversize
         newSheet.usedRects.push({
-          x: 0,
-          y: 0,
-          w: it.w,
-          h: it.h,
-          name: it.name,
+          x: margin,
+          y: margin,
+          w: item.w,
+          h: item.h,
+          name: item.name,
           oversize: true,
+          margin: margin,
         });
+      }
       sheets.push(newSheet);
     }
   }
 
   return sheets;
-}
-
-/**
- * Calcula a eficiência do empacotamento
- */
-export function calcEfficiency(sheets: Sheet[]): number {
-  let usedArea = 0;
-  let totalArea = 0;
-  for (const s of sheets) {
-    totalArea += s.w * s.h;
-    for (const u of s.usedRects) if (!u.oversize) usedArea += u.w * u.h;
-  }
-  return usedArea / totalArea || 0;
 }
