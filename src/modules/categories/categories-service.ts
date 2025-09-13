@@ -21,14 +21,11 @@ export async function appendCategoryService(data: CategoryInput) {
         parsed.error.format(),
       );
     }
+
     const category_id = await generateId("CAT");
+    const payload = { category_id, ...parsed.data };
 
-    const payload = {
-      category_id,
-      ...parsed.data,
-    };
-
-    console.log("➡️ Inserindo categoria:", payload);
+    console.log("Inserindo categoria:", payload);
 
     const insertedEntity = await insertEntityToTable(payload, {
       tableName: "table_categories",
@@ -64,25 +61,23 @@ export async function getCategoryService() {
     );
   }
 }
-
-// Buscar categoria por ID
 export async function getCategoryByIdService(category_id: string) {
-  try {
-    const data = await getEntityByIdService({
-      tableName: "table_categories",
-      idColumnName: "category_id",
-      idObject: category_id,
-      selectFields: "*",
-    });
+  const categoryData = await getEntityByIdService({
+    tableName: "table_categories",
+    idColumnName: "category_id",
+    idObject: category_id,
+    selectFields: "*",
+  });
 
-    return successResponse(data, 200, "Categoria encontrada");
-  } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+  if (!categoryData) {
+    throw errorsResponse(404, "Categoria não encontrada");
   }
+
+  return {
+    statusCode: 200,
+    message: "Categoria encontrada",
+    data: categoryData,
+  };
 }
 
 // Atualização de categoria
@@ -133,7 +128,7 @@ export async function deleteCategoryService(category_id: string) {
 
     return successResponse(
       deletedEntity,
-      204,
+      200,
       "Categoria deletada com sucesso",
     );
   } catch (err: any) {

@@ -1,7 +1,3 @@
-// ----------------------------
-// Busca peças de um projeto (genérico)
-// ----------------------------
-
 import type { Piece } from "@/modules/cuttingPlan/utils/packing-utils";
 import { getPiecesByProjectId } from "../piece-services";
 
@@ -14,12 +10,18 @@ export async function fetchPieces(project_id: string): Promise<Piece[]> {
         w: item.piece_width,
         h: item.piece_height,
         name: item.piece_name ?? "Sem nome",
-        category_id: item.product_id?.product_category ?? "Sem categoria", // <-- obrigatório
+        product_id: item.product_id ?? "Sem ID", // agora pegando o ID real
+        category_id: item.product_id?.product_category ?? "Sem categoria",
       })) ?? [];
 
     if (pieces.length === 0) {
       throw new Error("Nenhuma peça encontrada para o projeto");
     }
+
+    console.log(
+      "IDs das peças capturadas:",
+      pieces.map((p) => p.product_id),
+    );
 
     console.log(
       "Categorias das peças capturadas:",
