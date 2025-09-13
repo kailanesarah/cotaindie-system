@@ -26,12 +26,12 @@ export const TableOrder = ({ orders }: { orders: Order[] }) => {
       <TableBody>
         {orders.map((order: Order) => (
           <TableRow key={order.code}>
-            <TableCell className="text-title-light w-full font-semibold whitespace-nowrap">
+            <TableCell className="text-title-light w-full max-w-[12rem] font-semibold whitespace-nowrap">
               <span className="line-clamp-1 truncate" title={order.name}>
                 {order.name}
               </span>
             </TableCell>
-            <TableCell className="max-w-[9rem]">
+            <TableCell className="max-w-[9.5rem]">
               <Badge
                 variant="secondary"
                 className="max-w-full"
