@@ -24,7 +24,6 @@ export function ClientBasicsFields() {
 
   useEffect(() => {
     if (!isFirstRender.current && previousCategory.current !== category) {
-      // trocou categoria → limpa documento
       form.setValue("document.value", "");
     }
 
@@ -53,7 +52,6 @@ export function ClientBasicsFields() {
           </FormItem>
         )}
       />
-
       <FormField
         control={form.control}
         name="category"
@@ -76,7 +74,6 @@ export function ClientBasicsFields() {
           </FormItem>
         )}
       />
-
       {category === "pf" && (
         <FormField
           control={form.control}
@@ -101,7 +98,6 @@ export function ClientBasicsFields() {
           )}
         />
       )}
-
       {category === "pj" && (
         <FormField
           control={form.control}
@@ -126,7 +122,6 @@ export function ClientBasicsFields() {
           )}
         />
       )}
-
       <FormField
         control={form.control}
         name="phone"
@@ -149,7 +144,6 @@ export function ClientBasicsFields() {
           </FormItem>
         )}
       />
-
       <FormField
         control={form.control}
         name="email"

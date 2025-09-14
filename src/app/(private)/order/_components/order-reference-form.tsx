@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
   Form,
@@ -61,15 +60,13 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
                 >
-                  <Button variant="secondary" asChild>
-                    <SelectTrigger
-                      truncate
-                      placeholder="Selecione um cliente"
-                      className="justify-between text-left font-medium"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                  </Button>
+                  <SelectTrigger
+                    truncate
+                    placeholder="Selecione um cliente"
+                    className="justify-between"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent align="end">
                     {clients.map((opt) => (
                       <SelectItem key={opt.id} value={opt.id}>
@@ -111,15 +108,13 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
                 >
-                  <Button variant="secondary" asChild>
-                    <SelectTrigger
-                      truncate
-                      placeholder="Expira em..."
-                      className="justify-between text-left font-medium"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                  </Button>
+                  <SelectTrigger
+                    truncate
+                    placeholder="Expira em..."
+                    className="justify-between"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent align="end">
                     {Array.from({ length: 15 }).map((_, index) => {
                       const day = index + 1;
