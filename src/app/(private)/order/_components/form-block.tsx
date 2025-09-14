@@ -8,11 +8,11 @@ export const FormGroup = ({ children }: { children: ReactNode }) => {
 
 export const FormSection = ({ children }: { children?: ReactNode }) => {
   return (
-    <div className={cn("border-b-light border-y bg-white p-6")}>
+    <section className={cn("border-b-light border-y bg-white p-6")}>
       <div className="mx-auto flex max-w-[58.25rem] flex-col gap-6">
         {children}
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -19,18 +19,20 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type z from "zod";
-import { orderReferenceSchema } from "../schema/order-reference-schema";
+import {
+  orderReferenceSchema,
+  type orderReferenceType,
+} from "../schema/order-reference-schema";
 
 export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
-  const form = useForm<z.infer<typeof orderReferenceSchema>>({
+  const form = useForm<orderReferenceType>({
     resolver: zodResolver(orderReferenceSchema),
     defaultValues: { startsAt: new Date() },
   });
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-12 gap-3">
+      <form className="grid grid-cols-12 items-start gap-3">
         <FormField
           control={form.control}
           name="title"
