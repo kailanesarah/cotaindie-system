@@ -36,7 +36,11 @@ export const OrderMenuActions = () => {
             <SelectValue />
           </SelectTrigger>
         </Button>
-        <SelectContent align="end" className="divide-x divide-gray-300 px-0">
+        <SelectContent
+          align="end"
+          className="divide-x divide-gray-300"
+          classNameViewport="px-0"
+        >
           <SelectItem
             value="open"
             className="text-yellow-darker font-semibold outline-0"
