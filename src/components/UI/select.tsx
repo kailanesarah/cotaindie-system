@@ -37,9 +37,11 @@ function SelectTrigger({
   className,
   children,
   placeholder,
+  truncate = false, // por padrão desativado
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
   placeholder?: string;
+  truncate?: boolean;
 }) {
   return (
     <SelectPrimitive.Trigger
@@ -47,14 +49,14 @@ function SelectTrigger({
       data-slot="select-trigger"
       className={cn(
         "group border-b-light rounded-default flex h-[2.875rem] w-full cursor-pointer items-center justify-between gap-2 px-3",
-        "overflow-hidden",
+        truncate && "overflow-hidden", // só aplica se truncate = true
         className,
       )}
     >
-      <span className="w-full truncate">
+      <span className={cn("w-full", truncate && "truncate")}>
         <SelectPrimitive.Value
           placeholder={placeholder}
-          className="w-full truncate text-left"
+          className={cn("w-full text-left", truncate && "truncate")}
         />
       </span>
       <SelectPrimitive.Icon asChild>

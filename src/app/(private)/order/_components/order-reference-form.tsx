@@ -39,7 +39,11 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
             <FormItem className="col-span-5">
               <FormLabel>Título</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Título do orçamento" />
+                <Input
+                  {...field}
+                  value={field.value ?? ""}
+                  placeholder="Título do orçamento"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -59,6 +63,7 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                 >
                   <Button variant="secondary" asChild>
                     <SelectTrigger
+                      truncate
                       placeholder="Selecione um cliente"
                       className="justify-between text-left font-medium"
                     >
@@ -108,6 +113,7 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                 >
                   <Button variant="secondary" asChild>
                     <SelectTrigger
+                      truncate
                       placeholder="Expira em..."
                       className="justify-between text-left font-medium"
                     >
