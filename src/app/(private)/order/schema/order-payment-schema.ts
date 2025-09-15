@@ -6,22 +6,19 @@ export const orderPaymentSchema = z.object({
   deliveryDays: z
     .number("Adicione os dias até a entrega")
     .positive("O número de dias deve ser positivo"),
-  discountPercentage: z
+  discountPercent: z
     .number("Insira um desconto")
     .min(0, "Desconto deve ser a partir de zero")
     .max(100, "Desconto máximo de 100%"),
   discount: z
     .number("Insira um desconto")
     .min(0, "O desconto deve ser a partir de zero"),
-  upfrontPaymentMethod: z.enum(paymentMethod, "Escolha uma opção válida"),
-  upfrontAmount: z
+  paymentMethod: z.enum(paymentMethod, "Escolha uma opção válida"),
+  advanceAmount: z
     .number("Insira um adiantamento")
     .min(0, "O adiantamento deve ser a partir de zero"),
-  remainingAmount: z
-    .number("Insira o valor restante")
-    .min(0, "O valor deve ser a partir de zero"),
-  remainingPaymentMethod: z.enum(paymentMethod, "Escolha uma opção válida"),
-  remainingInstallmentCount: z
+  advancePaymentMethod: z.enum(paymentMethod, "Escolha uma opção válida"),
+  installmentCount: z
     .string()
     .regex(/^[1-9]\d*$/, "Insira um número positivo válido"),
   notes: z.string("Detalhes sobre o pedido").optional(),
