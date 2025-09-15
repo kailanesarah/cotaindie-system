@@ -8,8 +8,8 @@ export const orderPaymentSchema = z.object({
     .positive("O número de dias deve ser positivo"),
   discountPercentage: z
     .number("Insira um desconto")
-    .min(0, "O desconto deve ser a partir de zero")
-    .max(100, "O desconto não pode ser maior que 100%"),
+    .min(0, "Desconto deve ser a partir de zero")
+    .max(100, "Desconto máximo de 100%"),
   discount: z
     .number("Insira um desconto")
     .min(0, "O desconto deve ser a partir de zero"),
