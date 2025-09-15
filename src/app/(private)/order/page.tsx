@@ -10,6 +10,7 @@ import {
   FormSeparator,
   FormTitle,
 } from "./_components/form-block";
+import { OrderIncludedForm } from "./_components/order-included-form";
 import { OrderMenu } from "./_components/order-menu";
 import { OrderPaymentForm } from "./_components/order-payment-form";
 import { OrderReferenceForm } from "./_components/order-reference-form";
@@ -30,6 +31,18 @@ export default async function OrderPage() {
             <FormSeparator />
             <FormContent>
               <OrderReferenceForm clients={clients} />
+            </FormContent>
+          </FormSection>
+          <FormSection>
+            <FormHeading>
+              <FormTitle>Projetos inclusos</FormTitle>
+              <FormDescription>
+                Projetos que o cliente está orçando e o que está incluso.
+              </FormDescription>
+            </FormHeading>
+            <FormSeparator />
+            <FormContent>
+              <OrderIncludedForm />
             </FormContent>
           </FormSection>
           <FormSection>
