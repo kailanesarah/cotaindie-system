@@ -9,9 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { statusMap } from "../../_constants/status-map";
 import { useSearch } from "../../_hooks/use-search";
 import { orders } from "../_constants/orders-list";
-import { statusMap } from "../_constants/status-map";
 import { OrderTableActions } from "./order-table-actions";
 
 export const OrderTable = () => {
