@@ -144,19 +144,22 @@ export const OrderPaymentForm = () => {
                     });
                   }}
                   allowNegative={false}
-                  decimalScale={2}
+                  decimalScale={4}
                   fixedDecimalScale
                   suffix="%"
                   decimalSeparator=","
                   placeholder="Ex: 10%"
                   customInput={Input}
+                  isAllowed={(values) => {
+                    const { floatValue } = values;
+                    return (floatValue ?? 0) <= 100;
+                  }}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="discount"
