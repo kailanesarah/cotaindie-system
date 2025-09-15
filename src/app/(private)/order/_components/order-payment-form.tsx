@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { paymentCategories } from "../_constants/payment-categories";
 import { rawOrderValue } from "../_constants/raw-order-value";
+import { currencyFormatter } from "../_utils/currency-formatter";
 import {
   orderPaymentSchema,
   type orderPaymentType,
@@ -34,15 +35,26 @@ export const OrderPaymentForm = () => {
   });
 
   const discount = form.watch("discount");
-
-  const discountFormated = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(discount);
+  const remainingAmount = form.watch("remainingAmount") ?? 0;
+  const remainingInstallmentCount = Number(
+    form.watch("remainingInstallmentCount") ?? 0,
+  );
 
   const discountMessage = discount
-    ? `Desconto final: ${discountFormated}`
-    : "Insira um desconto";
+    ? `Desconto final: ${currencyFormatter.format(discount)}.`
+    : "Desconto não aplicado";
+
+  const remainingPerInstallment = remainingInstallmentCount
+    ? (rawOrderValue - remainingAmount - (discount ?? 0)) /
+      remainingInstallmentCount
+    : 0;
+
+  const installmentsLabel =
+    remainingInstallmentCount > 1 ? "parcelas" : "parcela";
+
+  const remainingMessage = remainingInstallmentCount
+    ? `Restante: ${remainingInstallmentCount} ${installmentsLabel} de ${currencyFormatter.format(remainingPerInstallment)}`
+    : "Escolha o n° de parcelas";
 
   return (
     <Form {...form}>
@@ -134,7 +146,7 @@ export const OrderPaymentForm = () => {
                     return floatValue >= 0 && floatValue <= 100;
                   }}
                   allowNegative={false}
-                  decimalScale={3}
+                  decimalScale={2}
                   fixedDecimalScale={true}
                   suffix="%"
                   decimalSeparator=","
@@ -151,28 +163,22 @@ export const OrderPaymentForm = () => {
           name="discount"
           render={({ field }) => {
             const handleChange = (values: any) => {
-              const floatValue = values.floatValue;
-              field.onChange(floatValue ?? 0);
-              if (floatValue != null) {
-                form.setValue(
-                  "discountPercentage",
-                  floatValue / rawOrderValue,
-                  {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                  },
-                );
-              }
+              field.onChange(values.floatValue ?? 0);
             };
 
             const handleBlur = () => {
-              if ((field.value ?? 0) > rawOrderValue) {
-                field.onChange(rawOrderValue);
-                form.setValue("discountPercentage", 1, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
-              }
+              const maxValue = rawOrderValue;
+              let newValue = field.value ?? 0;
+              if (newValue > maxValue) newValue = maxValue;
+
+              field.onChange(newValue);
+              const percent =
+                parseFloat(((newValue / rawOrderValue) * 100).toFixed(2)) / 100;
+
+              form.setValue("discountPercentage", percent, {
+                shouldValidate: true,
+                shouldDirty: false,
+              });
             };
 
             return (
@@ -205,28 +211,41 @@ export const OrderPaymentForm = () => {
         <FormField
           control={form.control}
           name="remainingAmount"
-          render={({ field }) => (
-            <FormItem className="col-span-3">
-              <FormLabel>Adiantamento</FormLabel>
-              <FormControl>
-                <NumericFormat
-                  value={field.value ?? ""}
-                  onValueChange={(values) => {
-                    field.onChange(values.floatValue ?? "");
-                  }}
-                  allowNegative={false}
-                  decimalScale={2}
-                  fixedDecimalScale={true}
-                  prefix="R$ "
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  placeholder="Ex: R$ 250,00"
-                  customInput={Input}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => {
+            const handleChange = (values: any) => {
+              field.onChange(values.floatValue ?? 0);
+            };
+
+            const handleBlur = () => {
+              const maxValue =
+                rawOrderValue - (form.getValues("discount") ?? 0);
+              if ((field.value ?? 0) > maxValue) {
+                field.onChange(maxValue);
+              }
+            };
+
+            return (
+              <FormItem className="col-span-3">
+                <FormLabel>Adiantamento</FormLabel>
+                <FormControl>
+                  <NumericFormat
+                    value={field.value ?? ""}
+                    onValueChange={handleChange}
+                    onBlur={handleBlur}
+                    allowNegative={false}
+                    decimalScale={2}
+                    fixedDecimalScale
+                    prefix="R$ "
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    placeholder="Ex: R$ 250,00"
+                    customInput={Input}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
         <FormField
           control={form.control}
@@ -299,7 +318,7 @@ export const OrderPaymentForm = () => {
           )}
         />
         <InputDisabled className="col-span-4 mt-[1.375rem]">
-          Restante: 5 parcelas de R$ 2.281,00
+          {remainingMessage}
         </InputDisabled>
         <FormField
           control={form.control}
