@@ -131,19 +131,21 @@ export const OrderPaymentForm = () => {
                       Math.max(values.floatValue ?? 0, 0),
                       100,
                     );
-                    field.onChange(percent / 100);
-                    form.setValue("discount", (percent / 100) * rawAmount, {
+                    const decimalPercent = percent / 100;
+
+                    field.onChange(decimalPercent);
+
+                    const discountValue = parseFloat(
+                      String(decimalPercent * rawAmount),
+                    );
+                    form.setValue("discount", discountValue, {
                       shouldValidate: true,
                       shouldDirty: true,
                     });
                   }}
-                  isAllowed={(values) => {
-                    const floatValue = values.floatValue ?? 0;
-                    return floatValue >= 0 && floatValue <= 100;
-                  }}
                   allowNegative={false}
                   decimalScale={2}
-                  fixedDecimalScale={true}
+                  fixedDecimalScale
                   suffix="%"
                   decimalSeparator=","
                   placeholder="Ex: 10%"
@@ -154,6 +156,7 @@ export const OrderPaymentForm = () => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="discount"
@@ -162,9 +165,7 @@ export const OrderPaymentForm = () => {
               const newValue = values.floatValue ?? 0;
               field.onChange(newValue);
 
-              const percent =
-                parseFloat(((newValue / rawAmount) * 100).toFixed(2)) / 100;
-
+              const percent = parseFloat(String(newValue / rawAmount));
               form.setValue("discountPercent", percent, {
                 shouldValidate: true,
                 shouldDirty: true,
@@ -199,6 +200,7 @@ export const OrderPaymentForm = () => {
             );
           }}
         />
+
         <InputDisabled className="col-span-4 mt-[1.375rem]">
           {discountMessage}
         </InputDisabled>
