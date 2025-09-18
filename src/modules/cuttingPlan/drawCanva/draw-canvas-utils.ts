@@ -19,7 +19,7 @@ export function formatSheetsForDrawing<
     }>;
     freeRects?: Array<{ x: number; y: number; w: number; h: number }>;
   },
->(rawSheets: T[], margin: number): SheetForDrawing[] {
+>(rawSheets: T[], defaultMargin: number): SheetForDrawing[] {
   try {
     return rawSheets.map((sheet) => ({
       w: sheet.w,
@@ -32,7 +32,8 @@ export function formatSheetsForDrawing<
         name: r.name ?? "Sem nome",
         rotated: r.rotated ?? false,
         oversize: r.oversize ?? false,
-        margin: r.margin ?? margin,
+        // Garante que margin seja número
+        margin: typeof r.margin === "number" ? r.margin : defaultMargin,
       })),
       freeRects: sheet.freeRects,
     }));
@@ -47,18 +48,29 @@ export function formatSheetsForDrawing<
 // ----------------------------
 export function generateSheetsSVG<
   T extends { w: number; h: number; usedRects: any[]; freeRects?: any[] },
->(rawSheets: T[], margin: number) {
+>(rawSheets: T[], defaultMargin: number) {
   try {
     const sheetsForDrawing: SheetForDrawing[] = formatSheetsForDrawing(
       rawSheets,
-      margin,
+      defaultMargin,
     );
 
-    const { url } = drawSheetsSVG(sheetsForDrawing, 0.2, margin, true);
+    // drawSheetsSVG agora retorna { svg, base64, filePath, url }
+    const { svg, base64, filePath, url } = drawSheetsSVG(
+      sheetsForDrawing,
+      0.2,
+      defaultMargin,
+    );
 
-    if (!url) throw new Error("Erro ao gerar arquivo SVG");
+    if (!svg || !url) {
+      throw new Error("Erro ao gerar SVG ou URL de produção");
+    }
 
-    return { sheetsForDrawing, imageUrl: url };
+    // Pode usar diretamente como <img src={url} /> ou <img src={base64} />
+    const imageUrl = url; // link para produção
+    const base64Url = base64; // base64 se precisar inline
+
+    return { sheetsForDrawing, svg, filePath, imageUrl, base64Url };
   } catch (error) {
     console.error("Erro ao gerar SVG das sheets:", error);
     throw new Error("Falha ao gerar SVG das sheets");

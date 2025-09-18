@@ -1,9 +1,7 @@
 import { fetchPieces } from "@/modules/piece/utils/utils";
 import { getProductByIdService } from "@/modules/products/products-service";
-import { generateId } from "@/utils/idGenerator"; // para gerar cutPlan_id
 import { generateSheetsSVG } from "../drawCanva/draw-canvas-utils";
 import type { CleanSheet } from "../schemas/schema";
-import { appendCuttingPlanService } from "../service/cutPlan-services";
 import { packMaxRects, type Sheet } from "./packing-utils";
 import { calculateSheetMetrics } from "./waste-rate-utils";
 
@@ -23,6 +21,7 @@ export async function generateSheetsForProject(
   totalWasteRate: number;
   sheets: CleanSheet[];
   imageUrl: string;
+  base64Url: string;
 }> {
   // Buscar peças do projeto
   const pieces = await fetchPieces(project_id);
@@ -75,7 +74,7 @@ export async function generateSheetsForProject(
     pieces,
     defaultMargin,
   );
-  const { imageUrl } = generateSheetsSVG(rawSheets, defaultMargin);
+  const { imageUrl, base64Url } = generateSheetsSVG(rawSheets, defaultMargin);
 
   // Calcular métricas e preparar CleanSheet
   const sheets: CleanSheet[] = rawSheets.map((sheet) => {
@@ -103,6 +102,7 @@ export async function generateSheetsForProject(
   const totalWasteRate =
     ((totalAreaAllSheets - totalUsedArea) / totalAreaAllSheets) * 100;
 
+  /*
   // Gerar ID do plano de corte
   const cutPlan_id = await generateId("CUT");
 
@@ -122,7 +122,8 @@ export async function generateSheetsForProject(
     console.log("Plano de corte criado:", cuttingPlanResult);
   } catch (err) {
     console.error("Erro ao criar plano de corte:", err);
-  }
+}
+    */
 
   // Retornar resultado
   return {
@@ -131,5 +132,6 @@ export async function generateSheetsForProject(
     totalWasteRate,
     sheets,
     imageUrl,
+    base64Url,
   };
 }
