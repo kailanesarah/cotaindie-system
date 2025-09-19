@@ -19,6 +19,7 @@ import {
   OrderProjectsTotal,
 } from "./_components/order-projects";
 import { OrderReferenceForm } from "./_components/order-reference-form";
+import { OrderSummaryTable } from "./_components/order-summary-table";
 
 export default async function OrderPage() {
   return (
@@ -47,7 +48,7 @@ export default async function OrderPage() {
           <FormContent>
             <OrderProjects>
               <OrderProjectsContent>
-                Table
+                <OrderSummaryTable />
                 <OrderProjectsActions />
               </OrderProjectsContent>
               <OrderProjectsTotal />

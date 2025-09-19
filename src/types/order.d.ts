@@ -1,6 +1,11 @@
 type Status = "approved" | "open";
 type Payment = "credit" | "debit" | "bank_transfer" | "pix" | "others";
 
+type Project = {
+  name: string;
+  qtde: number;
+};
+
 interface Order {
   //base infor
   id: string;
@@ -8,6 +13,8 @@ interface Order {
   name: string;
   client: Pick<Client, "code" | "name">;
   status: Status;
+
+  projects: Project[];
 
   //projet material
   included: string;
