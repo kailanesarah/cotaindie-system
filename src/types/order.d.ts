@@ -1,11 +1,6 @@
 type Status = "approved" | "open";
 type Payment = "credit" | "debit" | "bank_transfer" | "pix" | "others";
 
-type Project = {
-  name: string;
-  qtde: number;
-};
-
 interface Order {
   //base infor
   id: string;

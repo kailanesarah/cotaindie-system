@@ -12,7 +12,13 @@ import { Icon } from "@/components/ui/icon";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 
-export const OrderSummaryActions = ({ project }: { project: Project }) => {
+export const SummaryActions = ({
+  project,
+  index,
+}: {
+  project: Project;
+  index: number;
+}) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -47,6 +53,7 @@ export const OrderSummaryActions = ({ project }: { project: Project }) => {
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
         <DeleteDialog handleDelete={handleDelete} />
       </Dialog>
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}></Dialog>
     </>
   );
 };
