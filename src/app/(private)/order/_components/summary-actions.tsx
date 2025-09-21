@@ -11,6 +11,8 @@ import {
 import { Icon } from "@/components/ui/icon";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { StepperProvider } from "../_provider/project-stepper-provider";
+import { ProjectsDialog } from "./project-dialog";
 
 export const SummaryActions = ({
   project,
@@ -53,7 +55,11 @@ export const SummaryActions = ({
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
         <DeleteDialog handleDelete={handleDelete} />
       </Dialog>
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}></Dialog>
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <StepperProvider>
+          <ProjectsDialog project={project} index={index} />
+        </StepperProvider>
+      </Dialog>
     </>
   );
 };
