@@ -19,12 +19,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useSaveOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
 export const OrderMenuActions = () => {
   const { order, setStatusInfo } = useOrderStore();
-
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  const { execute: handleSave } = useSaveOrder();
 
   const handleDelete = () => {
     console.log("Deleted!");
@@ -63,7 +65,10 @@ export const OrderMenuActions = () => {
         </SelectContent>
       </Select>
       <div className="flex">
-        <Button className="rounded-r-none border-0 border-r border-[#d2837cda] focus:z-10">
+        <Button
+          className="rounded-r-none border-0 border-r border-[#d2837cda] focus:z-10"
+          onClick={handleSave}
+        >
           <Icon name="folder_check" />
           Salvar
         </Button>

@@ -28,12 +28,13 @@ export default function RootLayout({
                 padding: 0,
                 margin: 0,
                 boxShadow: "none",
+                background: "transparent",
               },
             }}
             containerStyle={{
               margin: 0,
               padding: 0,
-              bottom: "3rem",
+              bottom: "7rem",
               right: "3rem",
             }}
           />

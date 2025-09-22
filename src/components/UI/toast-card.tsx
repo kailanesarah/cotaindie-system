@@ -7,6 +7,7 @@ export interface IToastCard {
   status?: "success" | "error" | "warning" | "info";
   title: string;
   text?: string;
+  className?: string;
 }
 
 const statusBorder: Record<NonNullable<IToastCard["status"]>, string> = {
@@ -21,12 +22,14 @@ function ToastCard({
   status = "success",
   title,
   text,
+  className,
 }: Readonly<IToastCard>) {
   return (
     <div
       className={cn(
         "rounded-default flex w-[22.5rem] justify-between gap-6 border-b-[0.1875rem] bg-white p-6 px-4 py-3 shadow-[0_0.5rem_3rem_-0.75rem_rgba(0,0,0,0.12)]",
         statusBorder[status],
+        className,
       )}
     >
       <div className="flex flex-col gap-[0.25rem]">
