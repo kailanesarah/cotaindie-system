@@ -42,17 +42,17 @@ export const PieceForm = () => {
 
   const { watch, setValue } = form;
 
-  const measureType = watch("measureType");
-  const material = watch("material");
+  const measureType = watch("material.measureType");
+  const material = watch("material.name");
 
   const isFirstRender = useRef(true);
   const previousMeasureType = useRef(measureType);
 
   useEffect(() => {
     if (!isFirstRender.current && previousMeasureType.current !== measureType) {
-      if (measureType === "m2") setValue("measure", [0, 0]);
-      if (measureType === "ml") setValue("measure", [0]);
-      if (measureType === "un") setValue("measure", [1]);
+      if (measureType === "m2") setValue("material.measure", [0, 0]);
+      if (measureType === "ml") setValue("material.measure", [0]);
+      if (measureType === "un") setValue("material.measure", [1]);
     }
 
     if (isFirstRender.current) {
@@ -74,54 +74,7 @@ export const PieceForm = () => {
         <DialogBody className="grid grid-cols-6 items-start gap-3">
           <FormField
             control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="col-span-4">
-                <FormLabel>Nome da peça</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Peça do local..." />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="qtde"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>Quantidade</FormLabel>
-                <FormControl>
-                  <Select
-                    value={field.value ? String(field.value) : ""}
-                    onValueChange={(val) => field.onChange(Number(val))}
-                  >
-                    <SelectTrigger
-                      truncate
-                      placeholder="Qtde..."
-                      className="justify-between"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent align="end">
-                      {Array.from({ length: 10 }).map((_, index) => {
-                        const value = index + 1;
-                        return (
-                          <SelectItem key={value} value={String(value)}>
-                            {value}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="material"
+            name="material.name"
             render={({ field }) => (
               <FormItem className="col-span-4">
                 <FormLabel>Material</FormLabel>
@@ -136,17 +89,21 @@ export const PieceForm = () => {
                       );
                       if (selectedMaterial) {
                         form.setValue(
-                          "measureType",
+                          "material.measureType",
                           selectedMaterial.measureType,
                           {
                             shouldValidate: true,
                             shouldDirty: true,
                           },
                         );
-                        form.setValue("baseValue", selectedMaterial.baseValue, {
-                          shouldValidate: true,
-                          shouldDirty: true,
-                        });
+                        form.setValue(
+                          "material.baseValue",
+                          selectedMaterial.baseValue,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
                       }
                     }}
                   >
@@ -177,7 +134,7 @@ export const PieceForm = () => {
           />
           <FormField
             control={form.control}
-            name="baseValue"
+            name="material.baseValue"
             render={({ field }) => (
               <FormItem className="col-span-2">
                 <FormLabel>Valor base</FormLabel>
@@ -200,6 +157,60 @@ export const PieceForm = () => {
               </FormItem>
             )}
           />
+          {material && measureType !== "un" && (
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="col-span-4">
+                  <FormLabel>Nome da peça</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Peça do local..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          <FormField
+            control={form.control}
+            name="qtde"
+            render={({ field }) => (
+              <FormItem
+                className={cn(
+                  "col-span-6",
+                  material && measureType !== "un" && "col-span-2",
+                )}
+              >
+                <FormLabel>Quantidade</FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value ? String(field.value) : ""}
+                    onValueChange={(val) => field.onChange(Number(val))}
+                  >
+                    <SelectTrigger
+                      truncate
+                      placeholder="Qtde..."
+                      className="justify-between"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent align="end">
+                      {Array.from({ length: 10 }).map((_, index) => {
+                        const value = index + 1;
+                        return (
+                          <SelectItem key={value} value={String(value)}>
+                            {value}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </DialogBody>
         {measureType && (
           <DialogBody className="flex items-start gap-3">
@@ -207,7 +218,7 @@ export const PieceForm = () => {
               <>
                 <FormField
                   control={form.control}
-                  name="measure.0"
+                  name="material.measure.0"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Comprimento</FormLabel>
@@ -230,7 +241,7 @@ export const PieceForm = () => {
                 <div className="text-title-light -mt-1 pt-9 text-base">x</div>
                 <FormField
                   control={form.control}
-                  name="measure.1"
+                  name="material.measure.1"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Altura</FormLabel>
@@ -255,7 +266,7 @@ export const PieceForm = () => {
             {measureType === "ml" && (
               <FormField
                 control={form.control}
-                name="measure.0"
+                name="material.measure.0"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Comprimento</FormLabel>
