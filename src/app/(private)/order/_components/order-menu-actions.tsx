@@ -19,8 +19,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useOrderStore } from "../_stores/order-store";
 
 export const OrderMenuActions = () => {
+  const { order, setStatusInfo } = useOrderStore();
+
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const handleDelete = () => {
@@ -30,10 +33,13 @@ export const OrderMenuActions = () => {
 
   return (
     <div className="flex gap-4">
-      <Select>
+      <Select
+        value={order.status ?? undefined}
+        onValueChange={(value) => setStatusInfo({ status: value as Status })}
+      >
         <Button variant="secondary" className="border-0" asChild>
           <SelectTrigger className="outline-0" placeholder="Fase do pedido">
-            <SelectValue />
+            <SelectValue placeholder="Fase do pedido" />
           </SelectTrigger>
         </Button>
         <SelectContent
