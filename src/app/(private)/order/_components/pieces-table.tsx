@@ -92,6 +92,7 @@ export const PiecesTable = ({ pieces }: { pieces: Piece[] }) => {
                     aria-expanded={!!openGroups[gIndex]}
                   >
                     <button
+                      type="button"
                       onClick={() => toggleGroup(gIndex)}
                       className="-my-1 flex cursor-pointer items-center justify-center p-1"
                     >

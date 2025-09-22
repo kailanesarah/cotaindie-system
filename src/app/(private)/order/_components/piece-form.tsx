@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import type z from "zod";
@@ -66,9 +66,11 @@ export const PieceForm = () => {
     console.log(values);
   };
 
+  const id = useId();
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} id={id}>
         <DialogBody className="grid grid-cols-6 items-start gap-3">
           <FormField
             control={form.control}
@@ -281,7 +283,7 @@ export const PieceForm = () => {
             </InputDisabled>
           </DialogBody>
         )}
-        <PieceFormActions />
+        <PieceFormActions formId={id} />
       </form>
     </Form>
   );
