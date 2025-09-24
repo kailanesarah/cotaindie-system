@@ -5,6 +5,11 @@ interface OrderStore {
   order: Partial<Order>;
 
   setStatusInfo: (data: Partial<Pick<Order, "status">>) => void;
+  setReference: (
+    data: Partial<
+      Pick<Order, "name" | "client" | "initialDate" | "expirationDays">
+    >,
+  ) => void;
   setExcluded: (
     data: Partial<Pick<Order, "included" | "excluded" | "teamNotes">>,
   ) => void;
@@ -20,6 +25,9 @@ export const useOrderStore = create<OrderStore>()(
     order: { status: "open" as Status },
 
     setStatusInfo: (data) =>
+      set((state) => ({ order: { ...state.order, ...data } })),
+
+    setReference: (data) =>
       set((state) => ({ order: { ...state.order, ...data } })),
 
     setExcluded: (data) =>
