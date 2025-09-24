@@ -32,7 +32,7 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
 
   const form = useForm<orderReferenceType>({
     resolver: zodResolver(orderReferenceSchema),
-    defaultValues: { startsAt: new Date() },
+    defaultValues: { startsAt: new Date(), endsAt: "" },
   });
 
   useEffect(() => {

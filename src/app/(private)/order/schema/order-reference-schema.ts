@@ -2,9 +2,9 @@ import z from "zod";
 
 export const orderReferenceSchema = z.object({
   title: z.string("Insira um título para o orçamento"),
-  client: z.string("Escolha o cliente que o orçamento pertence"),
-  startsAt: z.date("Insira uma data inicial de validade"),
-  endsAt: z.string().regex(/^[1-9]\d*$/, "Insira um número positivo válido"),
+  client: z.string("Escolha um cliente"),
+  startsAt: z.date("Insira uma data inicial"),
+  endsAt: z.string().regex(/^[1-9]\d*$/, "Insira um número"),
 });
 
 export type orderReferenceType = z.infer<typeof orderReferenceSchema>;
