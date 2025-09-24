@@ -1,6 +1,6 @@
 import { fetchPieces } from "@/modules/piece/utils/utils";
 import { getProductByIdService } from "@/modules/products/products-service";
-import { generateSheetsSVG } from "../drawCanva/draw-canvas-utils";
+import { generateSheetsPNG } from "../drawCanva/draw-canvas-utils"; // função atualizada
 import type { CleanSheet } from "../schemas/schema";
 import { packMaxRects, type Sheet } from "./packing-utils";
 import { calculateSheetMetrics } from "./waste-rate-utils";
@@ -20,8 +20,8 @@ export async function generateSheetsForProject(
   totalSheets: number;
   totalWasteRate: number;
   sheets: CleanSheet[];
-  imageUrl: string;
-  base64Url: string;
+  tmpPath: string;
+  base64Png: string;
 }> {
   // Buscar peças do projeto
   const pieces = await fetchPieces(project_id);
@@ -74,7 +74,12 @@ export async function generateSheetsForProject(
     pieces,
     defaultMargin,
   );
-  const { imageUrl, base64Url } = generateSheetsSVG(rawSheets, defaultMargin);
+
+  // Gerar PNG temporário + base64
+  const { base64Png, tmpPath, sheetsForDrawing } = await generateSheetsPNG(
+    rawSheets,
+    defaultMargin,
+  );
 
   // Calcular métricas e preparar CleanSheet
   const sheets: CleanSheet[] = rawSheets.map((sheet) => {
@@ -102,36 +107,13 @@ export async function generateSheetsForProject(
   const totalWasteRate =
     ((totalAreaAllSheets - totalUsedArea) / totalAreaAllSheets) * 100;
 
-  /*
-  // Gerar ID do plano de corte
-  const cutPlan_id = await generateId("CUT");
-
-  // Montar payload para inserção no Supabase
-  const cuttingPlanPayload = {
-    cutPlan_id,
-    project_id,
-    cutPlan_total_sheets: sheets.length,
-    cutPlan_total_waste_rate: totalWasteRate,
-    cutPlan_image_url: imageUrl,
-  };
-
-  try {
-    console.log("Payload para inserção no Supabase:", cuttingPlanPayload);
-    const cuttingPlanResult =
-      await appendCuttingPlanService(cuttingPlanPayload);
-    console.log("Plano de corte criado:", cuttingPlanResult);
-  } catch (err) {
-    console.error("Erro ao criar plano de corte:", err);
-}
-    */
-
   // Retornar resultado
   return {
     message: "Chapas geradas com sucesso",
     totalSheets: sheets.length,
     totalWasteRate,
     sheets,
-    imageUrl,
-    base64Url,
+    tmpPath, // caminho temporário do PNG
+    base64Png, // PNG em base64 para frontend
   };
 }
