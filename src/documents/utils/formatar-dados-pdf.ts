@@ -1,13 +1,30 @@
+// src/utils/formatar-dados-pdf.ts
 import type { ClientInput } from "@/modules/clients/schema/clients-schema";
 import type { costInput } from "@/modules/costs/schemas/costs-schemas";
 import type { pieceInput } from "@/modules/piece/schemas/pieces-schemas";
 import type { ProductInput } from "@/modules/products/schema/products-schema";
 import type { projectInput } from "@/modules/projects/schemas/project-schema";
-
-import type { CondicoesPagamento } from "../types/condicoes-pagamento";
-import type { InformacoesAdicionais } from "../types/infos-adicionais";
+import type { InformacoesAdicionais } from "@/modules/quotation/schemas/additional-info-schema ";
+import type { CondicoesPagamento } from "@/modules/quotation/schemas/payment-conditions-schema";
 import type { EmpresaInfo } from "../types/simple-header";
-import { objetoParaTabela } from "./objetoParaTabela";
+
+// Função genérica de filtro com alias
+export function filterFieldsWithAlias<T extends Record<string, any>>(
+  data: T[],
+  fieldsToShow?: (keyof T)[],
+  aliasMap?: Record<keyof T, string>,
+): Record<string, any>[] {
+  if (!fieldsToShow) return data;
+
+  return data.map((item) => {
+    const filtered: Record<string, any> = {};
+    fieldsToShow.forEach((field) => {
+      const key = aliasMap?.[field] ?? (field as string);
+      filtered[key] = item[field] ?? "";
+    });
+    return filtered;
+  });
+}
 
 interface FormatPDFParams {
   empresa?: EmpresaInfo[];
@@ -18,12 +35,15 @@ interface FormatPDFParams {
   pieces?: pieceInput[];
   infos?: InformacoesAdicionais[];
   condicoesPagamento?: CondicoesPagamento[];
+  clientFields?: (keyof ClientInput)[];
+  condicoesPagamentoFields?: (keyof CondicoesPagamento)[];
 }
 
-interface FormatPDFReturn {
-  empresaData: string[][];
-  contratanteData: string[][];
-  clientesLinhas: string[][];
+export interface FormatPDFReturn {
+  empresaData: EmpresaInfo[];
+  contratanteData: ClientInput[];
+  clientesLinhas: Record<string, any>[];
+  condicoesPagamentoLinhas: Record<string, any>[];
 
   materiaisDados: {
     Código: string;
@@ -38,7 +58,8 @@ interface FormatPDFReturn {
     Código: string;
     NomeProjeto: string;
     Quantidade?: number;
-    Status?: string;
+    "Valor unitário"?: string;
+    "Valor total"?: string;
   }[];
   custosDados: {
     Código: string;
@@ -51,6 +72,7 @@ interface FormatPDFReturn {
     Código: string;
     Nome: string;
   }[];
+
   totalMateriais: number;
   totalCustos: number;
   totalMateriaisStr: string;
@@ -67,101 +89,108 @@ export function formatarDadosParaPDF({
   pieces = [],
   infos = [],
   condicoesPagamento = [],
+  clientFields,
+  condicoesPagamentoFields,
 }: FormatPDFParams): FormatPDFReturn {
   const formatCurrency = (value: number) => `R$ ${value.toFixed(2)}`;
 
-  // Clientes
-  const clientesLinhas = clients.flatMap((cliente) =>
-    objetoParaTabela({
-      Nome: cliente.client_name,
-      Código: cliente.client_id ?? "",
-    }),
+  // Mapas de nomes amigáveis
+  const clientFieldNamesMap: Record<keyof ClientInput, string> = {
+    client_name: "Nome",
+    client_category: "Tipo de Cliente",
+    client_phone: "Telefone",
+    client_email: "E-mail",
+    client_city: "Cidade",
+    client_zipCode: "CEP",
+    client_neighborhood: "Bairro",
+    client_address: "Endereço",
+    client_id: "ID",
+    client_cpf: "CPF",
+    client_cnpj: "CNPJ",
+    client_complement: "Complemento",
+    client_notes: "Observações",
+  };
+
+  const condicoesFieldNamesMap: Record<keyof CondicoesPagamento, string> = {
+    previsaoDeEntrega: "Previsão de entrega",
+    planoDePagamento: "Plano de pagamento",
+    adiantamento: "Adiantamento",
+    percentualDeDesconto: "Percentual de desconto (%)",
+    valorDoDesconto: "Valor do desconto",
+    pagamentoPrincipal: "Pagamento principal",
+    pagamentoDoAdiantamento: "Pagamento do adiantamento",
+    pagamentoDoRestante: "Pagamento do restante",
+    parcelasDoRestante: "Parcelas do restante",
+    restante: "Restante",
+    dataDaVenda: "Data da venda",
+    observacoes: "Observações",
+  };
+
+  const condicoesFields =
+    condicoesPagamentoFields ??
+    (Object.keys(condicoesFieldNamesMap) as (keyof CondicoesPagamento)[]);
+
+  // Formata os dados
+  const condicoesPagamentoLinhas = filterFieldsWithAlias(
+    condicoesPagamento,
+    condicoesFields,
+    condicoesFieldNamesMap,
   );
 
-  const contratanteData = clients.flatMap((cliente) =>
-    objetoParaTabela({
-      Nome: cliente.client_name,
-      Código: cliente.client_id ?? "-",
-      Categoria: cliente.client_category ?? "-",
-      CPF: cliente.client_cpf ?? "-",
-      CNPJ: cliente.client_cnpj ?? "-",
-      Telefone: cliente.client_phone ?? "-",
-      Email: cliente.client_email ?? "-",
-      Cidade: cliente.client_city ?? "-",
-      CEP: cliente.client_zipCode ?? "-",
-      Bairro: cliente.client_neighborhood ?? "-",
-      Endereço: cliente.client_address ?? "-",
-      Complemento: cliente.client_complement ?? "-",
-      Observações: cliente.client_notes ?? "-",
-    }),
+  const clientesLinhas = filterFieldsWithAlias(
+    clients,
+    clientFields,
+    clientFieldNamesMap,
   );
 
-  // Empresa
-  const empresaData = empresa.flatMap((emp) =>
-    objetoParaTabela({
-      Nome: emp.nome,
-      CNPJ: emp.cnpj ?? "-",
-      PMF: emp.pmf ?? "-",
-      IE: emp.ie ?? "-",
-      Endereço: emp.endereco ?? "-",
-      Cidade: emp.cidade ?? "-",
-      Estado: emp.estado ?? "-",
-      CEP: emp.cep ?? "-",
-      WhatsApp: emp.whatsapp ?? "-",
-    }),
-  );
-
-  // Materiais
   const materiaisDados = products.map((product) => {
     const qtd = 2; // default
     return {
       Código: product.product_id ?? "",
-      Material: product.product_name,
+      Material: product.product_name ?? "",
       QtdeInt: 1,
       Qtd: qtd,
-      Medida: product.product_measurements,
-      ValorUnitario: product.product_price,
-      Total: product.product_price * qtd,
+      Medida: product.product_measurements ?? "",
+      ValorUnitario: product.product_price ?? 0,
+      Total: (product.product_price ?? 0) * qtd,
     };
   });
 
-  // Projetos
   const projetosDados = projects.map((proj) => ({
     Código: proj.project_id ?? "",
-    NomeProjeto: proj.project_name,
+    NomeProjeto: proj.project_name ?? "",
     Quantidade: proj.project_quantity,
-    Status: proj.project_status,
+    "Valor unitário": "2.0000",
+    "Valor total": "5.0000",
   }));
 
-  // Custos
   const custosDados = costs.map((cost) => ({
     Código: cost.cost_id ?? "",
-    Equipe: cost.cost_name,
+    Equipe: cost.cost_name ?? "",
     Quantidade: cost.cost_quantity,
     Valor: cost.cost_value_uni,
     Total: cost.cost_total_value,
   }));
 
-  // Peças
   const pecasDados = pieces.map((piece) => ({
     Código: piece.piece_id ?? "",
-    Nome: piece.piece_name,
+    Nome: piece.piece_name ?? "",
   }));
 
-  // Totais
   const totalMateriais = materiaisDados.reduce(
-    (sum, item) => sum + Number(item.Total),
+    (sum, item) => sum + item.Total,
     0,
   );
   const totalCustos = custosDados.reduce(
-    (sum, item) => sum + Number(item.Total || 0),
+    (sum, item) => sum + (item.Total ?? 0),
     0,
   );
 
   return {
-    empresaData,
-    contratanteData,
+    empresaData: empresa,
+    contratanteData: clients,
     clientesLinhas,
+    condicoesPagamentoLinhas,
     materiaisDados,
     projetosDados,
     custosDados,

@@ -4,20 +4,26 @@ import type { costInput } from "@/modules/costs/schemas/costs-schemas";
 import type { pieceInput } from "@/modules/piece/schemas/pieces-schemas";
 import type { ProductInput } from "@/modules/products/schema/products-schema";
 import type { projectInput } from "@/modules/projects/schemas/project-schema";
-import type { CondicoesPagamento } from "../types/condicoes-pagamento";
-import type { InformacoesAdicionais } from "../types/infos-adicionais";
+import type { InformacoesAdicionais } from "@/modules/quotation/schemas/additional-info-schema ";
+import type { CondicoesPagamento } from "../../modules/quotation/schemas/payment-conditions-schema";
 
 // ===========================================
 // Condições de Pagamento
 // ===========================================
 export const condicoesPagamentoMock: CondicoesPagamento[] = [
   {
+    previsaoDeEntrega: "45 dias úteis após a data da venda",
     planoDePagamento: "A combinar",
     adiantamento: "R$ 432,54",
+    percentualDeDesconto: 10,
+    valorDoDesconto: 432.54,
+    pagamentoPrincipal: "Cartão de crédito",
+    pagamentoDoAdiantamento: "Pix",
+    pagamentoDoRestante: "Boleto",
+    parcelasDoRestante: 3,
+    restante: "3x de R$ 805,60",
     dataDaVenda: "30/05/2025",
-    pagamentoDoRestante: "A combinar",
-    previsaoDeEntrega: "45 dias úteis após a data da venda",
-    restante: "1 X de R$ 805,60 = R$ 805,60",
+    observacoes: "Pagamento flexível, sujeito a aprovação do setor financeiro.",
   },
 ];
 
@@ -79,15 +85,10 @@ export const empresaMock = [
 // ===========================================
 // Informações Adicionais
 // ===========================================
-export const dados: InformacoesAdicionais = {
+export const informacoesAdicionaisMock: InformacoesAdicionais = {
   materiaisInclusos: "Estrutura confeccionada em MDF de alta qualidade",
   materiaisExclusos: "Espelhos, independentemente do tamanho ou espessura",
-  observacoes: "Realizar pedido de materiais com antecedência",
-  descontoPercentual: 10,
-  valorDesconto: "R$ -432,54",
-  valorAPagar: "R$ 1.832,54",
-  valorPedido: "R$ 2.432,54",
-  total: "R$ 2.132,54",
+  observacoesEquipeInterna: "Realizar pedido de materiais com antecedência",
 };
 
 // ===========================================
@@ -343,3 +344,11 @@ export const materiaisParaPDF = [
     ],
   },
 ];
+
+// documents/utils/moks.ts
+
+export const dados: InformacoesAdicionais = {
+  materiaisInclusos: "Madeira, Parafusos, Cola",
+  materiaisExclusos: "Ferramentas, Verniz",
+  observacoesEquipeInterna: "Conferir cortes e medidas antes da entrega",
+};
