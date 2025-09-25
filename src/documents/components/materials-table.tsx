@@ -1,91 +1,194 @@
-// src/components/MaterialsTable.tsx
-import { pdfStyles } from "@/styles/pdf_styles/pdfStyles";
 import { Text, View } from "@react-pdf/renderer";
+import type { JSX } from "react";
 
-interface MaterialsTableProps {
-  data: {
+export interface MaterialItem {
+  n: string;
+  nome: string;
+  corte?: string;
+  quantidade?: number | null;
+  subItems?: {
     n: string;
     nome: string;
-    corte?: string;
-    quantidade?: number | null;
-    subItems?: {
-      n: string;
-      nome: string;
-      infoExtra: string;
-      quantidade: number;
-    }[];
+    infoExtra?: string;
+    quantidade: number;
   }[];
 }
 
+interface MaterialsTableProps {
+  data: MaterialItem[];
+}
+
 const MaterialsTable = ({ data }: MaterialsTableProps) => {
+  const itemPrincipalCellBg = "#e8e8e8";
+  const headerBg = "#f0f0f0";
+
+  const renderRow = (
+    n: string,
+    content: JSX.Element,
+    qtde: number | null,
+    isSubItem: boolean = false,
+    isLastRow: boolean = false,
+    boldNumber: boolean = false,
+  ) => (
+    <View
+      key={n}
+      style={{
+        flexDirection: "row",
+        borderBottomWidth: isLastRow ? 0 : 1,
+        borderBottomColor: "#000",
+      }}
+    >
+      {/* Nº */}
+      <View
+        style={{
+          flex: 0.1,
+          borderRightWidth: 1,
+          borderRightColor: "#000",
+          padding: 4,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{ fontSize: 10, fontWeight: boldNumber ? "bold" : "normal" }}
+        >
+          {n}
+        </Text>
+      </View>
+
+      {/* Materiais e peças */}
+      <View
+        style={{
+          flex: 0.7,
+          borderRightWidth: 1,
+          borderRightColor: "#000",
+          padding: 4,
+          backgroundColor: isSubItem ? "#fff" : itemPrincipalCellBg,
+          justifyContent: "center",
+        }}
+      >
+        {content}
+      </View>
+
+      {/* Quantidade */}
+      <View
+        style={{
+          flex: 0.2,
+          padding: 4,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {qtde != null && (
+          <Text
+            style={{ fontSize: 10, fontWeight: isSubItem ? "bold" : "normal" }}
+          >
+            {qtde}
+          </Text>
+        )}
+      </View>
+    </View>
+  );
+
   return (
-    <View style={pdfStyles.table}>
+    <View style={{ borderWidth: 1, borderColor: "#000" }}>
       {/* Cabeçalho */}
-      <View style={[pdfStyles.tableRow, pdfStyles.tableHeaderRow]}>
+      <View
+        style={{
+          flexDirection: "row",
+          borderBottomWidth: 1,
+          borderBottomColor: "#000",
+          alignItems: "center",
+        }}
+      >
         <View
-          style={[pdfStyles.tableCol, { flexGrow: 0.1, borderRightWidth: 0.5 }]}
+          style={{
+            flex: 0.1,
+            borderRightWidth: 1,
+            borderRightColor: "#000",
+            padding: 4,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <Text style={pdfStyles.boldSmall}>Nº</Text>
+          <Text
+            style={{ fontWeight: "bold", fontSize: 10, textAlign: "center" }}
+          >
+            Nº
+          </Text>
         </View>
         <View
-          style={[pdfStyles.tableCol, { flexGrow: 1, borderRightWidth: 0.5 }]}
+          style={{
+            flex: 0.7,
+            borderRightWidth: 1,
+            borderRightColor: "#000",
+            padding: 4,
+            justifyContent: "center",
+          }}
         >
-          <Text style={pdfStyles.boldSmall}>Materiais e peças</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 10 }}>
+            Materiais e peças
+          </Text>
         </View>
-        <View style={[pdfStyles.tableCol, { flexGrow: 0.2 }]}>
-          <Text style={pdfStyles.boldSmall}>Qtde</Text>
+        <View
+          style={{
+            flex: 0.2,
+            padding: 4,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontWeight: "bold", fontSize: 10 }}>Qtde</Text>
         </View>
       </View>
 
       {/* Linhas de dados */}
-      {data.map((item, index) => (
-        <View key={index} style={pdfStyles.tableRow}>
-          {/* Nº */}
-          <View
-            style={[
-              pdfStyles.tableCol,
-              { flexGrow: 0.1, borderBottomWidth: 0.5 },
-            ]}
-          >
-            <Text style={pdfStyles.tableCell}>{item.n}</Text>
-          </View>
+      {data.flatMap((item, itemIndex) => {
+        const rows: JSX.Element[] = [];
+        const totalSubItems = item.subItems ? item.subItems.length : 0;
 
-          {/* Materiais e peças + sub-itens */}
-          <View
-            style={[
-              pdfStyles.tableCol,
-              { flexGrow: 1, borderBottomWidth: 0.5 },
-            ]}
-          >
-            <Text style={pdfStyles.boldSmall}>{item.nome}</Text>
-            {item.corte && (
-              <Text style={[pdfStyles.tableCell, pdfStyles.boldSmall]}>
-                {" "}
-                (Corte: {item.corte})
+        // Linha principal
+        rows.push(
+          renderRow(
+            item.n,
+            <View>
+              <Text style={{ fontWeight: "bold", fontSize: 10 }}>
+                {item.nome}
               </Text>
-            )}
-            {item.subItems &&
-              item.subItems.map((subItem, subIndex) => (
-                <Text key={subIndex} style={pdfStyles.tableCell}>
-                  {subItem.n} - {subItem.nome}{" "}
-                  {subItem.infoExtra && `(${subItem.infoExtra})`}
-                </Text>
-              ))}
-          </View>
+              {item.corte && (
+                <Text style={{ fontSize: 9 }}>Corte: {item.corte}</Text>
+              )}
+            </View>,
+            item.quantidade ?? null,
+            false,
+            totalSubItems === 0 && itemIndex === data.length - 1,
+            true, // número em negrito
+          ),
+        );
 
-          {/* Quantidade */}
-          <View
-            style={[
-              pdfStyles.tableCol,
-              { flexGrow: 0.2, borderBottomWidth: 0.5 },
-            ]}
-          >
-            {item.quantidade != null && (
-              <Text style={pdfStyles.tableCell}>{item.quantidade}</Text>
-            )}
-          </View>
-        </View>
-      ))}
+        // Sub-itens
+        if (item.subItems) {
+          item.subItems.forEach((subItem, subIndex) => {
+            const isLastRow =
+              itemIndex === data.length - 1 &&
+              subIndex === item.subItems!.length - 1;
+            rows.push(
+              renderRow(
+                subItem.n,
+                <Text
+                  style={{ fontSize: 10 }}
+                >{`- ${subItem.nome} ${subItem.infoExtra ? `(${subItem.infoExtra})` : ""}`}</Text>,
+                subItem.quantidade,
+                true,
+                isLastRow,
+                false,
+              ),
+            );
+          });
+        }
+
+        return rows;
+      })}
     </View>
   );
 };
