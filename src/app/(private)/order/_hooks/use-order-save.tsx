@@ -10,6 +10,8 @@ export function useSaveOrder() {
   const execute = async () => {
     const triggerKeys = Object.keys(triggers);
 
+    console.log(triggerKeys);
+
     if (triggerKeys.length === 0) {
       toast((t) => (
         <ToastCard

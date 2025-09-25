@@ -13,6 +13,20 @@ interface OrderStore {
   setExcluded: (
     data: Partial<Pick<Order, "included" | "excluded" | "teamNotes">>,
   ) => void;
+  setPayment: (
+    data: Partial<
+      Pick<
+        Order,
+        | "deliveryDays"
+        | "paymentMethod"
+        | "discountPercent"
+        | "installmentCount"
+        | "advanceAmount"
+        | "advancePaymentMethod"
+        | "notes"
+      >
+    >,
+  ) => void;
 
   reset: () => void;
 
@@ -22,7 +36,7 @@ interface OrderStore {
 
 export const useOrderStore = create<OrderStore>()(
   subscribeWithSelector((set) => ({
-    order: { status: "open" as Status },
+    order: { status: "open" as Status, rawAmount: 12000 },
 
     setStatusInfo: (data) =>
       set((state) => ({ order: { ...state.order, ...data } })),
@@ -31,6 +45,9 @@ export const useOrderStore = create<OrderStore>()(
       set((state) => ({ order: { ...state.order, ...data } })),
 
     setExcluded: (data) =>
+      set((state) => ({ order: { ...state.order, ...data } })),
+
+    setPayment: (data) =>
       set((state) => ({ order: { ...state.order, ...data } })),
 
     reset: () => set({ order: {} }),

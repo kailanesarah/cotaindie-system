@@ -19,10 +19,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { paymentCategories } from "../_constants/payment-categories";
 import { rawAmount } from "../_constants/raw-amount";
+import { useOrderStore } from "../_stores/order-store";
 import { currencyFormatter } from "../_utils/currency-formatter";
 import {
   orderPaymentSchema,
@@ -32,6 +34,10 @@ import {
 export const OrderPaymentForm = () => {
   const form = useForm<orderPaymentType>({
     resolver: zodResolver(orderPaymentSchema),
+    defaultValues: {
+      installmentCount: "1",
+      advanceAmount: 0,
+    },
   });
 
   const discount = form.watch("discount");
@@ -51,6 +57,13 @@ export const OrderPaymentForm = () => {
   const remainingMessage = installmentCount
     ? `Restante: ${installmentCount} ${installmentsLabel} de ${currencyFormatter.format(remainingPerInstallment)}`
     : "Escolha o n° de parcelas";
+
+  const setTrigger = useOrderStore((state) => state.setTrigger);
+  const setPayment = useOrderStore((state) => state.setPayment);
+
+  useEffect(() => {
+    setTrigger("paymentForm", form.trigger);
+  }, [form.trigger, setTrigger]);
 
   return (
     <Form {...form}>
@@ -76,6 +89,10 @@ export const OrderPaymentForm = () => {
                     const { floatValue } = values;
                     return floatValue === undefined || floatValue >= 1;
                   }}
+                  onBlur={(e) => {
+                    field.onBlur();
+                    setPayment({ deliveryDays: field.value });
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -91,7 +108,12 @@ export const OrderPaymentForm = () => {
               <FormControl>
                 <Select
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val as Payment);
+                    setPayment({
+                      paymentMethod: val as Payment,
+                    });
+                  }}
                 >
                   <SelectTrigger
                     truncate
@@ -142,6 +164,11 @@ export const OrderPaymentForm = () => {
                       shouldValidate: true,
                       shouldDirty: true,
                     });
+                  }}
+                  onBlur={(e) => {
+                    field.onBlur();
+                    console.log(e.target.value);
+                    setPayment({ discountPercent: field.value });
                   }}
                   allowNegative={false}
                   decimalScale={4}
@@ -203,7 +230,6 @@ export const OrderPaymentForm = () => {
             );
           }}
         />
-
         <InputDisabled className="col-span-4 mt-[1.375rem]">
           {discountMessage}
         </InputDisabled>
@@ -230,6 +256,11 @@ export const OrderPaymentForm = () => {
                     decimalSeparator=","
                     placeholder="Ex: R$ 250,00"
                     customInput={Input}
+                    onBlur={(e) => {
+                      field.onBlur();
+                      console.log(e.target.value);
+                      setPayment({ advanceAmount: field.value });
+                    }}
                     isAllowed={(values) => {
                       const { floatValue } = values;
                       const maxValue =
@@ -252,7 +283,12 @@ export const OrderPaymentForm = () => {
               <FormControl>
                 <Select
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val as Payment);
+                    setPayment({
+                      advancePaymentMethod: val as Payment,
+                    });
+                  }}
                 >
                   <SelectTrigger
                     truncate
@@ -283,7 +319,12 @@ export const OrderPaymentForm = () => {
               <FormControl>
                 <Select
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                    setPayment({
+                      installmentCount: Number(val),
+                    });
+                  }}
                 >
                   <SelectTrigger
                     truncate
@@ -323,7 +364,14 @@ export const OrderPaymentForm = () => {
             <FormItem className="col-span-12">
               <FormLabel>Observações (cliente)</FormLabel>
               <FormControl>
-                <Textarea {...field} placeholder="Ex: Cliente deseja..." />
+                <Textarea
+                  {...field}
+                  placeholder="Ex: Cliente deseja..."
+                  onBlur={(e) => {
+                    field.onBlur();
+                    setPayment({ notes: e.target.value });
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
