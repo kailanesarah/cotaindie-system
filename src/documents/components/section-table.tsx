@@ -1,3 +1,4 @@
+// section-table.tsx
 import { pdfStyles } from "@/styles/pdf_styles/pdfStyles";
 import { Text, View } from "@react-pdf/renderer";
 import { SecondaryTable } from "./secondary-table";
@@ -7,6 +8,8 @@ interface SectionTableProps {
   columns: string[];
   data: any[];
   total?: string | number;
+  margin?: number; // margem opcional em pt
+  largurasFixas?: number[]; // ✅ adiciona aqui
 }
 
 export const SectionTable = ({
@@ -14,12 +17,20 @@ export const SectionTable = ({
   columns,
   data,
   total,
+  margin = 0,
+  largurasFixas, // ✅ recebe
 }: SectionTableProps) => (
-  <View style={pdfStyles.mtLg}>
-    <Text style={pdfStyles.boldBody}>{title}</Text>
-    <SecondaryTable colunas={columns} dados={data} />
+  <View style={[{ marginLeft: margin, marginRight: margin }]}>
+    <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>{title}</Text>
+    <SecondaryTable
+      title=""
+      columns={columns}
+      data={data}
+      largurasFixas={largurasFixas}
+    />{" "}
+    {/* ✅ passa adiante */}
     {total && (
-      <Text style={[pdfStyles.boldBody, pdfStyles.mtMd]}>Total: {total}</Text>
+      <Text style={[pdfStyles.body, pdfStyles.mtMd]}>Total: {total}</Text>
     )}
   </View>
 );

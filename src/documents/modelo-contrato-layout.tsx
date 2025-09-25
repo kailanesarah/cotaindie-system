@@ -1,30 +1,33 @@
-// ===== Imports de tipos =====
 import type { ClientInput } from "@/modules/clients/schema/clients-schema";
 import type { projectInput } from "@/modules/projects/schemas/project-schema";
-import type { InformacoesAdicionais } from "./types/infos-adicionais";
+import type { InformacoesAdicionais } from "@/modules/quotation/schemas/additional-info-schema ";
 import type { EmpresaInfo } from "./types/simple-header";
 
-// ===== Imports de estilos e PDF renderer =====
-import { pagePadding, pdfStyles } from "@/styles/pdf_styles/pdfStyles";
+import { pdfStyles } from "@/styles/pdf_styles/pdfStyles";
 import { Document, Page, Text, View } from "@react-pdf/renderer";
 
-// ===== Imports de componentes =====
+import { AssinaturasSection } from "./components/assinaturas-section";
+import { ClausulasSection } from "./components/clausulas-section";
+import { ClientesSection } from "./components/clients-section";
+import { CondicoesPagamentoSection } from "./components/condicoes-pagamento-section";
+import { ContratadaSection } from "./components/contratada-section";
 import Footer from "./components/footer";
 import Header from "./components/header";
-import PrimaryTable from "./components/primary-table";
-import { SectionTable } from "./components/section-table";
+import { InformacoesAdicionaisSection } from "./components/informacoes-adicionais-section";
+import { ProjetosSection } from "./components/projects-section";
 
-// ===== Imports de utilitários e constantes =====
-import { colors } from "@/styles/pdf_styles/pdfColors";
-import { COLUNAS_PROJETOS } from "./constants/pdfColumns";
+import type { CondicoesPagamento } from "@/modules/quotation/schemas/payment-conditions-schema";
+import SectionTitleWithCode from "./components/tittle-section";
 import { formatarDadosParaPDF } from "./utils/formatar-dados-pdf";
-import { objetoParaTabela } from "./utils/objetoParaTabela";
 
 interface ModeloContratoProps {
   clients: ClientInput[];
   empresa: EmpresaInfo[];
   projects: projectInput[];
   informacoesAdicionais?: InformacoesAdicionais | InformacoesAdicionais[];
+  condicoesPagamentoData?: CondicoesPagamento[];
+  clientFields?: (keyof ClientInput)[];
+  condicoesPagamentoFields?: (keyof CondicoesPagamento)[];
 }
 
 const clausulas = [
@@ -37,27 +40,33 @@ const clausulas = [
   "2-1) Não poderão cancelar ou adiar pagamentos se a CONTRATADA estiver em dia nos prazos estipulados.",
   "2-2) Fornecerá planta elétrica e hidráulica (quando solicitado/a) pela CONTRATADA no período de instalações dos móveis.",
   "2-3) Assinará 02 (duas) vias de igual teor, ficando com 01 (uma) via.",
+  "3) A CONTRATADA compromete-se a manter sigilo sobre quaisquer informações fornecidas pelo CONTRATANTE.",
+  "4) Qualquer divergência ou conflito referente a este contrato será solucionado via negociação entre as partes, e em último caso, de acordo com a legislação vigente.",
+  "5) Este contrato entra em vigor na data da assinatura e tem validade até a completa execução dos serviços contratados.",
 ];
 
-const condicoesPagamento = {
-  "Plano de pagamento": "A combinar",
-  Adiantamento: "R$ 432,54",
-  "Data da venda": "30/05/2025",
-  "Pagamento do restante": "A combinar",
-  "Previsão de entrega": "45 dias úteis após a data da venda",
-  Restante: "1 X de R$ 805,60 = R$ 805,60",
-};
-
-const ModeloContratoLayout = ({
+export const ModeloContratoLayout = ({
   clients,
   empresa,
   projects,
   informacoesAdicionais,
+  condicoesPagamentoData,
+  clientFields,
+  condicoesPagamentoFields,
 }: ModeloContratoProps) => {
-  const { empresaData, contratanteData, projetosDados } = formatarDadosParaPDF({
-    empresa,
+  const {
+    empresaData,
+    contratanteData,
+    projetosDados,
+    clientesLinhas,
+    condicoesPagamentoLinhas,
+  } = formatarDadosParaPDF({
     clients,
+    empresa,
     projects,
+    clientFields,
+    condicoesPagamento: condicoesPagamentoData,
+    condicoesPagamentoFields,
   });
 
   const infosArray = Array.isArray(informacoesAdicionais)
@@ -68,135 +77,81 @@ const ModeloContratoLayout = ({
 
   return (
     <Document>
+      {/* Página 1: Dados, projetos e informações gerais */}
       <Page size="A4" style={pdfStyles.page} wrap>
-        {/* Header */}
         <Header data={empresa[0]} />
 
-        {/* Título */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: pagePadding.paddingTop,
-          }}
-        >
-          <Text style={{ ...pdfStyles.h3, color: colors.redDarker }}>
-            E29115 -{" "}
-          </Text>
-          <Text style={pdfStyles.h3}>
-            Relatório de clientes, materiais e projetos
-          </Text>
+        <SectionTitleWithCode code="V29115" title="Contrato de venda" />
+
+        {/* Contratada */}
+        <View style={pdfStyles.mbLg}>
+          <Text style={pdfStyles.boldBody}>Dados da Contratada</Text>
+          <ContratadaSection empresaData={empresaData} />
         </View>
 
-        <View style={{ flexDirection: "column", flexGrow: 1 }}>
-          {/* Seção: Dados da Contratada */}
-          <View style={pdfStyles.mbLg}>
-            <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>
-              Dados da Contratada
-            </Text>
-            <PrimaryTable items={empresaData} />
-          </View>
+        {/* Clientes */}
+        <View style={pdfStyles.mbLg}>
+          <Text style={pdfStyles.boldBody}>Dados da contratante</Text>
+          <ClientesSection clientesLinhas={clientesLinhas} />
+        </View>
 
-          {/* Seção: Dados do Contratante */}
-          <View style={pdfStyles.mbLg}>
-            <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>
-              Dados da Contratante (Cliente)
-            </Text>
-            <PrimaryTable items={contratanteData} />
-          </View>
+        {/* Projetos */}
+        <View style={pdfStyles.mbLg}>
+          <Text style={[pdfStyles.boldBody]}>Projetos</Text>
+          <ProjetosSection projetosDados={projetosDados} />
+        </View>
 
-          {/* Seção: Projetos */}
-          <View style={pdfStyles.mbLg}>
-            <SectionTable
-              title="Projetos"
-              columns={COLUNAS_PROJETOS}
-              data={projetosDados}
+        {/* Informações Adicionais */}
+        <View style={pdfStyles.mbLg}>
+          <Text style={[pdfStyles.boldBody, pdfStyles.mbLg]}>
+            Informações Adicionais
+          </Text>
+          <InformacoesAdicionaisSection infos={infosArray} />
+        </View>
+
+        {/* Condições de Pagamento */}
+        <View style={pdfStyles.mbLg}>
+          <Text style={pdfStyles.boldBody}>Condições de Pagamento</Text>
+          <CondicoesPagamentoSection
+            condicoesPagamentoData={condicoesPagamentoLinhas}
+          />
+        </View>
+
+        {/* Footer da página */}
+        <View style={pdfStyles.footerContainer} fixed>
+          <Footer />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              flexGrow: 1,
+            }}
+          >
+            <Text
+              render={({ pageNumber, totalPages }) =>
+                `Página ${pageNumber} de ${totalPages}`
+              }
+              style={{ textAlign: "right" }}
             />
           </View>
+        </View>
+      </Page>
 
-          {/* Informações adicionais */}
-          {infosArray.map((info, idx) => (
-            <View key={idx}>
-              {info.materiaisInclusos && (
-                <View style={pdfStyles.mbLg}>
-                  <Text style={pdfStyles.boldBody}>Materiais inclusos:</Text>
-                  <Text style={pdfStyles.tableCell}>
-                    {info.materiaisInclusos}
-                  </Text>
-                </View>
-              )}
-              {info.materiaisExclusos && (
-                <View style={pdfStyles.mbLg}>
-                  <Text style={pdfStyles.boldBody}>Materiais exclusivos:</Text>
-                  <Text style={pdfStyles.tableCell}>
-                    {info.materiaisExclusos}
-                  </Text>
-                </View>
-              )}
-              {info.observacoes && (
-                <View style={pdfStyles.mbLg}>
-                  <Text style={pdfStyles.boldBody}>Observações e outros:</Text>
-                  <Text style={pdfStyles.tableCell}>{info.observacoes}</Text>
-                </View>
-              )}
-            </View>
-          ))}
-
-          {/* Condições de pagamento */}
-          <View style={pdfStyles.mbLg}>
-            <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>
-              Condições de pagamento
-            </Text>
-            <PrimaryTable items={objetoParaTabela(condicoesPagamento, 2)} />
-          </View>
-
-          {/* Cláusulas contratuais */}
-          <View wrap={false} style={pdfStyles.mbLg}>
-            <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>
-              Cláusulas contratuais
-            </Text>
-            {clausulas.map((clausula, idx) => (
-              <Text
-                key={idx}
-                style={[
-                  pdfStyles.body,
-                  { textAlign: "justify", lineHeight: 1.4, marginBottom: 4 },
-                ]}
-              >
-                {clausula}
-              </Text>
-            ))}
-          </View>
-
-          {/* Assinaturas */}
-          <View style={pdfStyles.mtXl}>
-            <Text
-              style={[pdfStyles.body, { textAlign: "right", marginBottom: 40 }]}
-            >
-              Viçosa do Ceará, 01 de agosto de 2025
-            </Text>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 40,
-              }}
-            >
-              <View style={{ alignItems: "center", flex: 1 }}>
-                <Text>_________________________________</Text>
-                <Text style={{ marginTop: 4 }}>CONTRATADA</Text>
-                <Text style={{ marginTop: 4 }}>Paulo César Arruda Aragão</Text>
-              </View>
-              <View style={{ alignItems: "center", flex: 1 }}>
-                <Text>_________________________________</Text>
-                <Text style={{ marginTop: 4 }}>CONTRATANTE</Text>
-                <Text style={{ marginTop: 4 }}>Cliente exemplo</Text>
-              </View>
-            </View>
-          </View>
+      {/* Página 2: Cláusulas e Assinaturas */}
+      <Page size="A4" style={pdfStyles.page} wrap>
+        {/* Cláusulas */}
+        <View style={pdfStyles.mbLg}>
+          <Text style={pdfStyles.boldBody}>Cláusulas</Text>
+          <ClausulasSection clausulas={clausulas} />
         </View>
 
-        {/* Footer e paginação */}
+        {/* Assinaturas */}
+        <View style={pdfStyles.mbLg}>
+          <Text style={pdfStyles.boldBody}>Assinaturas</Text>
+          <AssinaturasSection />
+        </View>
+
+        {/* Footer da página */}
         <View style={pdfStyles.footerContainer} fixed>
           <Footer />
           <View
