@@ -20,7 +20,8 @@ export const COLUNAS_PROJETOS = [
   "Código",
   "Nome do Projeto",
   "Quantidade",
-  "Status",
+  "Valor unitário",
+  "Valor total",
 ];
 export const COLUNAS_CUSTOS = [
   "Código",
@@ -31,3 +32,18 @@ export const COLUNAS_CUSTOS = [
 ];
 
 export const COLUNAS_PECAS = ["Código", "Nome", "Quantidade"];
+
+export const COLUNAS_CONDICOES = [
+  "Previsão de entrega",
+  "Plano de pagamento",
+  "Adiantamento",
+  "Percentual de desconto",
+  "Valor do desconto",
+  "Pagamento principal",
+  "Pagamento do adiantamento",
+  "Pagamento do restante",
+  "Parcelas do restante",
+  "Restante",
+  "Data da venda",
+  "Observações",
+];
