@@ -1,7 +1,8 @@
 // ===== Imports de tipos =====
 import type { ClientInput } from "@/modules/clients/schema/clients-schema";
 import type { projectInput } from "@/modules/projects/schemas/project-schema";
-import type { InformacoesAdicionais } from "./types/infos-adicionais";
+import type { InformacoesAdicionais } from "@/modules/quotation/schemas/additional-info-schema ";
+import type { CondicoesPagamento } from "@/modules/quotation/schemas/payment-conditions-schema";
 import type { EmpresaInfo } from "./types/simple-header";
 
 // ===== Imports de estilos e PDF renderer =====
@@ -9,42 +10,39 @@ import { pdfStyles } from "@/styles/pdf_styles/pdfStyles";
 import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 // ===== Imports de componentes =====
+import { CondicoesPagamentoSection } from "./components/condicoes-pagamento-section";
 import Footer from "./components/footer";
 import Header from "./components/header";
+import { InformacoesAdicionaisSection } from "./components/informacoes-adicionais-section";
 import PrimaryTable from "./components/primary-table";
 import { SectionTable } from "./components/section-table";
 
-// ===== Imports de utilitários e constantes =====
+// ===== Imports de utilitários =====
+import SectionTitleWithCode from "./components/tittle-section";
 import { COLUNAS_PROJETOS } from "./constants/pdfColumns";
 import { formatarDadosParaPDF } from "./utils/formatar-dados-pdf";
-import { objetoParaTabela } from "./utils/objetoParaTabela";
 
 interface ModeloOrcamentoProps {
   clients: ClientInput[];
   empresa: EmpresaInfo[];
   projects: projectInput[];
   informacoesAdicionais?: InformacoesAdicionais | InformacoesAdicionais[];
+  condicoesPagamentoData?: CondicoesPagamento[];
 }
 
-const condicoesPagamentoPadrao = {
-  "Plano de pagamento": "A combinar",
-  Adiantamento: "R$ 432,54",
-  "Data da venda": "30/05/2025",
-  "Pagamento do restante": "A combinar",
-  "Previsão de entrega": "45 dias úteis após a data da venda",
-  Restante: "1 X de R$ 805,60 = 805,60",
-};
-
-const ModeloOrcamentoLayout = ({
+export const ModeloOrcamentoLayout = ({
   clients,
   empresa,
   projects,
   informacoesAdicionais,
+  condicoesPagamentoData,
 }: ModeloOrcamentoProps) => {
-  const { clientesLinhas, projetosDados } = formatarDadosParaPDF({
-    clients,
-    projects,
-  });
+  const { clientesLinhas, projetosDados, condicoesPagamentoLinhas } =
+    formatarDadosParaPDF({
+      clients,
+      projects,
+      condicoesPagamento: condicoesPagamentoData,
+    });
 
   const infosArray = Array.isArray(informacoesAdicionais)
     ? informacoesAdicionais
@@ -58,98 +56,49 @@ const ModeloOrcamentoLayout = ({
         {/* Header */}
         <Header data={empresa[0]} />
 
+        <SectionTitleWithCode code="C29115" title="Orçamento do projeto" />
+
         <View style={{ flexDirection: "column", flexGrow: 1 }}>
-          {/* Seção: Dados do Cliente */}
+          {/* Dados do Cliente */}
           <View style={pdfStyles.mbLg}>
             <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>
-              Dados da Contratante (Cliente)
+              Dados do(a) cliente
             </Text>
             <PrimaryTable items={clientesLinhas} />
           </View>
 
-          {/* Seção: Projetos */}
-          <View style={pdfStyles.mbLg}>
+          {/* Projetos */}
+          <View style={pdfStyles.mtLg}>
+            <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>
+              Projetos inclusos
+            </Text>
             <SectionTable
-              title="Projetos"
+              title=""
               columns={COLUNAS_PROJETOS}
               data={projetosDados}
             />
           </View>
 
-          {/* Informações adicionais */}
-          {infosArray.map((info, idx) => (
-            <View key={idx}>
-              {/* Valores do pedido */}
-              {(info.valorPedido ||
-                info.descontoPercentual !== undefined ||
-                info.valorDesconto ||
-                info.valorAPagar) && (
-                <View style={pdfStyles.mbLg}>
-                  {info.valorPedido && (
-                    <Text style={pdfStyles.tableCell}>
-                      Valor do pedido: {info.valorPedido}
-                    </Text>
-                  )}
-                  {info.descontoPercentual !== undefined && (
-                    <Text style={pdfStyles.tableCell}>
-                      Desconto de: {info.descontoPercentual}%
-                    </Text>
-                  )}
-                  {info.valorDesconto && (
-                    <Text style={pdfStyles.tableCell}>
-                      Valor do desconto: {info.valorDesconto}
-                    </Text>
-                  )}
-                  {info.valorAPagar && (
-                    <Text style={[pdfStyles.boldBody, pdfStyles.mtSm]}>
-                      Valor a pagar: {info.valorAPagar}
-                    </Text>
-                  )}
-                </View>
-              )}
+          {/* Informações Adicionais */}
 
-              {/* Materiais inclusos */}
-              {info.materiaisInclusos && (
-                <View style={pdfStyles.mbLg}>
-                  <Text style={pdfStyles.boldBody}>Materiais inclusos:</Text>
-                  <Text style={pdfStyles.tableCell}>
-                    {info.materiaisInclusos}
-                  </Text>
-                </View>
-              )}
+          <View style={pdfStyles.mtLg}>
+            <Text style={[pdfStyles.h3, pdfStyles.mtLg]}>
+              Informações Adicionais
+            </Text>
+            <InformacoesAdicionaisSection infos={infosArray} />
+          </View>
 
-              {/* Materiais exclusivos */}
-              {info.materiaisExclusos && (
-                <View style={pdfStyles.mbLg}>
-                  <Text style={pdfStyles.boldBody}>Materiais exclusivos:</Text>
-                  <Text style={pdfStyles.tableCell}>
-                    {info.materiaisExclusos}
-                  </Text>
-                </View>
-              )}
+          {/* Condições de Pagamento */}
 
-              {/* Condições de pagamento */}
-              <View style={pdfStyles.mbLg}>
-                <Text style={[pdfStyles.boldBody, pdfStyles.mbSm]}>
-                  Condições de pagamento
-                </Text>
-                <PrimaryTable
-                  items={objetoParaTabela(condicoesPagamentoPadrao, 2)}
-                />
-              </View>
-
-              {/* Observações */}
-              {info.observacoes && (
-                <View style={pdfStyles.mbLg}>
-                  <Text style={pdfStyles.boldBody}>Observações e outros:</Text>
-                  <Text style={pdfStyles.tableCell}>{info.observacoes}</Text>
-                </View>
-              )}
-            </View>
-          ))}
+          <View style={pdfStyles.mbLg}>
+            <Text style={pdfStyles.boldBody}>Condições de pagamento</Text>
+            <CondicoesPagamentoSection
+              condicoesPagamentoData={condicoesPagamentoLinhas}
+            />
+          </View>
         </View>
 
-        {/* Footer e paginação */}
+        {/* Footer */}
         <View style={pdfStyles.footerContainer} fixed>
           <Footer />
           <View
