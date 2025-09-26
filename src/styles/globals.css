@@ -119,3 +119,7 @@ div[role="status"][aria-live="polite"] {
 * {
   @apply transition-none;
 }
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}

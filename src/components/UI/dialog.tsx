@@ -75,7 +75,7 @@ function DialogContent({
     xsmall: "max-w-[30rem]",
     small: "max-w-[33.75rem]",
     medium: "max-w-[40rem]",
-    large: "max-w-[57.75rem]",
+    large: "max-w-[58.25rem]",
   };
 
   return (

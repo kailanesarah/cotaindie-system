@@ -9,6 +9,8 @@ interface Order {
   client: Pick<Client, "code" | "name">;
   status: Status;
 
+  projects: Project[];
+
   //projet material
   included: string;
   excluded: string;

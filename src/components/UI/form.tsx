@@ -163,6 +163,16 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
+function FormList({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <ul className="text-body-lighter pl-2 text-[0.6875rem]">{children}</ul>
+  );
+}
+
+function FormListItem({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <li> - {children}</li>;
+}
+
 export {
   Form,
   FormControl,
@@ -170,6 +180,8 @@ export {
   FormField,
   FormItem,
   FormLabel,
+  FormList,
+  FormListItem,
   FormMessage,
   useFormField,
 };

@@ -63,8 +63,11 @@ export const OrderMenuActions = () => {
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="w-8 rounded-l-none border-0 focus:z-10">
-              <Icon name="keyboard_arrow_down" />
+            <Button className="group w-8 rounded-l-none border-0 focus:z-10">
+              <Icon
+                name="keyboard_arrow_down"
+                className="group-data-[state=open]:rotate-180"
+              />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[12.5rem]">

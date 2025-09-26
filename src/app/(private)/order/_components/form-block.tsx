@@ -9,7 +9,7 @@ export const FormGroup = ({ children }: { children: ReactNode }) => {
 export const FormSection = ({ children }: { children?: ReactNode }) => {
   return (
     <section className={cn("border-b-light border-y bg-white p-6")}>
-      <div className="mx-auto flex max-w-[58.25rem] flex-col gap-6">
+      <div className="max-w-container-small mx-auto flex flex-col gap-6">
         {children}
       </div>
     </section>
@@ -19,7 +19,7 @@ export const FormSection = ({ children }: { children?: ReactNode }) => {
 export const FormEmptySection = () => {
   return (
     <div
-      className={cn("border-b-light h-[5.75rem] border-y bg-white px-6 py-4")}
+      className={cn("border-b-light h-[6.25rem] border-y bg-white px-6 py-4")}
     />
   );
 };

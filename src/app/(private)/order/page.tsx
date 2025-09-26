@@ -12,7 +12,14 @@ import {
 } from "./_components/form-block";
 import { OrderIncludedForm } from "./_components/order-included-form";
 import { OrderPaymentForm } from "./_components/order-payment-form";
+import {
+  OrderProjects,
+  OrderProjectsActions,
+  OrderProjectsContent,
+  OrderProjectsTotal,
+} from "./_components/order-projects";
 import { OrderReferenceForm } from "./_components/order-reference-form";
+import { SummaryTable } from "./_components/summary-table";
 
 export default async function OrderPage() {
   return (
@@ -37,6 +44,16 @@ export default async function OrderPage() {
               Projetos que o cliente está orçando e o que está incluso.
             </FormDescription>
           </FormHeading>
+          <FormSeparator />
+          <FormContent>
+            <OrderProjects>
+              <OrderProjectsContent>
+                <SummaryTable />
+                <OrderProjectsActions />
+              </OrderProjectsContent>
+              <OrderProjectsTotal />
+            </OrderProjects>
+          </FormContent>
           <FormSeparator />
           <FormContent>
             <OrderIncludedForm />

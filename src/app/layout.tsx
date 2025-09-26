@@ -14,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${fontAspektaVariable.variable} antialiased`}>
+    <html lang="pt-BR" className="no-scrollbar">
+      <body className={`${fontAspektaVariable.variable} !m-0 antialiased`}>
         <aside>
           <Toaster
             gutter={16}
