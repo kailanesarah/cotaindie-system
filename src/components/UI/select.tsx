@@ -43,17 +43,20 @@ function SelectTrigger({
 }) {
   return (
     <SelectPrimitive.Trigger
+      {...props}
       data-slot="select-trigger"
       className={cn(
-        "group placeholder:body-lighter border-b-light rounded-default flex h-[2.875rem] w-full cursor-pointer items-center justify-between gap-2 border bg-[#E5E5E235] px-5 pb-0.5 shadow-[inset_0_0.1875rem_0.3125rem_0_rgba(0,0,0,0.04)]",
+        "group border-b-light rounded-default flex h-[2.875rem] w-full cursor-pointer items-center justify-between gap-2 px-3",
+        "overflow-hidden",
         className,
       )}
-      {...props}
     >
-      <SelectPrimitive.Value
-        placeholder={placeholder}
-        className="truncate text-left"
-      />
+      <span className="w-full truncate">
+        <SelectPrimitive.Value
+          placeholder={placeholder}
+          className="w-full truncate text-left"
+        />
+      </span>
       <SelectPrimitive.Icon asChild>
         <Icon
           name="keyboard_arrow_down"
@@ -65,18 +68,24 @@ function SelectTrigger({
   );
 }
 
+interface SelectContentProps
+  extends React.ComponentProps<typeof SelectPrimitive.Content> {
+  classNameViewport?: string;
+}
+
 function SelectContent({
   className,
   children,
   position = "popper",
+  classNameViewport,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: Readonly<SelectContentProps>) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 border-b-light rounded-default relative z-50 mt-1 flex max-h-[20rem] w-full origin-(--radix-select-content-transform-origin) flex-col overflow-x-hidden overflow-y-auto border bg-white p-1",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 border-b-light rounded-default relative z-50 mt-1 flex max-h-[20rem] w-full origin-(--radix-select-content-transform-origin) flex-col overflow-x-hidden overflow-y-auto border bg-white !p-0",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className,
@@ -89,6 +98,8 @@ function SelectContent({
           className={cn(
             position === "popper" &&
               "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1",
+            "p-1",
+            classNameViewport,
           )}
         >
           {children}
@@ -126,12 +137,10 @@ function SelectItem({
       )}
       {...props}
     >
-      <span className="absolute right-2 flex size-3.5 items-center justify-center">
-        <SelectPrimitive.ItemIndicator>
-          <Icon name="check_small" size={20} className="-mr-1" />
-        </SelectPrimitive.ItemIndicator>
-      </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemIndicator className="ml-auto">
+        <Icon name="check_small" size={20} className="text-red-default" />
+      </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
 }
