@@ -9,11 +9,11 @@ export const statusMap: Record<
   { text: string; type: BadgeVariant }
 > = {
   open: {
-    text: "Apenas cotado",
+    text: "Cotado",
     type: "alert",
   },
   approved: {
-    text: "Pedido finalizado",
+    text: "Finalizado",
     type: "success",
   },
 };
