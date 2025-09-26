@@ -50,6 +50,9 @@
   --color-body-darker: #cccccc;
 
   --color-sidebar: var(--color-black-default);
+
+  /* Max Width */
+  --max-width-container-small: 58.25rem;
 }
 
 html {

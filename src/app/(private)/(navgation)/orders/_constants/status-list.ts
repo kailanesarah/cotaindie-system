@@ -1,4 +1,4 @@
-import { statusMap } from "./status-map";
+import { statusMap } from "../../_constants/status-map";
 
 export const statusList: Category[] = [
   { id: "open", name: statusMap["open"].text },
