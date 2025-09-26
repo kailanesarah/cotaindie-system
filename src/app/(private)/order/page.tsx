@@ -11,6 +11,7 @@ import {
   FormTitle,
 } from "./_components/form-block";
 import { OrderMenu } from "./_components/order-menu";
+import { OrderPaymentForm } from "./_components/order-payment-form";
 import { OrderReferenceForm } from "./_components/order-reference-form";
 
 export default async function OrderPage() {
@@ -29,6 +30,18 @@ export default async function OrderPage() {
             <FormSeparator />
             <FormContent>
               <OrderReferenceForm clients={clients} />
+            </FormContent>
+          </FormSection>
+          <FormSection>
+            <FormHeading>
+              <FormTitle>Pagamento e condições</FormTitle>
+              <FormDescription>
+                Indique como o cliente vai pagar ao finalizar o pedido.
+              </FormDescription>
+            </FormHeading>
+            <FormSeparator />
+            <FormContent>
+              <OrderPaymentForm />
             </FormContent>
           </FormSection>
           <FormEmptySection />

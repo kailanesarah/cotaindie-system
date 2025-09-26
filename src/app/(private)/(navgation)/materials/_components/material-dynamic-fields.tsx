@@ -139,7 +139,7 @@ export const MaterialDinamicFields = () => {
           </FormItem>
         )}
       />
-      <InputDisabled className="mt-[1.375rem] w-full justify-center">
+      <InputDisabled className="mt-[1.375rem] w-full">
         Por: {measureType.toUpperCase()}
       </InputDisabled>
     </>

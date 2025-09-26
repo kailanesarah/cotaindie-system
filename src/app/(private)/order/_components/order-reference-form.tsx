@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
   Form,
@@ -20,18 +19,20 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type z from "zod";
-import { orderReferenceSchema } from "../schema/order-reference-schema";
+import {
+  orderReferenceSchema,
+  type orderReferenceType,
+} from "../schema/order-reference-schema";
 
 export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
-  const form = useForm<z.infer<typeof orderReferenceSchema>>({
+  const form = useForm<orderReferenceType>({
     resolver: zodResolver(orderReferenceSchema),
     defaultValues: { startsAt: new Date() },
   });
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-12 gap-3">
+      <form className="grid grid-cols-12 items-start gap-3">
         <FormField
           control={form.control}
           name="title"
@@ -39,7 +40,11 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
             <FormItem className="col-span-5">
               <FormLabel>Título</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Título do orçamento" />
+                <Input
+                  {...field}
+                  value={field.value ?? ""}
+                  placeholder="Título do orçamento"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -57,14 +62,13 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
                 >
-                  <Button variant="secondary" asChild>
-                    <SelectTrigger
-                      placeholder="Selecione um cliente"
-                      className="justify-between text-left font-medium"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                  </Button>
+                  <SelectTrigger
+                    truncate
+                    placeholder="Selecione um cliente"
+                    className="justify-between"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent align="end">
                     {clients.map((opt) => (
                       <SelectItem key={opt.id} value={opt.id}>
@@ -106,14 +110,13 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
                 >
-                  <Button variant="secondary" asChild>
-                    <SelectTrigger
-                      placeholder="Expira em..."
-                      className="justify-between text-left font-medium"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                  </Button>
+                  <SelectTrigger
+                    truncate
+                    placeholder="Expira em..."
+                    className="justify-between"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent align="end">
                     {Array.from({ length: 15 }).map((_, index) => {
                       const day = index + 1;

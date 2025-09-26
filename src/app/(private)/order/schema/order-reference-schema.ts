@@ -6,3 +6,5 @@ export const orderReferenceSchema = z.object({
   startsAt: z.date("Insira uma data inicial de validade"),
   endsAt: z.string().regex(/^[1-9]\d*$/, "Insira um número positivo válido"),
 });
+
+export type orderReferenceType = z.infer<typeof orderReferenceSchema>;
