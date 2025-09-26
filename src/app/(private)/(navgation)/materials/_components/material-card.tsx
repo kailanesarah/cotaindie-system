@@ -33,7 +33,7 @@ export const MaterialCard = ({ material }: { material: Material }) => {
             </span>
             <div className="flex gap-2">
               <Badge variant="secondary">{material.category.name}</Badge>
-              <Badge>{material.id}</Badge>
+              <Badge>{material.code}</Badge>
             </div>
           </div>
         </div>

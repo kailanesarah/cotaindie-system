@@ -10,6 +10,7 @@ export const materials: Material[] = [
     wasteTax: 0.05,
     baseValue: 120,
     measure: [503.25, 44],
+    code: "M-1249",
   },
   {
     id: "2",
@@ -22,6 +23,7 @@ export const materials: Material[] = [
     wasteTax: 0.05,
     baseValue: 150,
     measure: [400],
+    code: "M-1250",
   },
   {
     id: "3",
@@ -34,6 +36,7 @@ export const materials: Material[] = [
     wasteTax: 0.02,
     baseValue: 5,
     measure: [1],
+    code: "M-1251",
   },
   {
     id: "4",
@@ -46,6 +49,7 @@ export const materials: Material[] = [
     wasteTax: 0.02,
     baseValue: 0.5,
     measure: [1],
+    code: "M-1252",
   },
   {
     id: "5",
@@ -58,5 +62,6 @@ export const materials: Material[] = [
     wasteTax: 0.05,
     baseValue: 1.5,
     measure: [100],
+    code: "M-1253",
   },
 ];
