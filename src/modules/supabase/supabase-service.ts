@@ -1,174 +1,168 @@
-import { errorsResponse } from "@/utils/errors-messages";
-import { successResponse } from "@/utils/success-messages";
-import { type EntityOptionsInput } from "./schema/services_schema";
+import { Errors } from "@/utils/errors";
+import {
+  type EntitiesByIdsOptions,
+  type EntityOptionsInput,
+} from "./schema/services_schema";
 import { getAuthenticatedUser } from "./supabase-auth-service";
 import { createClient } from "./supabase-server";
 
 export async function insertEntityToTable<T>(
-    data: T,
-    options: EntityOptionsInput
+  data: T,
+  options: EntityOptionsInput,
 ) {
-    try {
-        const supabase = await createClient();
-        const user = await getAuthenticatedUser(supabase);
+  try {
+    const supabase = await createClient();
+    const user = await getAuthenticatedUser(supabase);
 
-        const insertPayload = {
-            [options.idColumnName]: options.idObject,
-            user_id: user.id,
-            ...data,
-        };
+    const insertPayload = {
+      [options.idColumnName]: options.idObject,
+      user_id: user.id,
+      ...data,
+    };
 
-        const { data: insertedEntity, error } = await supabase
-            .from(options.tableName)
-            .insert([insertPayload])
-            .select(options.selectFields || "*")
-            .single();
+    const { data: insertedEntity, error } = await supabase
+      .from(options.tableName)
+      .insert([insertPayload])
+      .select(options.selectFields || "*")
+      .single();
 
-        if (error || !insertedEntity) {
-            throw errorsResponse(
-                500,
-                `Erro ao inserir na tabela ${options.tableName}`,
-                error?.message
-            );
-        }
-
-        return successResponse(
-            insertedEntity,
-            201,
-            `Registro criado com sucesso na tabela ${options.tableName}`
-        );
-    } catch (err: any) {
-        throw errorsResponse(
-            err.status || 500,
-            err.message || "Erro interno",
-            err.details
-        );
+    if (error || !insertedEntity) {
+      return { success: false, ...Errors.INTERNAL(error?.message) };
     }
+
+    return {
+      success: true,
+      status: 201,
+      message: `Registro criado com sucesso na tabela ${options.tableName}`,
+      data: insertedEntity,
+    };
+  } catch (err: any) {
+    return { success: false, ...Errors.INTERNAL(err.message) };
+  }
 }
 
 export async function getEntitiesService(options: EntityOptionsInput) {
-    try {
-        const supabase = await createClient();
-        const user = await getAuthenticatedUser(supabase);
+  try {
+    const supabase = await createClient();
+    const user = await getAuthenticatedUser(supabase);
 
-        const { data, error } = await supabase
-            .from(options.tableName)
-            .select(options.selectFields || "*")
-            .eq("user_id", user.id);
+    const { data, error } = await supabase
+      .from(options.tableName)
+      .select(options.selectFields || "*")
+      .eq("user_id", user.id);
 
-        if (error) {
-            throw errorsResponse(500, `Erro ao buscar registros`, error.message);
-        }
+    if (error) return { success: false, ...Errors.INTERNAL(error.message) };
 
-        return successResponse(
-            data,
-            200,
-            `Registros encontrados na tabela ${options.tableName}`
-        );
-    } catch (err: any) {
-        throw errorsResponse(
-            err.status || 500,
-            err.message || "Erro interno",
-            err.details
-        );
-    }
+    return {
+      success: true,
+      status: 200,
+      message: `Registros encontrados na tabela ${options.tableName}`,
+      data,
+    };
+  } catch (err: any) {
+    return { success: false, ...Errors.INTERNAL(err.message) };
+  }
 }
 
 export async function getEntityByIdService(options: EntityOptionsInput) {
-    try {
-        const supabase = await createClient();
-        const user = await getAuthenticatedUser(supabase);
+  try {
+    const supabase = await createClient();
+    const user = await getAuthenticatedUser(supabase);
 
-        const { data, error } = await supabase
-            .from(options.tableName)
-            .select(options.selectFields || "*")
-            .eq(options.idColumnName, options.idObject)
-            .eq("user_id", user.id)
-            .single();
+    const { data, error } = await supabase
+      .from(options.tableName)
+      .select(options.selectFields || "*")
+      .eq(options.idColumnName, options.idObject)
+      .eq("user_id", user.id)
+      .single();
 
-        if (error || !data) {
-            throw errorsResponse(404, "Registro não encontrado", error?.message);
-        }
+    if (error || !data)
+      return { success: false, ...Errors.NOT_FOUND("registro") };
 
-        return successResponse(
-            data,
-            200,
-            `Registro encontrado na tabela ${options.tableName}`
-        );
-    } catch (err: any) {
-        throw errorsResponse(
-            err.status || 500,
-            err.message || "Erro interno",
-            err.details
-        );
-    }
+    return {
+      success: true,
+      status: 200,
+      message: `Registro encontrado na tabela ${options.tableName}`,
+      data,
+    };
+  } catch (err: any) {
+    return { success: false, ...Errors.INTERNAL(err.message) };
+  }
+}
+
+export async function getEntitiesByIdsService(options: EntitiesByIdsOptions) {
+  try {
+    const supabase = await createClient();
+    const user = await getAuthenticatedUser(supabase);
+
+    const { data, error } = await supabase
+      .from(options.tableName)
+      .select(options.selectFields || "*")
+      .in(options.idColumnName, options.ids)
+      .eq("user_id", user.id);
+
+    if (error || !data || data.length === 0)
+      return { success: false, ...Errors.NOT_FOUND("registros") };
+
+    return { success: true, data };
+  } catch (err: any) {
+    return { success: false, ...Errors.INTERNAL(err.message) };
+  }
 }
 
 export async function updateEntityInTable<T>(
-    data: T,
-    options: EntityOptionsInput
+  data: T,
+  options: EntityOptionsInput,
 ) {
-    try {
-        const supabase = await createClient();
-        const user = await getAuthenticatedUser(supabase);
+  try {
+    const supabase = await createClient();
+    const user = await getAuthenticatedUser(supabase);
 
-        const { data: updatedEntity, error } = await supabase
-            .from(options.tableName)
-            .update(data)
-            .eq(options.idColumnName, options.idObject)
-            .eq("user_id", user.id)
-            .select(options.selectFields || "*")
-            .single();
+    const { data: updatedEntity, error } = await supabase
+      .from(options.tableName)
+      .update(data)
+      .eq(options.idColumnName, options.idObject)
+      .eq("user_id", user.id)
+      .select(options.selectFields || "*")
+      .single();
 
-        if (error || !updatedEntity) {
-            throw errorsResponse(
-                500,
-                `Erro ao atualizar na tabela ${options.tableName}`,
-                error.message
-            );
-        }
+    if (error || !updatedEntity)
+      return { success: false, ...Errors.INTERNAL(error?.message) };
 
-        return successResponse(
-            updatedEntity,
-            200,
-            `Registro atualizado com sucesso na tabela ${options.tableName}`
-        );
-    } catch (err: any) {
-        throw errorsResponse(
-            err.status || 500,
-            err.message || "Erro interno",
-            err.details
-        );
-    }
+    return {
+      success: true,
+      status: 200,
+      message: `Registro atualizado com sucesso na tabela ${options.tableName}`,
+      data: updatedEntity,
+    };
+  } catch (err: any) {
+    return { success: false, ...Errors.INTERNAL(err.message) };
+  }
 }
 
 export async function deleteEntityService(options: EntityOptionsInput) {
-    try {
-        const supabase = await createClient();
-        const user = await getAuthenticatedUser(supabase);
+  try {
+    const supabase = await createClient();
+    const user = await getAuthenticatedUser(supabase);
 
-        const { data: deleted, error } = await supabase
-            .from(options.tableName)
-            .delete()
-            .eq(options.idColumnName, options.idObject)
-            .eq("user_id", user.id)
-            .select()
-            .single();
+    const { data: deleted, error } = await supabase
+      .from(options.tableName)
+      .delete()
+      .eq(options.idColumnName, options.idObject)
+      .eq("user_id", user.id)
+      .select()
+      .single();
 
-        if (error || !deleted) {
-            throw errorsResponse(500, "Erro ao deletar registro", error?.message);
-        }
+    if (error || !deleted)
+      return { success: false, ...Errors.INTERNAL(error?.message) };
 
-        return successResponse(
-            deleted,
-            204,
-            `Registro deletado com sucesso na tabela ${options.tableName}`
-        );
-    } catch (err: any) {
-        throw errorsResponse(
-            err.status || 500,
-            err.message || "Erro interno",
-            err.details
-        );
-    }
+    return {
+      success: true,
+      status: 204,
+      message: `Registro deletado com sucesso na tabela ${options.tableName}`,
+      data: deleted,
+    };
+  } catch (err: any) {
+    return { success: false, ...Errors.INTERNAL(err.message) };
+  }
 }
