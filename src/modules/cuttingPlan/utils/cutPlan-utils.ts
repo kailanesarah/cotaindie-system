@@ -1,7 +1,7 @@
-import { fetchPieces } from "@/modules/piece/utils/utils";
+import { fetchPieces } from "@/modules/piece/utils/fetch-pieces-utils";
 import { getProductByIdService } from "@/modules/products/products-service";
 import { generateSheetsPNG } from "../drawCanva/draw-canvas-utils"; // função atualizada
-import type { CleanSheet } from "../schemas/schema";
+import type { CleanSheet } from "../schemas/sheet-schema";
 import { packMaxRects, type Sheet } from "./packing-utils";
 import { calculateSheetMetrics } from "./waste-rate-utils";
 
