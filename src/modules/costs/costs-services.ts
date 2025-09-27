@@ -1,8 +1,5 @@
-// costs-services.ts
-
-import { errorsResponse } from "@/utils/errors-messages";
+import { Errors } from "@/utils/errors";
 import { generateId } from "@/utils/idGenerator";
-import { successResponse } from "@/utils/success-messages";
 import {
   deleteEntityService,
   getEntitiesService,
@@ -19,138 +16,131 @@ export async function appendCostService(project_id: string, data: costInput[]) {
       data.map(async (cost, index) => {
         const parsed = costSchema.safeParse(cost);
         if (!parsed.success) {
-          throw errorsResponse(
-            400,
-            `Dados do custo inválidos no índice ${index}`,
-            parsed.error.format(),
+          throw new Error(
+            `Dados do custo inválidos no índice ${index}: ${JSON.stringify(parsed.error.format())}`,
           );
         }
 
         const cost_id = await generateId("COS");
         const dataWithProject = { ...parsed.data, project_id, cost_id };
 
-        return insertEntityToTable(dataWithProject, {
+        const inserted = await insertEntityToTable(dataWithProject, {
           tableName: "table_costs",
           idColumnName: "cost_id",
+          idObject: cost_id,
           selectFields: "*, project_id(project_id, project_name)",
         });
+
+        return { ...inserted, success: true };
       }),
     );
 
-    return successResponse(insertedCosts, 201, "Custos criados com sucesso");
+    return insertedCosts;
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.message) };
   }
 }
 
 // Listagem de custos
 export async function getCostsService() {
   try {
-    const data = await getEntitiesService({
+    const response = await getEntitiesService({
       tableName: "table_costs",
       idColumnName: "cost_id",
       selectFields: "*, project_id(project_id, project_name)",
     });
 
-    return successResponse(data, 200, "Custos encontrados");
+    return { ...response, success: true };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.message) };
   }
 }
 
 // Buscar custo por ID
 export async function getCostByIdService(cost_id: string) {
+  if (!cost_id) return { success: false, ...Errors.MISSING_PARAM("cost_id") };
+
   try {
-    const data = await getEntityByIdService({
+    const response = await getEntityByIdService({
       tableName: "table_costs",
       idColumnName: "cost_id",
       idObject: cost_id,
       selectFields: "*, project_id(project_id, project_name)",
     });
 
-    return successResponse(data, 200, "Custo encontrado");
+    if (!response) return { success: false, ...Errors.NOT_FOUND("custo") };
+
+    return { ...response, success: true };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.message) };
   }
 }
 
 // Buscar custos por projeto
 export async function getCostsByProjectId(project_id: string) {
+  if (!project_id)
+    return { success: false, ...Errors.MISSING_PARAM("project_id") };
+
   try {
-    const data = await getEntitiesService({
+    const allCosts = await getEntitiesService({
       tableName: "table_costs",
-      idColumnName: "project_id",
-      idObject: project_id,
+      idColumnName: "cost_id",
       selectFields: "*, project_id(project_id, project_name)",
     });
 
-    return successResponse(data, 200, "Custos do projeto encontrados");
-  } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
+    const filteredCosts = (allCosts.data ?? []).filter(
+      (item: any) => item.project_id?.project_id === project_id,
     );
+
+    return { success: true, data: filteredCosts };
+  } catch (err: any) {
+    return { success: false, ...Errors.INTERNAL(err.message) };
   }
 }
 
 // Atualização de custo
 export async function updateCostService(cost_id: string, data: costInput) {
+  if (!cost_id) return { success: false, ...Errors.MISSING_PARAM("cost_id") };
+
   try {
     const parsed = costSchema.partial().safeParse(data);
     if (!parsed.success) {
-      throw errorsResponse(
-        400,
-        "Dados do custo inválidos",
-        parsed.error.format(),
-      );
+      return { success: false, ...Errors.INVALID_DATA(parsed.error.format()) };
     }
 
-    const updatedEntity = await updateEntityInTable(parsed.data, {
+    const response = await updateEntityInTable(parsed.data, {
       tableName: "table_costs",
       idObject: cost_id,
       idColumnName: "cost_id",
       selectFields: "*, project_id(project_id, project_name)",
     });
 
-    return successResponse(updatedEntity, 200, "Custo atualizado com sucesso");
+    return { ...response, success: true };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.message) };
   }
 }
 
 // Exclusão de custo
 export async function deleteCostService(cost_id: string) {
+  if (!cost_id) return { success: false, ...Errors.MISSING_PARAM("cost_id") };
+
   try {
-    const deletedEntity = await deleteEntityService({
+    const response = await deleteEntityService({
       tableName: "table_costs",
       idObject: cost_id,
       idColumnName: "cost_id",
-      selectFields: "*, project_id(*)",
+      selectFields: "*, project_id(project_id, project_name)",
     });
 
-    return successResponse(deletedEntity, 204, "Custo deletado com sucesso");
+    return { ...response, success: true };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    const isForeignKey = err.message?.includes("foreign key");
+    return {
+      success: false,
+      ...(isForeignKey
+        ? Errors.FOREIGN_KEY_VIOLATION("custo")
+        : Errors.INTERNAL(err.message)),
+    };
   }
 }

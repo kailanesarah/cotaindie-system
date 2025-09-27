@@ -1,7 +1,10 @@
 import { insertEntityToTable } from "@/modules/supabase/supabase-service";
 import { errorsResponse } from "@/utils/errors-messages";
 import { successResponse } from "@/utils/success-messages";
-import { cuttingPlanSchema, type CuttingPlanInput } from "../schemas/schema";
+import {
+  cuttingPlanSchema,
+  type CuttingPlanInput,
+} from "../schemas/sheet-schema";
 
 // Criação de plano de corte
 export async function appendCuttingPlanService(data: CuttingPlanInput) {

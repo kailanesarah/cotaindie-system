@@ -1,8 +1,8 @@
 import fs from "fs";
 import os from "os";
 import path from "path";
-import { svgToBase64Png } from "../utils/convert-png";
-import { drawSheetsSVG, type SheetForDrawing } from "./draw-canvas";
+import { svgToBase64Png } from "../utils/convert-png-utils";
+import { drawSheetsSVG, type SheetForDrawing } from "./draw-canvas-service";
 
 export async function generateSheetsPNG<
   T extends { w: number; h: number; usedRects: any[]; freeRects?: any[] },

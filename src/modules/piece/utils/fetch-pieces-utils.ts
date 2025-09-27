@@ -10,7 +10,7 @@ export async function fetchPieces(project_id: string): Promise<Piece[]> {
         w: item.piece_width,
         h: item.piece_height,
         name: item.piece_name ?? "Sem nome",
-        product_id: item.product_id ?? "Sem ID", // agora pegando o ID real
+        product_id: item.product_id ?? "Sem ID",
         category_id: item.product_id?.product_category ?? "Sem categoria",
       })) ?? [];
 
@@ -18,19 +18,8 @@ export async function fetchPieces(project_id: string): Promise<Piece[]> {
       throw new Error("Nenhuma peça encontrada para o projeto");
     }
 
-    console.log(
-      "IDs das peças capturadas:",
-      pieces.map((p) => p.product_id),
-    );
-
-    console.log(
-      "Categorias das peças capturadas:",
-      pieces.map((p) => p.category_id),
-    );
-
     return pieces;
   } catch (error) {
-    console.error("Erro ao buscar peças do projeto:", error);
     throw new Error("Falha ao buscar peças do projeto");
   }
 }

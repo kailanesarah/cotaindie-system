@@ -1,5 +1,3 @@
-import { errorsResponse } from "@/utils/errors-messages";
-import { successResponse } from "@/utils/success-messages";
 import { registerSchema, type registerInput } from "./schema/register_schema";
 import { createClient } from "./supabase-server";
 
@@ -13,21 +11,12 @@ export async function signInWithEmail(email: string, password: string) {
     });
 
     if (error) {
-      throw errorsResponse(401, "Credenciais inválidas", error.message);
+      throw new Error(`Credenciais inválidas: ${error.message}`);
     }
 
-    return successResponse(
-      data.user,
-      200,
-      "auth",
-      "Login realizado com sucesso",
-    );
+    return data.user;
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno ao autenticar",
-      err.details,
-    );
+    throw new Error(err.message || "Erro interno ao autenticar");
   }
 }
 
@@ -37,7 +26,9 @@ export async function signUpWithEmail(data: registerInput) {
 
     const parsed = registerSchema.safeParse(data);
     if (!parsed.success) {
-      throw errorsResponse(400, "Dados inválidos", parsed.error.format());
+      throw new Error(
+        `Dados inválidos: ${JSON.stringify(parsed.error.format())}`,
+      );
     }
 
     const { user_name, user_email, user_password } = parsed.data;
@@ -47,7 +38,7 @@ export async function signUpWithEmail(data: registerInput) {
     });
 
     if (authError || !authData.user) {
-      throw errorsResponse(400, "Erro ao criar usuário", authError?.message);
+      throw new Error(`Erro ao criar usuário: ${authError?.message}`);
     }
 
     const { error: insertError } = await supabase.from("table_users").insert({
@@ -58,25 +49,14 @@ export async function signUpWithEmail(data: registerInput) {
     });
 
     if (insertError) {
-      throw errorsResponse(
-        500,
-        "Erro ao salvar dados do usuário",
-        insertError.message,
+      throw new Error(
+        `Erro ao salvar dados do usuário: ${insertError.message}`,
       );
     }
 
-    return successResponse(
-      authData,
-      201,
-      "auth",
-      "Usuário registrado com sucesso",
-    );
+    return authData;
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno ao registrar",
-      err.details,
-    );
+    throw new Error(err.message || "Erro interno ao registrar");
   }
 }
 
@@ -87,16 +67,12 @@ export async function signOut() {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      throw errorsResponse(500, "Erro ao desconectar usuário", error.message);
+      throw new Error(`Erro ao desconectar usuário: ${error.message}`);
     }
 
-    return successResponse(null, 200, "Logout realizado com sucesso");
+    return { message: "Logout realizado com sucesso" };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno ao desconectar usuário",
-      err.details,
-    );
+    throw new Error(err.message || "Erro interno ao desconectar usuário");
   }
 }
 
@@ -107,7 +83,7 @@ export async function getAuthenticatedUser(supabase: any) {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    throw errorsResponse(401, "Usuário não autenticado", error?.message);
+    throw new Error(`Usuário não autenticado: ${error?.message}`);
   }
 
   return user;
@@ -121,21 +97,15 @@ export async function requireSession() {
     const user = data?.user;
 
     if (error) {
-      throw errorsResponse(500, "Erro ao verificar usuário", {
-        message: error.message,
-      });
+      throw new Error(`Erro ao verificar usuário: ${error.message}`);
     }
 
     if (!user) {
-      throw errorsResponse(401, "Usuário não autenticado", {});
+      throw new Error("Usuário não autenticado");
     }
 
-    return successResponse(user, 200, "Usuário válido");
+    return user;
   } catch (err: any) {
-    throw errorsResponse(
-      err?.status ?? 500,
-      err?.message ?? "Erro interno ao verificar sessão",
-      err?.details ?? {},
-    );
+    throw new Error(err?.message ?? "Erro interno ao verificar sessão");
   }
 }
