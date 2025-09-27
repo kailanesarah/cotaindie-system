@@ -1,8 +1,5 @@
-// project-service.ts
-
-import { errorsResponse } from "@/utils/errors-messages";
+import { Errors } from "@/utils/errors";
 import { generateId } from "@/utils/idGenerator";
-import { successResponse } from "@/utils/success-messages";
 import {
   deleteEntityService,
   getEntitiesService,
@@ -25,16 +22,10 @@ export async function appendProjectService(data: {
 }) {
   try {
     const { project, costs, pieces } = data;
-    console.log("Criando projeto com dados:", project);
 
     const parsed = projectSchema.safeParse(project);
     if (!parsed.success) {
-      console.error("Validação falhou:", parsed.error.format());
-      throw errorsResponse(
-        400,
-        "Dados do projeto inválidos",
-        parsed.error.format(),
-      );
+      return { success: false, ...Errors.INVALID_DATA(parsed.error.format()) };
     }
 
     const project_id = await generateId("PRO");
@@ -53,61 +44,51 @@ export async function appendProjectService(data: {
       appendPieceService(project_id, pieces),
     ]);
 
-    return successResponse(
-      {
-        project: insertedProject,
-        costs: insertedCosts,
-        pieces: insertedPieces,
-      },
-      201,
-      "Projeto e itens associados criados com sucesso",
-    );
+    return {
+      success: true,
+
+      project: insertedProject.data,
+      costs: insertedCosts,
+      pieces: insertedPieces,
+    };
   } catch (err: any) {
-    console.error("Erro ao criar projeto:", err);
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
 // Listar projetos
 export async function getProjectsService() {
   try {
-    const data = await getEntitiesService({
+    const response = await getEntitiesService({
       tableName: "table_projects",
       idColumnName: "project_id",
       selectFields: "*, client_id(client_id, client_name)",
     });
 
-    return successResponse(data, 200, "Projetos encontrados");
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
 // Buscar projeto por ID
 export async function getProjectByIdService(project_id: string) {
+  if (!project_id)
+    return { success: false, ...Errors.MISSING_PARAM("project_id") };
+
   try {
-    const data = await getEntityByIdService({
+    const response = await getEntityByIdService({
       tableName: "table_projects",
       idColumnName: "project_id",
       idObject: project_id,
       selectFields: "*, client_id(client_id, client_name)",
     });
 
-    return successResponse(data, 200, "Projeto encontrado");
+    if (!response) return { success: false, ...Errors.NOT_FOUND("projeto") };
+
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
@@ -116,54 +97,49 @@ export async function updateProjectService(
   project_id: string,
   data: projectInput,
 ) {
+  if (!project_id)
+    return { success: false, ...Errors.MISSING_PARAM("project_id") };
+
   try {
     const parsed = projectSchema.safeParse(data);
     if (!parsed.success) {
-      throw errorsResponse(
-        400,
-        "Dados do projeto inválidos",
-        parsed.error.format(),
-      );
+      return { success: false, ...Errors.INVALID_DATA(parsed.error.format()) };
     }
 
-    const updatedEntity = await updateEntityInTable(parsed.data, {
+    const response = await updateEntityInTable(parsed.data, {
       tableName: "table_projects",
       idObject: project_id,
       idColumnName: "project_id",
       selectFields: "*, client_id(client_id, client_name)",
     });
 
-    return successResponse(
-      updatedEntity,
-      200,
-      "Projeto atualizado com sucesso",
-    );
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
 // Excluir projeto
 export async function deleteProjectService(project_id: string) {
+  if (!project_id)
+    return { success: false, ...Errors.MISSING_PARAM("project_id") };
+
   try {
-    console.log(project_id);
-    const deletedEntity = await deleteEntityService({
+    const response = await deleteEntityService({
       tableName: "table_projects",
       idObject: project_id,
       idColumnName: "project_id",
       selectFields: "*",
     });
 
-    return successResponse(deletedEntity, 204, "Projeto deletado com sucesso");
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    const isForeignKey = err.message?.includes("foreign key");
+    return {
+      success: false,
+      ...(isForeignKey
+        ? Errors.FOREIGN_KEY_VIOLATION("projeto")
+        : Errors.INTERNAL(err.details)),
+    };
   }
 }
