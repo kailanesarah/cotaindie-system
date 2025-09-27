@@ -1,6 +1,5 @@
-import { errorsResponse } from "@/utils/errors-messages";
+import { Errors } from "@/utils/errors";
 import { generateId } from "@/utils/idGenerator";
-import { successResponse } from "@/utils/success-messages";
 import {
   deleteEntityService,
   getEntitiesService,
@@ -14,70 +13,59 @@ import { productSchema, type ProductInput } from "./schema/products-schema";
 export async function appendProductService(data: ProductInput) {
   try {
     const parsed = productSchema.safeParse(data);
-    console.log(data);
     if (!parsed.success) {
-      throw errorsResponse(
-        400,
-        "Dados do produto inválidos",
-        parsed.error.format(),
-      );
+      return { success: false, ...Errors.INVALID_DATA(parsed.error.format()) };
     }
 
     const product_id = await generateId("P");
+    const payload = { product_id, ...parsed.data };
 
-    const insertedEntity = await insertEntityToTable(parsed.data, {
+    const response = await insertEntityToTable(payload, {
       tableName: "table_products",
       idObject: product_id,
       idColumnName: "product_id",
       selectFields: "*, product_category(*)",
     });
 
-    return successResponse(insertedEntity, 201, "Produto criado com sucesso");
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
 // Listagem de produtos
 export async function getProductService() {
   try {
-    const data = await getEntitiesService({
+    const response = await getEntitiesService({
       tableName: "table_products",
       idColumnName: "product_id",
       selectFields: "*, product_category(*)",
     });
 
-    return successResponse(data, 200, "Produtos encontrados");
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
 // Buscar produto por ID
 export async function getProductByIdService(product_id: string) {
+  if (!product_id)
+    return { success: false, ...Errors.MISSING_PARAM("product_id") };
+
   try {
-    const data = await getEntityByIdService({
+    const response = await getEntityByIdService({
       tableName: "table_products",
       idColumnName: "product_id",
       idObject: product_id,
       selectFields: "*, product_category(*)",
     });
 
-    return data;
+    if (!response) return { success: false, ...Errors.NOT_FOUND("produto") };
+
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
@@ -86,53 +74,49 @@ export async function updateProductService(
   product_id: string,
   data: ProductInput,
 ) {
+  if (!product_id)
+    return { success: false, ...Errors.MISSING_PARAM("product_id") };
+
   try {
     const parsed = productSchema.partial().safeParse(data);
     if (!parsed.success) {
-      throw errorsResponse(
-        400,
-        "Dados do produto inválidos",
-        parsed.error.format(),
-      );
+      return { success: false, ...Errors.INVALID_DATA(parsed.error.format()) };
     }
 
-    const updatedEntity = await updateEntityInTable(parsed.data, {
+    const response = await updateEntityInTable(parsed.data, {
       tableName: "table_products",
       idObject: product_id,
       idColumnName: "product_id",
       selectFields: "*, product_category(*)",
     });
 
-    return successResponse(
-      updatedEntity,
-      200,
-      "Produto atualizado com sucesso",
-    );
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    return { success: false, ...Errors.INTERNAL(err.details) };
   }
 }
 
 // Exclusão de produto
 export async function deleteProductService(product_id: string) {
+  if (!product_id)
+    return { success: false, ...Errors.MISSING_PARAM("product_id") };
+
   try {
-    const deletedEntity = await deleteEntityService({
+    const response = await deleteEntityService({
       tableName: "table_products",
       idObject: product_id,
       idColumnName: "product_id",
       selectFields: "*",
     });
 
-    return successResponse(deletedEntity, 204, "Produto deletado com sucesso");
+    return { ...response };
   } catch (err: any) {
-    throw errorsResponse(
-      err.status || 500,
-      err.message || "Erro interno",
-      err.details,
-    );
+    const isForeignKey = err.message?.includes("foreign key");
+    return {
+      success: false,
+      ...(isForeignKey
+        ? Errors.FOREIGN_KEY_VIOLATION("produto")
+        : Errors.INTERNAL(err.details)),
+    };
   }
 }
