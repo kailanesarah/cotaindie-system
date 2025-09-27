@@ -5,7 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type z from "zod";
+import { useProjectForm } from "../_hooks/use-project-form";
 import { Stepper } from "../_provider/project-stepper-provider";
+import { useOrderStore } from "../_stores/order-store";
 import {
   getProjectDefaultValues,
   projectSchema,
@@ -35,8 +37,16 @@ export const ProjectForm = ({
     };
   }, []);
 
+  const setTrigger = useOrderStore((state) => state.setTrigger);
+
+  useEffect(() => {
+    setTrigger("projectsForm", form.trigger);
+  }, [form.trigger, setTrigger]);
+
+  const { saveProject } = useProjectForm();
+
   const onSubmit = (values: z.infer<typeof projectSchema>) => {
-    console.log(values);
+    saveProject(values);
   };
 
   return (

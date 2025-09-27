@@ -1,5 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
 import {
   Table,
@@ -10,21 +18,203 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { currencyFormatter } from "../_utils/currency-formatter";
-import { groupPiecesByMaterial } from "../_utils/group-pieces-by-material";
-import { PiecesTableActions } from "./pieces-table-actions";
+import {
+  groupPiecesByMaterial,
+  type GroupedPieces,
+} from "../_utils/group-pieces-by-material";
+import { calculatePieceMaterial } from "../functions/calculate-piece-value";
 
-export const PiecesTable = ({ pieces }: { pieces: Piece[] }) => {
-  const { groups: materialGroups, uniqueMaterialsCount } =
-    groupPiecesByMaterial(pieces);
+export const PiecesTableActions = ({ index }: { index: number }) => {
+  const { control } = useFormContext();
+  const { remove } = useFieldArray({ control, name: "pieces" });
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
+  const handleDelete = () => {
+    remove(index);
+    setIsDeleteOpen(false);
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button square variant="link" className="-my-0.5 size-6">
+            <Icon name="more_vert" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent sideOffset={12} align="end" alignOffset={16}>
+          <DropdownMenuItem
+            className="text-red-default"
+            onClick={() => setIsDeleteOpen(true)}
+          >
+            <Icon name="delete" /> Apagar
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <DeleteDialog handleDelete={handleDelete} />
+      </Dialog>
+    </>
+  );
+};
+
+const PiecesTableRowSingle = ({
+  pieces,
+  gIndex,
+}: {
+  pieces: Piece[];
+  gIndex: number;
+}) => {
+  const { getValues } = useFormContext<{ pieces: Piece[] }>();
+  const allPieces = getValues("pieces");
+
+  return (
+    <>
+      {pieces.map((piece) => {
+        const calc = calculatePieceMaterial(piece);
+        const globalIndex = allPieces.indexOf(piece);
+
+        return (
+          <TableRow
+            key={`un-${gIndex}-${globalIndex}`}
+            className="text-title-light whitespace-nowrap last:border-0"
+          >
+            <TableCell className="pr-0">{gIndex + 1}</TableCell>
+            <TableCell>
+              <span className="line-clamp-1" title={piece.name}>
+                {piece.material.name}{" "}
+                <span className="text-muted-foreground">({piece.qtde})</span>
+              </span>
+            </TableCell>
+            <TableCell>{calc.quantityInt}</TableCell>
+            <TableCell>{calc.quantityFrac}</TableCell>
+            <TableCell>{calc.unit}</TableCell>
+            <TableCell>{currencyFormatter.format(calc.value)}</TableCell>
+            <TableCell className="flex h-full items-center justify-center text-right">
+              <PiecesTableActions index={globalIndex} />
+            </TableCell>
+          </TableRow>
+        );
+      })}
+    </>
+  );
+};
+
+const PiecesTableRowGroup = ({
+  group,
+  gIndex,
+  isOpen,
+  toggleGroup,
+}: {
+  group: GroupedPieces;
+  gIndex: number;
+  isOpen: boolean;
+  toggleGroup: (idx: number) => void;
+}) => {
+  const { getValues } = useFormContext<{ pieces: Piece[] }>();
+  const allPieces = getValues("pieces");
+
+  const groupCalc = group.pieces.reduce(
+    (acc, piece) => {
+      const calc = calculatePieceMaterial(piece);
+      acc.quantityInt += calc.quantityInt;
+      acc.quantityFrac += calc.quantityFrac;
+      acc.value += calc.value;
+      return acc;
+    },
+    { quantityInt: 0, quantityFrac: 0, value: 0 },
+  );
+
+  return (
+    <Fragment>
+      <TableRow className="text-title-light whitespace-nowrap last:border-0">
+        <TableCell className="pr-0">{gIndex + 1}</TableCell>
+        <TableCell>
+          <span className="line-clamp-1" title={group.material.name}>
+            {group.material.name}
+          </span>
+        </TableCell>
+        <TableCell>{groupCalc.quantityInt}</TableCell>
+        <TableCell>{groupCalc.quantityFrac.toFixed(2)}</TableCell>
+        <TableCell>{group.material.measureType}</TableCell>
+        <TableCell>{currencyFormatter.format(groupCalc.value)}</TableCell>
+        <TableCell className="flex h-full items-center justify-center text-right">
+          <div className="group" data-open={isOpen} aria-expanded={isOpen}>
+            <button
+              type="button"
+              onClick={() => toggleGroup(gIndex)}
+              className="-my-1 flex cursor-pointer items-center justify-center p-1"
+            >
+              <Icon
+                name="keyboard_arrow_down"
+                className="transition-transform group-data-[open=true]:rotate-180"
+              />
+            </button>
+          </div>
+        </TableCell>
+      </TableRow>
+      {isOpen &&
+        group.pieces.map((piece, i) => {
+          const calc = calculatePieceMaterial(piece);
+          const globalIndex = allPieces.indexOf(piece);
+
+          return (
+            <TableRow
+              key={`piece-${gIndex}-${i}`}
+              className={cn(
+                "bg-body-dark/50",
+                i === group.pieces.length - 1 &&
+                  "border-black-default border-b",
+              )}
+            >
+              <TableCell>
+                {gIndex + 1}.{i + 1}
+              </TableCell>
+              <TableCell>
+                {piece.name}{" "}
+                <span className="text-muted-foreground">({piece.qtde})</span>
+              </TableCell>
+              <TableCell>{calc.quantityInt}</TableCell>
+              <TableCell>{calc.quantityFrac}</TableCell>
+              <TableCell>{calc.unit}</TableCell>
+              <TableCell>{currencyFormatter.format(calc.value)}</TableCell>
+              <TableCell className="flex items-center justify-center text-right">
+                <PiecesTableActions index={globalIndex} />
+              </TableCell>
+            </TableRow>
+          );
+        })}
+    </Fragment>
+  );
+};
+
+interface PiecesTableProps {
+  pieces: Piece[];
+}
+
+export const PiecesTable = ({ pieces }: PiecesTableProps) => {
+  const { groups: materialGroups } = groupPiecesByMaterial(pieces);
   const [openGroups, setOpenGroups] = useState<Record<number, boolean>>(() =>
-    Object.fromEntries(materialGroups.map((_, i) => [i, false])),
+    Object.fromEntries(materialGroups.map((_, i) => [i, true])),
   );
 
   const toggleGroup = (idx: number) =>
     setOpenGroups((s) => ({ ...s, [idx]: !s[idx] }));
+
+  const { setValue } = useFormContext<{ pieces: Piece[]; rawAmount: number }>();
+
+  useEffect(() => {
+    const total = pieces.reduce((acc, piece) => {
+      const { value } = calculatePieceMaterial(piece);
+      return acc + value;
+    }, 0);
+
+    setValue("rawAmount", total);
+  }, [pieces, setValue]);
 
   return (
     <Table
@@ -43,93 +233,23 @@ export const PiecesTable = ({ pieces }: { pieces: Piece[] }) => {
         </TableRow>
       </TableHeader>
       <TableBody className="text-title-light">
-        {materialGroups.map((group, gIndex) => {
-          const groupKey = group.material?.id ?? gIndex;
-
-          if (group.material.measureType === "un") {
-            return group.pieces.map((piece, index) => (
-              <TableRow
-                key={`un-${gIndex}-${index}-${piece.id ?? "noid"}`}
-                className="text-title-light whitespace-nowrap last:border-0"
-              >
-                <TableCell className="pr-0">{gIndex + 1}</TableCell>
-                <TableCell>
-                  <span className="line-clamp-1" title={piece.name}>
-                    {piece.material.name}
-                  </span>
-                </TableCell>
-                <TableCell>{piece.qtde}</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>{piece.material.measureType}</TableCell>
-                <TableCell>
-                  {currencyFormatter.format(
-                    piece.qtde * piece.material.baseValue,
-                  )}
-                </TableCell>
-                <TableCell className="flex h-full items-center justify-center text-right">
-                  <PiecesTableActions piece={piece} index={gIndex + 1} />
-                </TableCell>
-              </TableRow>
-            ));
-          }
-          return (
-            <Fragment key={`group-${gIndex}-${groupKey}`}>
-              <TableRow className="text-title-light whitespace-nowrap last:border-0">
-                <TableCell className="pr-0">{gIndex + 1}</TableCell>
-                <TableCell>
-                  <span className="line-clamp-1" title={group.material.name}>
-                    {group.material.name}
-                  </span>
-                </TableCell>
-                <TableCell>{group.totalQtde}</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell className="flex h-full items-center justify-center text-right">
-                  <div
-                    className="group"
-                    data-open={!!openGroups[gIndex]}
-                    aria-expanded={!!openGroups[gIndex]}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => toggleGroup(gIndex)}
-                      className="-my-1 flex cursor-pointer items-center justify-center p-1"
-                    >
-                      <Icon
-                        name="keyboard_arrow_down"
-                        className="transition-transform group-data-[open=true]:rotate-180"
-                      />
-                    </button>
-                  </div>
-                </TableCell>
-              </TableRow>
-              {openGroups[gIndex] &&
-                group.pieces.map((piece: Piece, i: number) => (
-                  <TableRow
-                    key={`piece-${gIndex}-${i}-${piece.id ?? "noid"}`}
-                    className={cn(
-                      "bg-body-dark/50",
-                      i === group.pieces.length - 1 &&
-                        "border-black-default border-b",
-                    )}
-                  >
-                    <TableCell>
-                      {gIndex + 1}.{i + 1}
-                    </TableCell>
-                    <TableCell>{piece.name}</TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell className="flex items-center justify-center text-right">
-                      <PiecesTableActions piece={piece} index={i + 1} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </Fragment>
-          );
-        })}
+        {materialGroups.map((group, gIndex) =>
+          group.material.measureType === "un" ? (
+            <PiecesTableRowSingle
+              key={gIndex}
+              pieces={group.pieces}
+              gIndex={gIndex}
+            />
+          ) : (
+            <PiecesTableRowGroup
+              key={gIndex}
+              group={group}
+              gIndex={gIndex}
+              isOpen={!!openGroups[gIndex]}
+              toggleGroup={toggleGroup}
+            />
+          ),
+        )}
       </TableBody>
     </Table>
   );

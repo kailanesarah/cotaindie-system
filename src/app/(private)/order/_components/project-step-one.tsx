@@ -15,7 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
-import { pieces } from "../_constants/pieces-list";
 import { OrderEmptyTable } from "./order-empty-table";
 import { PiecesTable } from "./pieces-table";
 import {
@@ -27,6 +26,7 @@ import {
 
 export const ProjectStepOne = () => {
   const form = useFormContext();
+  const pieces = form.watch("pieces");
 
   return (
     <>

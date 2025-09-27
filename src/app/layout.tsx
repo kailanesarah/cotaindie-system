@@ -34,7 +34,7 @@ export default function RootLayout({
             containerStyle={{
               margin: 0,
               padding: 0,
-              bottom: "7rem",
+              bottom: "3rem",
               right: "3rem",
             }}
           />

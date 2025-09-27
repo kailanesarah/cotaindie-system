@@ -2,9 +2,18 @@ import z from "zod";
 
 export const pieceSchema = z
   .object({
-    name: z.string("Insira um nome"),
+    id: z.string().optional(),
+    name: z.string(),
     qtde: z.number().min(1, "Insira um número"),
+    measure: z.union([
+      z.tuple([z.number().positive("Deve ser maior que 0")]),
+      z.tuple([
+        z.number().positive("Deve ser maior que 0"),
+        z.number().positive("Deve ser maior que 0"),
+      ]),
+    ]),
     material: z.object({
+      id: z.string("Insira um ID válido"),
       name: z.string("Escolha um material"),
       measure: z.union([
         z.tuple([z.number().positive("Deve ser maior que 0")]),
@@ -17,6 +26,10 @@ export const pieceSchema = z
       measureType: z.enum(["m2", "ml", "un"], {
         message: "Tipo de medida inválido",
       }),
+      unit: z.enum(["cm", "un"], {
+        message: "Unidade inválida",
+      }),
+      wasteTax: z.number(),
     }),
   })
   .superRefine((data, ctx) => {

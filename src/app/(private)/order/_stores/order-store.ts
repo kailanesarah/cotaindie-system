@@ -28,6 +28,8 @@ interface OrderStore {
     >,
   ) => void;
 
+  setProject: (data: Project) => void;
+
   reset: () => void;
 
   triggers: Record<string, () => Promise<boolean>>;
@@ -36,7 +38,7 @@ interface OrderStore {
 
 export const useOrderStore = create<OrderStore>()(
   subscribeWithSelector((set) => ({
-    order: { status: "open" as Status, rawAmount: 12000 },
+    order: { status: "open" as Status, rawAmount: 12000, projects: [] },
 
     setStatusInfo: (data) =>
       set((state) => ({ order: { ...state.order, ...data } })),
@@ -49,6 +51,14 @@ export const useOrderStore = create<OrderStore>()(
 
     setPayment: (data) =>
       set((state) => ({ order: { ...state.order, ...data } })),
+
+    setProject: (data) =>
+      set((state) => ({
+        order: {
+          ...state.order,
+          projects: [...(state.order.projects ?? []), data],
+        },
+      })),
 
     reset: () => set({ order: {} }),
 

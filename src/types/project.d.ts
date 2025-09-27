@@ -12,6 +12,8 @@ type Project = {
 
   costs: Cost[];
 
+  rawTotal: number;
+
   profitRate: number;
   monthlyExpense: number;
   comission: number;

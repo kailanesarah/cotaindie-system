@@ -23,7 +23,12 @@ import {
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useId, useRef } from "react";
-import { useForm } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  type FieldValues,
+  type UseFormReturn,
+} from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import type z from "zod";
 import { measureMap } from "../../(navgation)/_constants/mesure-map";
@@ -34,7 +39,13 @@ import {
 } from "../schema/piece-form-schema";
 import { PieceFormActions } from "./piece-form-actions";
 
-export const PieceForm = () => {
+export const PieceForm = ({
+  formParent,
+}: {
+  formParent: UseFormReturn<FieldValues, any, FieldValues>;
+}) => {
+  const id = useId();
+
   const form = useForm<z.infer<typeof pieceSchema>>({
     resolver: zodResolver(pieceSchema),
     defaultValues: getPiecetDefaultValues(),
@@ -50,9 +61,9 @@ export const PieceForm = () => {
 
   useEffect(() => {
     if (!isFirstRender.current && previousMeasureType.current !== measureType) {
-      if (measureType === "m2") setValue("material.measure", [0, 0]);
-      if (measureType === "ml") setValue("material.measure", [0]);
-      if (measureType === "un") setValue("material.measure", [1]);
+      if (measureType === "m2") setValue("measure", [0, 0]);
+      if (measureType === "ml") setValue("measure", [0]);
+      if (measureType === "un") setValue("measure", [1]);
     }
 
     if (isFirstRender.current) {
@@ -62,15 +73,23 @@ export const PieceForm = () => {
     previousMeasureType.current = measureType;
   }, [measureType]);
 
-  const onSubmit = (values: z.infer<typeof pieceSchema>) => {
-    console.log(values);
-  };
+  const { append } = useFieldArray({
+    control: formParent.control,
+    name: "pieces",
+  });
 
-  const id = useId();
+  const onSubmit = async (values: z.infer<typeof pieceSchema>) => {
+    const isValid = await form.trigger();
+
+    if (!isValid) return;
+
+    append(values);
+    form.reset(getPiecetDefaultValues());
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} id={id}>
+      <form id={id}>
         <DialogBody className="grid grid-cols-6 items-start gap-3">
           <FormField
             control={form.control}
@@ -80,14 +99,23 @@ export const PieceForm = () => {
                 <FormLabel>Material</FormLabel>
                 <FormControl>
                   <Select
-                    {...field}
-                    value={field.value ?? ""}
+                    value={
+                      materials.find((opt) => opt.name === field.value)?.id ??
+                      ""
+                    }
                     onValueChange={(value) => {
-                      field.onChange(value);
                       const selectedMaterial = materials.find(
                         (opt) => opt.id === value,
                       );
                       if (selectedMaterial) {
+                        form.setValue("material.id", selectedMaterial.id, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                        form.setValue("material.name", selectedMaterial.name, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
                         form.setValue(
                           "material.measureType",
                           selectedMaterial.measureType,
@@ -97,8 +125,28 @@ export const PieceForm = () => {
                           },
                         );
                         form.setValue(
+                          "material.measure",
+                          selectedMaterial.measure,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
+                        form.setValue(
                           "material.baseValue",
                           selectedMaterial.baseValue,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
+                        form.setValue("material.unit", selectedMaterial.unit, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                        form.setValue(
+                          "material.wasteTax",
+                          selectedMaterial.wasteTax,
                           {
                             shouldValidate: true,
                             shouldDirty: true,
@@ -218,7 +266,7 @@ export const PieceForm = () => {
               <>
                 <FormField
                   control={form.control}
-                  name="material.measure.0"
+                  name="measure.0"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Comprimento</FormLabel>
@@ -241,7 +289,7 @@ export const PieceForm = () => {
                 <div className="text-title-light -mt-1 pt-9 text-base">x</div>
                 <FormField
                   control={form.control}
-                  name="material.measure.1"
+                  name="measure.1"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Altura</FormLabel>
@@ -266,7 +314,7 @@ export const PieceForm = () => {
             {measureType === "ml" && (
               <FormField
                 control={form.control}
-                name="material.measure.0"
+                name="measure.0"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Comprimento</FormLabel>
@@ -294,7 +342,7 @@ export const PieceForm = () => {
             </InputDisabled>
           </DialogBody>
         )}
-        <PieceFormActions formId={id} />
+        <PieceFormActions onSubmit={() => onSubmit(form.getValues())} />
       </form>
     </Form>
   );
