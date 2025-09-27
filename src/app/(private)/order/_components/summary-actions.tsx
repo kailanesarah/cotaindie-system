@@ -57,7 +57,11 @@ export const SummaryActions = ({
       </Dialog>
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <StepperProvider>
-          <ProjectsDialog project={project} index={index} />
+          <ProjectsDialog
+            project={project}
+            index={index}
+            isOpen={setIsEditOpen}
+          />
         </StepperProvider>
       </Dialog>
     </>

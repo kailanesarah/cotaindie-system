@@ -77,7 +77,11 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                     const client = clients.find((c) => c.id === val);
                     if (client) {
                       setReference({
-                        client: { id: client.id, name: client.name },
+                        client: {
+                          id: client.id,
+                          name: client.name,
+                          code: client.code,
+                        },
                       });
                     }
                   }}

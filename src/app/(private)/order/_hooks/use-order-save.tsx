@@ -8,6 +8,18 @@ export function useSaveOrder() {
   const { order, triggers } = useOrderStore();
 
   const execute = async () => {
+    if (!order.projects || order.projects.length === 0) {
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="warning"
+          title="Nenhum projeto adicionado!"
+          text="Adicione ao menos um projeto antes de salvar."
+        />
+      ));
+      return false;
+    }
+
     const triggerKeys = Object.keys(triggers);
 
     console.log(triggerKeys);
@@ -31,6 +43,7 @@ export function useSaveOrder() {
       if (!trigger) continue;
 
       const isValid = await trigger();
+
       if (!isValid) {
         allValid = false;
       }
@@ -41,7 +54,7 @@ export function useSaveOrder() {
         <ToastCard
           id={t.id}
           status="success"
-          title="Dados salvo com suscesso!"
+          title="Dados salvos com sucesso!"
           text="Todas as mudanças estão salvas."
         />
       ));

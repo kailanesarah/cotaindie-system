@@ -5,7 +5,7 @@ import { useOrderStore } from "../_stores/order-store";
 export const useProjectForm = () => {
   const setProjectStore = useOrderStore((state) => state.setProject);
 
-  const saveProject = (values: Project) => {
+  const saveProject = (values: Project): boolean => {
     if (values.pieces.length < 1) {
       toast((t) => (
         <ToastCard
@@ -15,7 +15,7 @@ export const useProjectForm = () => {
           text="Adicione pelo menos uma peça ao projeto."
         />
       ));
-      return;
+      return false;
     }
 
     setProjectStore({ ...values });
@@ -28,6 +28,8 @@ export const useProjectForm = () => {
         text="Lembre de salvar o orçamento antes de sair."
       />
     ));
+
+    return true;
   };
 
   return { saveProject };

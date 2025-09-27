@@ -19,9 +19,11 @@ import { ProjectStepTwo } from "./project-step-two";
 export const ProjectForm = ({
   project,
   index,
+  isOpen,
 }: {
   project?: Project;
   index?: number;
+  isOpen: (value: boolean) => void;
 }) => {
   const stepper = Stepper.useStepper();
 
@@ -48,7 +50,11 @@ export const ProjectForm = ({
   const onSubmit = (values: z.infer<typeof projectSchema>) => {
     const { rawAmount, ...project } = values;
 
-    saveProject(project);
+    const success = saveProject(project);
+
+    if (success && isOpen) {
+      isOpen(false);
+    }
   };
 
   return (

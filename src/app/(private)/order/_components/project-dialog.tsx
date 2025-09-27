@@ -15,9 +15,11 @@ import { ProjectForm } from "./project-form";
 export const ProjectsDialog = ({
   project,
   index,
+  isOpen,
 }: {
   project?: Project;
   index?: number;
+  isOpen: (value: boolean) => void;
 }) => {
   const { utils, useStepper } = Stepper;
   const stepper = useStepper();
@@ -40,7 +42,7 @@ export const ProjectsDialog = ({
           )}
         </DialogHeaderContent>
       </DialogHeader>
-      <ProjectForm project={project} index={index} />
+      <ProjectForm project={project} index={index} isOpen={isOpen} />
     </DialogContent>
   );
 };
