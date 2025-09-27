@@ -14,7 +14,7 @@ interface Order {
 
   //base infor
   name: string;
-  client: Pick<Client, "id" | "name">;
+  client: Pick<Client, "id" | "name" | "code">;
   expirationDays: number;
   initialDate: string;
 

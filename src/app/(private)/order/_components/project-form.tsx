@@ -46,7 +46,9 @@ export const ProjectForm = ({
   const { saveProject } = useProjectForm();
 
   const onSubmit = (values: z.infer<typeof projectSchema>) => {
-    saveProject(values);
+    const { rawAmount, ...project } = values;
+
+    saveProject(project);
   };
 
   return (

@@ -3,7 +3,7 @@ import z from "zod";
 export const pieceSchema = z
   .object({
     id: z.string().optional(),
-    name: z.string(),
+    name: z.string().optional(),
     qtde: z.number().min(1, "Insira um número"),
     measure: z.union([
       z.tuple([z.number().positive("Deve ser maior que 0")]),

@@ -42,7 +42,7 @@ export const getProjectDefaultValues = (
     qtde: project?.qtde || 1,
 
     costs: [],
-    pieces: [],
+    pieces: project?.pieces || [],
 
     profitRate: project?.profitRate || 0,
     monthlyExpense: project?.monthlyExpense || 0,

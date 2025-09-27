@@ -302,7 +302,7 @@ export const ProjectStepTwo = () => {
       <DialogBody className="flex flex-col gap-2 text-right">
         <span>Resumo do projeto</span>
         <h6 className="!text-[1.0625rem]">
-          Valor total: {currencyFormatter.format(totalValue)}
+          Valor total: {currencyFormatter.format(totalValue || 0)}
         </h6>
       </DialogBody>
     </>

@@ -23,7 +23,6 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { paymentCategories } from "../_constants/payment-categories";
-import { rawAmount } from "../_constants/raw-amount";
 import { useOrderStore } from "../_stores/order-store";
 import { currencyFormatter } from "../_utils/currency-formatter";
 import {
@@ -39,6 +38,10 @@ export const OrderPaymentForm = () => {
       advanceAmount: 0,
     },
   });
+
+  const {
+    order: { rawAmount = 0 },
+  } = useOrderStore();
 
   const discount = form.watch("discount");
   const advanceAmount = form.watch("advanceAmount") ?? 0;

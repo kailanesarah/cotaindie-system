@@ -10,7 +10,7 @@ export const calculateProjectValue = (
 
   const baseCost = piecesAmount + expensePerProject + totalCosts;
 
-  const finalValue = (baseCost * (1 + profitRate)) / (1 - comission);
+  const finalValue = ((baseCost * (1 + profitRate)) / (1 - comission)) * qtde;
 
   const profit = finalValue * (1 - comission) - baseCost;
 

@@ -29,6 +29,7 @@ interface OrderStore {
   ) => void;
 
   setProject: (data: Project) => void;
+  setRawAmount: (rawAmount: number) => void;
 
   reset: () => void;
 
@@ -38,7 +39,7 @@ interface OrderStore {
 
 export const useOrderStore = create<OrderStore>()(
   subscribeWithSelector((set) => ({
-    order: { status: "open" as Status, rawAmount: 12000, projects: [] },
+    order: { status: "open" as Status, rawAmount: 0, projects: [] },
 
     setStatusInfo: (data) =>
       set((state) => ({ order: { ...state.order, ...data } })),
@@ -59,6 +60,9 @@ export const useOrderStore = create<OrderStore>()(
           projects: [...(state.order.projects ?? []), data],
         },
       })),
+
+    setRawAmount: (rawAmount: number) =>
+      set((state) => ({ order: { ...state.order, rawAmount } })),
 
     reset: () => set({ order: {} }),
 

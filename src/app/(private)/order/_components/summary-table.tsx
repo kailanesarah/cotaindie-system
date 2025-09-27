@@ -8,10 +8,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { projectsSummaryList } from "../_constants/projects-summary-list";
+import { useEffect } from "react";
+import { useOrderStore } from "../_stores/order-store";
+import { currencyFormatter } from "../_utils/currency-formatter";
+import {
+  getProjectSummary,
+  type ProjectSummary,
+} from "../functions/projects-summary";
+import { OrderEmptyTable } from "./order-empty-table";
 import { SummaryActions } from "./summary-actions";
 
 export const SummaryTable = () => {
+  const { order, setRawAmount } = useOrderStore();
+  const projects = order.projects ?? [];
+
+  const projectSummaries: ProjectSummary[] = projects.map(getProjectSummary);
+
+  const projectsTotal = projectSummaries.reduce(
+    (acc, project) => project.totalValue + acc,
+    0,
+  );
+
+  useEffect(() => {
+    setRawAmount(projectsTotal);
+  }, [projectsTotal, setRawAmount]);
+
+  if (!projects.length) {
+    return (
+      <OrderEmptyTable
+        title="Adicione um novo projeto"
+        text="Todos os projetos inseridos fazem parte deste orçamento ou pedido."
+      />
+    );
+  }
+
   return (
     <Table
       className="border-0"
@@ -28,28 +58,27 @@ export const SummaryTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody className="text-title-light">
-        {projectsSummaryList.map((project: Project, index) => {
-          const value = index + 1;
-          return (
+        {projectSummaries.map(
+          ({ index, name, qtde, projectValue, totalValue, project }) => (
             <TableRow
-              key={value}
+              key={index}
               className="text-title-light whitespace-nowrap last:border-0"
             >
-              <TableCell className="pr-0">{value}</TableCell>
+              <TableCell className="pr-0">{index}</TableCell>
               <TableCell>
-                <span className="line-clamp-1" title={project.name}>
-                  {project.name}
+                <span className="line-clamp-1" title={name}>
+                  {name}
                 </span>
               </TableCell>
-              <TableCell>{project.qtde}</TableCell>
-              <TableCell>R$ 4.639,00</TableCell>
-              <TableCell>R$ 4.639,00</TableCell>
+              <TableCell>{qtde}</TableCell>
+              <TableCell>{currencyFormatter.format(projectValue)}</TableCell>
+              <TableCell>{currencyFormatter.format(totalValue)}</TableCell>
               <TableCell className="flex h-full items-center justify-center text-right">
-                <SummaryActions project={project} index={value} />
+                <SummaryActions project={project} index={index} />
               </TableCell>
             </TableRow>
-          );
-        })}
+          ),
+        )}
       </TableBody>
     </Table>
   );

@@ -5,6 +5,8 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import type { ReactNode } from "react";
 import { StepperProvider } from "../_provider/project-stepper-provider";
+import { useOrderStore } from "../_stores/order-store";
+import { currencyFormatter } from "../_utils/currency-formatter";
 import { ProjectsDialog } from "./project-dialog";
 
 export const OrderProjects = ({ children }: { children: ReactNode }) => {
@@ -16,14 +18,20 @@ export const OrderProjectsContent = ({ children }: { children: ReactNode }) => {
 };
 
 export const OrderProjectsTotal = () => {
+  const { order } = useOrderStore();
+  const rawAmount = order.rawAmount || 0;
+
   return (
     <div className="text-title-light text-right text-xs font-semibold">
-      Total com projetos: R$ 6.522,21
+      Total com projetos: {currencyFormatter.format(rawAmount)}
     </div>
   );
 };
 
 export const OrderProjectsActions = () => {
+  const { order } = useOrderStore();
+  const hasProjects = Boolean(order.projects?.length ?? 0);
+
   return (
     <div className="flex gap-3">
       <Dialog>
@@ -37,14 +45,18 @@ export const OrderProjectsActions = () => {
           <ProjectsDialog />
         </StepperProvider>
       </Dialog>
-      <Button variant="secondary">
-        <Icon name="download" />
-        Espelho de materiais
-      </Button>
-      <Button variant="secondary">
-        <Icon name="crop" />
-        Plano de corte
-      </Button>
+      {hasProjects && (
+        <>
+          <Button variant="secondary">
+            <Icon name="download" />
+            Espelho de materiais
+          </Button>
+          <Button variant="secondary">
+            <Icon name="crop" />
+            Plano de corte
+          </Button>
+        </>
+      )}
     </div>
   );
 };
