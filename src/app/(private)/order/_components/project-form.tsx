@@ -40,17 +40,24 @@ export const ProjectForm = ({
   }, []);
 
   const setTrigger = useOrderStore((state) => state.setTrigger);
+  const { saveProject } = useProjectForm();
+  const { updateProject } = useOrderStore();
 
   useEffect(() => {
     setTrigger("projectsForm", form.trigger);
   }, [form.trigger, setTrigger]);
 
-  const { saveProject } = useProjectForm();
-
   const onSubmit = (values: z.infer<typeof projectSchema>) => {
-    const { rawAmount, ...project } = values;
+    const { rawAmount, ...projectData } = values;
 
-    const success = saveProject(project);
+    let success = false;
+
+    if (typeof index === "number" && project) {
+      updateProject(index, projectData);
+      success = true;
+    } else {
+      success = saveProject(projectData);
+    }
 
     if (success && isOpen) {
       isOpen(false);

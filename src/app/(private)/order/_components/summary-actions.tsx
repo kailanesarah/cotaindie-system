@@ -12,6 +12,7 @@ import { Icon } from "@/components/ui/icon";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { StepperProvider } from "../_provider/project-stepper-provider";
+import { useOrderStore } from "../_stores/order-store";
 import { ProjectsDialog } from "./project-dialog";
 
 export const SummaryActions = ({
@@ -23,10 +24,15 @@ export const SummaryActions = ({
 }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const { deleteProject, duplicateProject } = useOrderStore();
 
   const handleDelete = () => {
-    console.log("Deleted!");
+    deleteProject(index);
     setIsDeleteOpen(false);
+  };
+
+  const handleDuplicate = () => {
+    duplicateProject(index);
   };
 
   return (
@@ -41,7 +47,7 @@ export const SummaryActions = ({
           <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
             <Icon name="edit_square" /> Editar
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleDuplicate}>
             <Icon name="file_copy" /> Duplicar
           </DropdownMenuItem>
           <DropdownMenuItem

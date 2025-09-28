@@ -29,6 +29,10 @@ interface OrderStore {
   ) => void;
 
   setProject: (data: Project) => void;
+  updateProject: (index: number, updatedProject: Project) => void;
+  deleteProject: (index: number) => void;
+  duplicateProject: (index: number) => void;
+
   setRawAmount: (rawAmount: number) => void;
 
   reset: () => void;
@@ -60,6 +64,52 @@ export const useOrderStore = create<OrderStore>()(
           projects: [...(state.order.projects ?? []), data],
         },
       })),
+
+    updateProject: (index, updatedProject) =>
+      set((state) => {
+        const projects = [...(state.order.projects ?? [])];
+        projects[index] = updatedProject;
+
+        return {
+          order: {
+            ...state.order,
+            projects,
+          },
+        };
+      }),
+
+    deleteProject: (index) =>
+      set((state) => {
+        const projects = [...(state.order.projects ?? [])];
+        projects.splice(index, 1);
+        return {
+          order: {
+            ...state.order,
+            projects,
+          },
+        };
+      }),
+
+    duplicateProject: (index) =>
+      set((state) => {
+        const projects = [...(state.order.projects ?? [])];
+        const projectToCopy = projects[index];
+        if (!projectToCopy) return state;
+
+        const duplicated = {
+          ...structuredClone(projectToCopy),
+          name: `${projectToCopy.name || "Projeto"} (cópia)`,
+        };
+
+        projects.splice(index + 1, 0, duplicated);
+
+        return {
+          order: {
+            ...state.order,
+            projects,
+          },
+        };
+      }),
 
     setRawAmount: (rawAmount: number) =>
       set((state) => ({ order: { ...state.order, rawAmount } })),

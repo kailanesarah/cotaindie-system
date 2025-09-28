@@ -59,7 +59,7 @@ export const SummaryTable = () => {
       </TableHeader>
       <TableBody className="text-title-light">
         {projectSummaries.map(
-          ({ index, name, qtde, projectValue, totalValue, project }) => (
+          ({ name, qtde, projectValue, totalValue, project }, index) => (
             <TableRow
               key={index}
               className="text-title-light whitespace-nowrap last:border-0"
