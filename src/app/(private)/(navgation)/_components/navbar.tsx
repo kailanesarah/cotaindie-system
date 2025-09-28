@@ -12,10 +12,10 @@ export const Navbar = async () => {
   const user = session?.user;
 
   return (
-    <nav className="border-b-light flex h-[4.5625rem] items-center border-b bg-white px-6 py-4">
+    <nav className="border-b-light flex h-[4.5625rem] items-center border-b bg-white px-4 py-4 lg:px-6">
       <div className="flex grow items-center justify-between gap-6">
         <NavbarBreadcrumb />
-        <div className="flex items-center gap-6">
+        <div className="hidden items-center gap-6 lg:flex">
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="link">
