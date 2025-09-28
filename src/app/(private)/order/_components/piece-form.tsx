@@ -33,6 +33,7 @@ import { NumericFormat } from "react-number-format";
 import type z from "zod";
 import { measureMap } from "../../(navgation)/_constants/mesure-map";
 import { materials } from "../../(navgation)/materials/_constants/material-list";
+import { formatMeasure } from "../_utils/format-measure";
 import {
   getPiecetDefaultValues,
   pieceSchema,
@@ -54,6 +55,9 @@ export const PieceForm = ({
   const { watch, setValue } = form;
 
   const measureType = watch("material.measureType");
+  const unit = watch("material.unit");
+  const measure = watch("material.measure");
+
   const material = watch("material.name");
 
   const isFirstRender = useRef(true);
@@ -173,7 +177,9 @@ export const PieceForm = ({
                 </FormControl>
                 {material && (
                   <FormList>
-                    <FormListItem>Medida padrão: 130cm x 219cm</FormListItem>
+                    <FormListItem>
+                      {formatMeasure(measure, unit, measureType)}
+                    </FormListItem>
                   </FormList>
                 )}
                 <FormMessage />
