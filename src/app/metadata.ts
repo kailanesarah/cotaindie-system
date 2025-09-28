@@ -33,4 +33,9 @@ export const metadataApplication: Metadata = {
     shortcut: "/images/favicon.ico",
     apple: "/images/apple-touch-icon.png",
   },
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
 };
