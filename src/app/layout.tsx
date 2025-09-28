@@ -43,7 +43,7 @@ export default function RootLayout({
             }}
           />
         </aside>
-        <div className="flex min-h-screen">{children}</div>
+        <div className="flex min-h-dvh">{children}</div>
       </body>
     </html>
   );

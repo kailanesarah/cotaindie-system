@@ -16,7 +16,7 @@ export const SupportDialog = () => {
         <DialogHeaderContent>
           <DialogTitle>Envie uma mensagem para o suporte</DialogTitle>
           <DialogDescription>
-            Algum problema técnico? A nossa equipe irá resolver o mais rápido!
+            A nossa equipe irá resolver o mais rápido!
           </DialogDescription>
         </DialogHeaderContent>
       </DialogHeader>
@@ -25,8 +25,7 @@ export const SupportDialog = () => {
       </DialogBody>
       <DialogFooter>
         <p className="text-body-lighter text-xs/normal">
-          O suporte pode demorar até 24h para retornar o seu chamado, em média o
-          atendimento é em poucas horas ou minutos.
+          O suporte pode demorar até 24h para retornar o seu chamado.
         </p>
       </DialogFooter>
     </DialogContent>
