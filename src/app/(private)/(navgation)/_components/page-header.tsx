@@ -19,7 +19,11 @@ export const PageHeaderContent = ({ children }: { children: ReactNode }) => {
 
 export const PageHeaderIcon = ({ name }: { name: string }) => {
   return (
-    <Icon name={name} size={28} className="text-red-default !hidden lg:block" />
+    <Icon
+      name={name}
+      size={28}
+      className="text-red-default !hidden lg:!block"
+    />
   );
 };
 
