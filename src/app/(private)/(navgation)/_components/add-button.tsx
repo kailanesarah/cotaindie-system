@@ -3,7 +3,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import type { ReactNode } from "react";
 
-export const AddMaterialButton = ({
+export const AddButton = ({
   children,
   text,
 }: {
