@@ -36,7 +36,7 @@ export const ProjectsDialog = ({
           </DialogTitle>
           {project && (
             <DialogDescription className="flex gap-3">
-              <Badge className="h-5 text-[0.6875rem]">N° {index}</Badge>
+              <Badge className="h-5 text-[0.6875rem]">N° {index! + 1}</Badge>
               Após alterar, lembre de salvar o orçamento
             </DialogDescription>
           )}

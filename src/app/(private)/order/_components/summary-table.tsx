@@ -64,7 +64,7 @@ export const SummaryTable = () => {
               key={index}
               className="text-title-light whitespace-nowrap last:border-0"
             >
-              <TableCell className="pr-0">{index}</TableCell>
+              <TableCell className="pr-0">{index + 1}</TableCell>
               <TableCell>
                 <span className="line-clamp-1" title={name}>
                   {name}

@@ -35,7 +35,7 @@ export const ProjectActions = ({ index }: { index?: number }) => {
 
   return (
     <DialogFooter className="flex flex-row justify-end gap-3">
-      {stepper.isLast && !index && (
+      {stepper.isLast && index === undefined && (
         <Button type="submit">
           <Icon name="add_2" />
           Adicionar projeto
