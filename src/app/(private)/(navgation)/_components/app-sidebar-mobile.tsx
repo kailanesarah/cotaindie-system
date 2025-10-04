@@ -69,12 +69,11 @@ export const SidebarMobile = ({ links, profile }: IAppSidebarMobile) => {
           </SheetClose>
         </SheetHeader>
         <div className="text-title-dark flex flex-col py-2">
-          {links.map(({ title, description, href, icon }) => {
+          {links.map(({ title, description, href, icon }, index) => {
             const isActive = pathname === href;
             return (
-              <SheetClose asChild>
+              <SheetClose asChild key={title + index}>
                 <Link
-                  key={title}
                   href={href}
                   className={`border-b-dark flex items-center gap-3 border-b p-4 first:border-t hover:bg-gray-800 ${
                     isActive ? "bg-black-light/75" : ""
