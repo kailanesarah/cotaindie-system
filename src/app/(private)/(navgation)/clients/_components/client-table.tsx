@@ -33,11 +33,13 @@ export const ClientsTable = () => {
       <TableHeader>
         <TableRow>
           <TableHead>Código</TableHead>
-          <TableHead className="max-w-[14.75rem] min-w-[12.5rem]">
+          <TableHead className="min-w-[12.5rem] lg:max-w-[14.75rem]">
             Nome ou razão social
           </TableHead>
-          <TableHead className="min-w-[12.5rem]">Observações</TableHead>
-          <TableHead className="min-w-[11.25rem]">Tipo de cliente</TableHead>
+          <TableHead className="hidden min-w-[12.5rem] lg:block">
+            Observações
+          </TableHead>
+          <TableHead className="lg:min-w-[11.25rem]">Tipo de cliente</TableHead>
           <TableHead className="text-right">Ações</TableHead>
         </TableRow>
       </TableHeader>
@@ -52,7 +54,7 @@ export const ClientsTable = () => {
                 {client.name}
               </span>
             </TableCell>
-            <TableCell>
+            <TableCell className="hidden lg:block">
               <span className="line-clamp-1" title={client.note}>
                 {client.note}
               </span>
