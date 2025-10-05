@@ -117,7 +117,9 @@ const SearchContext = createContext<SearchContextProps<any> | undefined>(
   undefined,
 );
 
-export function SearchProvider<T>({ children }: { children: ReactNode }) {
+export function SearchProvider<T>({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   const [state, dispatch] = useReducer(searchReducer, initialState);
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(false);
