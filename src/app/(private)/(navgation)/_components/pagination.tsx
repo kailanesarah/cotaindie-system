@@ -47,8 +47,9 @@ export const SearchPagination = () => {
         </Select>
       </div>
       <div className="flex items-center gap-4 whitespace-nowrap">
-        <div className="min-w-[4rem] text-right lg:min-w-auto">
-          <span className="hidden lg:block">Página</span> {page} de {totalPages}
+        <div className="flex min-w-[4rem] justify-end gap-1 text-right lg:min-w-auto">
+          <span className="hidden lg:block">Página</span>
+          {page} de {totalPages}
         </div>
         <div className="flex gap-3">
           <Button
