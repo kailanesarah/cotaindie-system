@@ -52,7 +52,7 @@ export default async function ClientsPage() {
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
-        <ScrollArea className="px-0">
+        <ScrollArea className="grow px-0">
           <PageContent className="max-w-dvw px-0 lg:px-0">
             <ClientsTable />
             <EmptyDataBox className="mx-4 lg:mx-6" />
