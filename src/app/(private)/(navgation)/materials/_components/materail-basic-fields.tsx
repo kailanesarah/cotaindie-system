@@ -29,7 +29,7 @@ export const MaterialBasicFields = () => {
         control={form.control}
         name="name"
         render={({ field }) => (
-          <FormItem className="col-span-3">
+          <FormItem className="col-span-1 lg:col-span-3">
             <FormLabel>Nome</FormLabel>
             <FormControl>
               <Input {...field} placeholder="Ex: Chapa de MDF Arauco 18MM" />
@@ -66,7 +66,7 @@ export const MaterialBasicFields = () => {
         control={form.control}
         name="description"
         render={({ field }) => (
-          <FormItem className="col-span-4">
+          <FormItem className="col-span-1 lg:col-span-4">
             <FormLabel isOptional>Descrição</FormLabel>
             <FormControl>
               <Textarea
@@ -82,7 +82,7 @@ export const MaterialBasicFields = () => {
         control={form.control}
         name="measureType"
         render={({ field }) => (
-          <FormItem className="col-span-3">
+          <FormItem className="col-span-1 lg:col-span-3">
             <FormLabel>Tipo de medida</FormLabel>
             <FormControl>
               <Select onValueChange={field.onChange} value={field.value}>
@@ -104,7 +104,7 @@ export const MaterialBasicFields = () => {
         control={form.control}
         name="wasteTax"
         render={({ field }) => (
-          <FormItem className="col-span-1">
+          <FormItem className="col-span-1 lg:col-span-1">
             <FormLabel>Taxa de desperdício</FormLabel>
             <FormControl>
               <NumericFormat
