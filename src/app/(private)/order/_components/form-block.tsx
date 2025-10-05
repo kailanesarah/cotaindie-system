@@ -19,7 +19,9 @@ export const FormSection = ({ children }: { children?: ReactNode }) => {
 export const FormEmptySection = () => {
   return (
     <div
-      className={cn("border-b-light h-[6.25rem] border-y bg-white px-6 py-4")}
+      className={cn(
+        "border-b-light h-[6.25rem] border-y bg-white px-6 py-4 text-center",
+      )}
     />
   );
 };
