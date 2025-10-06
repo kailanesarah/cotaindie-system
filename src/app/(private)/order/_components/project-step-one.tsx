@@ -30,12 +30,12 @@ export const ProjectStepOne = () => {
 
   return (
     <>
-      <DialogBody className="grid grid-cols-12 items-start gap-3">
+      <DialogBody className="grid grid-cols-1 items-start gap-3 lg:grid-cols-12">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="col-span-10">
+            <FormItem className="col-span-1 lg:col-span-10">
               <FormLabel>Nome</FormLabel>
               <FormControl>
                 <Input
@@ -52,7 +52,7 @@ export const ProjectStepOne = () => {
           control={form.control}
           name="qtde"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Quantidade</FormLabel>
               <FormControl>
                 <Select

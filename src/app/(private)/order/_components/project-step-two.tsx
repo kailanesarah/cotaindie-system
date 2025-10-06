@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { currencyFormatter } from "../_utils/currency-formatter";
@@ -68,7 +69,7 @@ export const ProjectStepTwo = () => {
                 />
               )}
               {fields.length > 0 && (
-                <div className="text-title-light grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-3 text-sm font-semibold">
+                <div className="text-title-light hidden grid-cols-[2fr_1fr_1fr_1fr_auto] gap-3 text-sm font-semibold lg:grid">
                   <div>Nome do custo</div>
                   <div>Quantidade</div>
                   <div>Valor unitário</div>
@@ -76,102 +77,121 @@ export const ProjectStepTwo = () => {
                   <div className="w-[2.75rem]"></div>
                 </div>
               )}
-
               {fields.map((field, index) => {
                 const costs = form.watch("costs");
                 const total =
                   (costs[index]?.qtde || 0) * (costs[index]?.value || 0);
-
                 const currencyTotal = currencyFormatter.format(total);
 
                 return (
-                  <div
-                    key={field.id}
-                    className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] items-start gap-3"
-                  >
-                    <FormField
-                      control={form.control}
-                      name={`costs.${index}.name`}
-                      render={({ field }) => (
-                        <FormItem className="grow">
-                          <FormControl>
-                            <Input {...field} placeholder="Custo aplicado..." />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`costs.${index}.qtde`}
-                      render={({ field }) => (
-                        <FormItem className="grow">
-                          <FormControl>
-                            <Select
-                              value={String(field.value || 1)}
-                              onValueChange={(val) =>
-                                field.onChange(Number(val))
-                              }
-                            >
-                              <SelectTrigger
-                                truncate
-                                placeholder="Qtde..."
-                                className="justify-between"
-                              >
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent align="end">
-                                {Array.from({ length: 10 }).map((_, i) => {
-                                  const value = i + 1;
-                                  return (
-                                    <SelectItem
-                                      key={value}
-                                      value={String(value)}
-                                    >
-                                      {value}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`costs.${index}.value`}
-                      render={({ field }) => (
-                        <FormItem className="max-w-[10.25rem] grow">
-                          <FormControl>
-                            <NumericFormat
-                              value={field.value ?? ""}
-                              onValueChange={(values) =>
-                                field.onChange(values.floatValue ?? 0)
-                              }
-                              thousandSeparator="."
-                              decimalSeparator=","
-                              decimalScale={2}
-                              fixedDecimalScale
-                              prefix="R$ "
-                              allowNegative={false}
-                              customInput={Input}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <InputDisabled>{currencyTotal}</InputDisabled>
-                    <Button
-                      variant="secondary"
-                      square
-                      onClick={() => remove(index)}
+                  <>
+                    <div
+                      key={field.id}
+                      className="grid grid-cols-4 items-start gap-3 lg:grid-cols-[2fr_1fr_1fr_1fr_auto]"
                     >
-                      <Icon name="close" />
-                    </Button>
-                  </div>
+                      <FormField
+                        control={form.control}
+                        name={`costs.${index}.name`}
+                        render={({ field }) => (
+                          <FormItem className="col-span-4 grow lg:col-span-1">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="Custo aplicado..."
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`costs.${index}.qtde`}
+                        render={({ field }) => (
+                          <FormItem className="col-span-2 grow lg:col-span-1">
+                            <FormControl>
+                              <Select
+                                value={String(field.value || 1)}
+                                onValueChange={(val) =>
+                                  field.onChange(Number(val))
+                                }
+                              >
+                                <SelectTrigger
+                                  truncate
+                                  placeholder="Qtde..."
+                                  className="justify-between"
+                                >
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent align="end">
+                                  {Array.from({ length: 10 }).map((_, i) => {
+                                    const value = i + 1;
+                                    return (
+                                      <SelectItem
+                                        key={value}
+                                        value={String(value)}
+                                      >
+                                        {value}
+                                      </SelectItem>
+                                    );
+                                  })}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`costs.${index}.value`}
+                        render={({ field }) => (
+                          <FormItem className="col-span-2 grow lg:col-span-1 lg:max-w-[10.25rem]">
+                            <FormControl>
+                              <NumericFormat
+                                value={field.value ?? ""}
+                                onValueChange={(values) =>
+                                  field.onChange(values.floatValue ?? 0)
+                                }
+                                thousandSeparator="."
+                                decimalSeparator=","
+                                decimalScale={2}
+                                fixedDecimalScale
+                                prefix="R$ "
+                                allowNegative={false}
+                                customInput={Input}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <InputDisabled className="hidden lg:col-span-1 lg:flex lg:items-center">
+                        {currencyTotal}
+                      </InputDisabled>
+                      <Button
+                        variant="secondary"
+                        square
+                        onClick={() => remove(index)}
+                        className="hidden lg:col-span-1 lg:flex lg:items-center"
+                      >
+                        <Icon name="close" />
+                      </Button>
+                      <div className="col-span-4 flex items-center gap-3 lg:hidden">
+                        <InputDisabled className="flex-1 justify-start">
+                          {currencyTotal}
+                        </InputDisabled>
+                        <Button
+                          variant="secondary"
+                          square
+                          onClick={() => remove(index)}
+                        >
+                          <Icon name="close" />
+                        </Button>
+                      </div>
+                    </div>
+                    <Separator className="my-2 lg:hidden" />
+                  </>
                 );
               })}
             </div>
@@ -180,12 +200,12 @@ export const ProjectStepTwo = () => {
           <PiecesCostsTotal total={totalCosts} />
         </PiecesCosts>
       </DialogBody>
-      <DialogBody className="grid grid-cols-12 items-start gap-3">
+      <DialogBody className="grid grid-cols-1 items-start gap-3 lg:grid-cols-12">
         <FormField
           control={form.control}
           name="profitRate"
           render={({ field }) => (
-            <FormItem className="col-span-4">
+            <FormItem className="col-span-1 lg:col-span-4">
               <FormLabel>Margem de lucro</FormLabel>
               <FormControl>
                 <NumericFormat
@@ -224,7 +244,7 @@ export const ProjectStepTwo = () => {
           control={form.control}
           name="monthlyExpense"
           render={({ field }) => (
-            <FormItem className="col-span-4">
+            <FormItem className="col-span-1 lg:col-span-4">
               <FormLabel>Despesa mensal</FormLabel>
               <FormControl>
                 <NumericFormat
@@ -263,7 +283,7 @@ export const ProjectStepTwo = () => {
           control={form.control}
           name="comission"
           render={({ field }) => (
-            <FormItem className="col-span-4">
+            <FormItem className="col-span-1 lg:col-span-4">
               <FormLabel>Comissão</FormLabel>
               <FormControl>
                 <NumericFormat
