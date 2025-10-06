@@ -31,7 +31,7 @@ export const SaveButton = () => {
     <Button
       onClick={handleSave}
       square
-      className="group h-[3.25rem] min-w-[3.25rem] !rounded-[0.5rem]"
+      className="group h-[3.25rem] min-w-[3.25rem] !rounded-[0.5rem] shadow-[0_0_32px_0_rgba(0,0,0,0.16)]"
     >
       <Icon name="folder_check" className="text-white" />
     </Button>
@@ -51,7 +51,7 @@ export const OptionsButton = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            className="group h-[2.5rem] w-[2.5rem] min-w-[2.5rem] !rounded-[0.5rem]"
+            className="group h-[2.5rem] w-[2.5rem] min-w-[2.5rem] !rounded-[0.5rem] shadow-[0_0_32px_0_rgba(0,0,0,0.16)]"
             variant="secondary"
             square
           >
