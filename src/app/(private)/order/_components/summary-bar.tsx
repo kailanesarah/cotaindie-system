@@ -87,7 +87,7 @@ export const SummaryBar = () => {
                 align="end"
                 className="divide-x divide-gray-300"
                 classNameViewport="px-0"
-                sideOffset={12 + 16}
+                sideOffset={8}
               >
                 <SelectItem
                   value="open"

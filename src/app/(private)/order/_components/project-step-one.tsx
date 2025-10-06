@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -86,13 +87,17 @@ export const ProjectStepOne = () => {
       <DialogBody className="flex items-start gap-3">
         <ProjectPieces>
           <PiecesContent>
-            {!pieces.length && (
-              <OrderEmptyTable
-                title="Adicione uma peça"
-                text="Adicione uma peça a primeira peça do projeto."
-              />
-            )}
-            {!!pieces.length && <PiecesTable pieces={pieces} />}
+            <ScrollArea className="grow">
+              <div className="max-w-[calc(100vw-2rem)]">
+                {!pieces.length && (
+                  <OrderEmptyTable
+                    title="Adicione uma peça"
+                    text="Adicione uma peça a primeira peça do projeto."
+                  />
+                )}
+                {!!pieces.length && <PiecesTable pieces={pieces} />}
+              </div>
+            </ScrollArea>
             <PiecesActions />
           </PiecesContent>
           <PiecesTotal />

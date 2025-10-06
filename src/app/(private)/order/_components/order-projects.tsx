@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { useState, type ReactNode } from "react";
 import { StepperProvider } from "../_provider/project-stepper-provider";
 import { useOrderStore } from "../_stores/order-store";
@@ -33,6 +34,8 @@ export const OrderProjectsActions = () => {
   const hasProjects = Boolean(order.projects?.length ?? 0);
   const [isOpen, setIsOpen] = useState(false);
 
+  const isSmallScreen = useMediaQuery("(max-width: 1023px)");
+
   return (
     <div className="flex gap-3">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -48,13 +51,13 @@ export const OrderProjectsActions = () => {
       </Dialog>
       {hasProjects && (
         <>
-          <Button variant="secondary">
+          <Button variant="secondary" square={isSmallScreen}>
             <Icon name="download" />
-            Espelho de materiais
+            <span className="hidden lg:inline">Espelho de materiais</span>
           </Button>
-          <Button variant="secondary">
+          <Button variant="secondary" square={isSmallScreen}>
             <Icon name="crop" />
-            Plano de corte
+            <span className="hidden lg:inline">Plano de corte</span>
           </Button>
         </>
       )}

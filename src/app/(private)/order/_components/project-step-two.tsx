@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Fragment } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { currencyFormatter } from "../_utils/currency-formatter";
@@ -84,11 +85,8 @@ export const ProjectStepTwo = () => {
                 const currencyTotal = currencyFormatter.format(total);
 
                 return (
-                  <>
-                    <div
-                      key={field.id}
-                      className="grid grid-cols-4 items-start gap-3 lg:grid-cols-[2fr_1fr_1fr_1fr_auto]"
-                    >
+                  <Fragment key={field.id}>
+                    <div className="grid grid-cols-4 items-start gap-3 lg:grid-cols-[2fr_1fr_1fr_1fr_auto]">
                       <FormField
                         control={form.control}
                         name={`costs.${index}.name`}
@@ -191,7 +189,7 @@ export const ProjectStepTwo = () => {
                       </div>
                     </div>
                     <Separator className="my-2 lg:hidden" />
-                  </>
+                  </Fragment>
                 );
               })}
             </div>
