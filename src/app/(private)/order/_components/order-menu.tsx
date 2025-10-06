@@ -29,14 +29,16 @@ export const OrderMenu = ({ order }: { order?: Order }) => {
         >
           <Icon name="close" size={40} />
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           {order && <Badge>{order.code}</Badge>}
-          <h6 className="!text-title-dark">{menuTitle}</h6>
+          <h6 className="!text-title-dark truncate overflow-hidden text-ellipsis whitespace-nowrap">
+            {menuTitle}
+          </h6>
         </div>
       </div>
       <button
         type="button"
-        className="border-l-b-dark relative flex h-[4.5rem] w-[4.5rem] cursor-pointer items-center justify-center border-l"
+        className="border-l-b-dark relative flex h-[4.5rem] w-[4.5rem] cursor-pointer items-center justify-center border-l lg:hidden"
       >
         <div className="bg-title-dark absolute h-[1px] w-8 rotate-45" />
         <div className="bg-title-dark absolute h-[1px] w-8 -rotate-45" />

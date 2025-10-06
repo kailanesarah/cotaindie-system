@@ -30,7 +30,7 @@ export const SummaryBar = () => {
 
   return (
     <div className="pointer-events-none fixed top-0 right-0 bottom-0 left-0 flex h-full w-full items-end">
-      <div className="border-b-light pointer-events-auto flex grow items-center border-t bg-white px-4 pt-4 pb-4 shadow-[0_0_32px_0_rgba(0,0,0,0.08)] lg:min-h-[6.25rem] lg:px-6 lg:pt-5 lg:pb-6">
+      <div className="border-b-light pointer-events-auto flex min-h-[5rem] grow items-center border-t bg-white px-4 pt-4 pb-4 shadow-[0_0_32px_0_rgba(0,0,0,0.08)] lg:min-h-[6.25rem] lg:px-6 lg:pt-5 lg:pb-6">
         <div className="max-w-container-small mx-auto flex w-full items-center justify-between gap-3 lg:gap-6">
           <div className="flex flex-col gap-1 lg:gap-2">
             <div className="flex items-center gap-2">

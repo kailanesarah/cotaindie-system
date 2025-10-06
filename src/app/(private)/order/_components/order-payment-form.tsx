@@ -70,12 +70,12 @@ export const OrderPaymentForm = () => {
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-12 items-start gap-3">
+      <form className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:items-start">
         <FormField
           control={form.control}
           name="deliveryDays"
           render={({ field }) => (
-            <FormItem className="col-span-6">
+            <FormItem className="col-span-1 lg:col-span-6">
               <FormLabel>Previsão de entrega</FormLabel>
               <FormControl>
                 <NumericFormat
@@ -106,7 +106,7 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="paymentMethod"
           render={({ field }) => (
-            <FormItem className="col-span-6">
+            <FormItem className="col-span-1 lg:col-span-6">
               <FormLabel>Pagamento principal</FormLabel>
               <FormControl>
                 <Select
@@ -142,7 +142,7 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="discountPercent"
           render={({ field }) => (
-            <FormItem className="col-span-3">
+            <FormItem className="col-span-1 lg:col-span-3">
               <FormLabel>Percentual do desconto</FormLabel>
               <FormControl>
                 <NumericFormat
@@ -206,7 +206,7 @@ export const OrderPaymentForm = () => {
             };
 
             return (
-              <FormItem className="col-span-5">
+              <FormItem className="col-span-1 lg:col-span-5">
                 <FormLabel>Valor do desconto</FormLabel>
                 <FormControl>
                   <NumericFormat
@@ -233,7 +233,7 @@ export const OrderPaymentForm = () => {
             );
           }}
         />
-        <InputDisabled className="col-span-4 mt-[1.375rem]">
+        <InputDisabled className="col-span-1 lg:col-span-4 lg:mt-[1.375rem]">
           {discountMessage}
         </InputDisabled>
         <FormField
@@ -245,7 +245,7 @@ export const OrderPaymentForm = () => {
             };
 
             return (
-              <FormItem className="col-span-3">
+              <FormItem className="col-span-1 lg:col-span-3">
                 <FormLabel>Adiantamento</FormLabel>
                 <FormControl>
                   <NumericFormat
@@ -281,7 +281,7 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="advancePaymentMethod"
           render={({ field }) => (
-            <FormItem className="col-span-3">
+            <FormItem className="col-span-1 lg:col-span-3">
               <FormLabel>Pag. do adiantamento</FormLabel>
               <FormControl>
                 <Select
@@ -317,7 +317,7 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="installmentCount"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Par. do restante</FormLabel>
               <FormControl>
                 <Select
@@ -357,14 +357,14 @@ export const OrderPaymentForm = () => {
             </FormItem>
           )}
         />
-        <InputDisabled className="col-span-4 mt-[1.375rem]">
+        <InputDisabled className="col-span-1 lg:col-span-4 lg:mt-[1.375rem]">
           {remainingMessage}
         </InputDisabled>
         <FormField
           control={form.control}
           name="notes"
           render={({ field }) => (
-            <FormItem className="col-span-12">
+            <FormItem className="col-span-1 lg:col-span-12">
               <FormLabel>Observações (cliente)</FormLabel>
               <FormControl>
                 <Textarea

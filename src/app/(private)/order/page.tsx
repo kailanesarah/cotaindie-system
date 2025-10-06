@@ -44,7 +44,7 @@ export default async function OrderPage() {
               Projetos que o cliente está orçando e o que está incluso.
             </FormDescription>
           </FormHeading>
-          <FormSeparator />
+          <FormSeparator className="hidden lg:block" />
           <FormContent>
             <OrderProjects>
               <OrderProjectsContent>

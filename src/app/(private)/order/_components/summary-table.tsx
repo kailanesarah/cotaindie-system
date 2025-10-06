@@ -37,7 +37,7 @@ export const SummaryTable = () => {
     return (
       <OrderEmptyTable
         title="Adicione um novo projeto"
-        text="Todos os projetos inseridos fazem parte deste orçamento ou pedido."
+        text="O orçamento deve conter ao menos um projeto."
       />
     );
   }
