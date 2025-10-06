@@ -39,6 +39,7 @@ export const OrderMenu = ({ order }: { order?: Order }) => {
       <button
         type="button"
         className="border-l-b-dark relative flex h-[4.5rem] w-[4.5rem] cursor-pointer items-center justify-center border-l lg:hidden"
+        onClick={handleClose}
       >
         <div className="bg-title-dark absolute h-[1px] w-8 rotate-45" />
         <div className="bg-title-dark absolute h-[1px] w-8 -rotate-45" />
