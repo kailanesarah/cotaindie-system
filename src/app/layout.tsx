@@ -1,12 +1,16 @@
 import "@/styles/globals.css";
 import "@/styles/material-icons/index.css";
+import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
+import { metadataApplication } from "./metadata";
 
 const fontAspektaVariable = localFont({
   src: "../../public/fonts/aspekta-variable.woff2",
   variable: "--font-aspekta-variable",
 });
+
+export const metadata: Metadata = metadataApplication;
 
 export default function RootLayout({
   children,
