@@ -48,9 +48,9 @@ export const SupportForm = () => {
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={field.value || undefined}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger placeholder="Selecione uma opção">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

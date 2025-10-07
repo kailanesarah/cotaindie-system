@@ -123,3 +123,33 @@ div[role="status"][aria-live="polite"] {
 @utility no-scrollbar {
   @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
+
+/* html {
+  font-size: calc(0.625rem + 0.41666666666666663vw);
+}
+
+@media screen and (max-width: 1920px) {
+  html {
+    font-size: calc(0.625rem + 0.41666666666666674vw);
+  }
+}
+@media screen and (max-width: 1440px) {
+  html {
+    font-size: calc(0.39866369710467703rem + 0.6681514476614699vw);
+  }
+}
+@media screen and (max-width: 991px) {
+  html {
+    font-size: calc(0.7497474747474747rem + 0.40404040404040403vw);
+  }
+}
+@media screen and (max-width: 496px) {
+  html {
+    font-size: calc(0.7489878542510121rem + 0.8097165991902835vw);
+  }
+}
+@media screen and (max-width: 249px) {
+  html {
+    font-size: calc(0.8744959677419355rem + 0.8064516129032256vw);
+  }
+} */

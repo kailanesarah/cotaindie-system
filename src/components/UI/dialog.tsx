@@ -7,7 +7,7 @@ import { ScrollArea } from "./scroll-area";
 
 function Dialog({
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+}: Readonly<React.ComponentProps<typeof DialogPrimitive.Root>>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
@@ -19,7 +19,7 @@ function DialogTrigger({
 
 function DialogPortal({
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+}: Readonly<React.ComponentProps<typeof DialogPrimitive.Portal>>) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
 
@@ -105,11 +105,15 @@ function DialogContent({
               >
                 <DialogClose asChild>
                   <button
-                    className="text-black-default absolute top-2 right-4 cursor-pointer"
+                    className="text-black-default absolute top-2 right-2 cursor-pointer lg:right-4"
                     aria-label="Fechar modal"
                     type="button"
                   >
-                    <Icon name="close" size={40} />
+                    <Icon
+                      name="close"
+                      size={40}
+                      className="scale-[0.85] lg:scale-100"
+                    />
                   </button>
                 </DialogClose>
                 {children}
@@ -127,7 +131,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-header"
       className={cn(
-        "border-b-b-light flex items-center gap-4 border-b px-6 py-4 pr-16",
+        "border-b-b-light flex items-center gap-4 border-b px-4 py-4 pr-14 lg:px-6 lg:pr-16",
         className,
       )}
       {...props}
@@ -152,7 +156,7 @@ function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-body"
-      className={cn("border-b-light border-b p-6", className)}
+      className={cn("border-b-light border-b px-4 py-6 lg:px-6", className)}
       {...props}
     />
   );
@@ -176,7 +180,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn("flex flex-col px-6 py-4", className)}
+      className={cn("flex flex-col px-4 py-4 lg:px-6", className)}
       {...props}
     />
   );
