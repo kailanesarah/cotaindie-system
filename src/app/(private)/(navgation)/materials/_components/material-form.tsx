@@ -27,13 +27,15 @@ export const MateriaForm = ({ material }: { material?: Material }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <DialogBody className="grid grid-cols-4 items-start gap-3">
+        <DialogBody className="grid grid-cols-1 items-start gap-3 lg:grid-cols-4">
           <MaterialBasicFields />
         </DialogBody>
-        <DialogBody className="flex items-start gap-3">
+        <DialogBody className="flex flex-col items-start gap-3 lg:flex-row">
           <MaterialDinamicFields />
         </DialogBody>
-        <MaterialCutFields />
+        <DialogBody className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:items-start">
+          <MaterialCutFields />
+        </DialogBody>
         <MaterialActions />
       </form>
     </Form>

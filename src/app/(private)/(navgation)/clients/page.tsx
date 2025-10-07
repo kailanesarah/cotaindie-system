@@ -1,4 +1,5 @@
-import { AddMaterialButton } from "../_components/add-button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { AddButton } from "../_components/add-button";
 import { EmptyDataBox } from "../_components/empty-data-box";
 import { PageContent } from "../_components/page-content";
 import {
@@ -38,9 +39,9 @@ export default async function ClientsPage() {
           </PageHeaderHeading>
         </PageHeaderContent>
         <PageHeaderAction>
-          <AddMaterialButton text="Novo cliente">
+          <AddButton text="Novo cliente">
             <ClientDialog />
-          </AddMaterialButton>
+          </AddButton>
         </PageHeaderAction>
       </PageHeader>
       <SearchProvider>
@@ -51,10 +52,12 @@ export default async function ClientsPage() {
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
-        <PageContent className="px-0">
-          <ClientsTable />
-          <EmptyDataBox className="mx-6" />
-        </PageContent>
+        <ScrollArea className="grow px-0">
+          <PageContent className="max-w-dvw px-0 lg:px-0">
+            <ClientsTable />
+            <EmptyDataBox className="mx-4 lg:mx-6" />
+          </PageContent>
+        </ScrollArea>
         <SearchPagination />
       </SearchProvider>
     </PageMain>

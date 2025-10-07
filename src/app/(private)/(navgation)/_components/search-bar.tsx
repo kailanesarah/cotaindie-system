@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import {
   type ChangeEvent,
   type KeyboardEvent,
@@ -19,14 +20,25 @@ import {
 } from "react";
 import { useSearchContext } from "../_context/search-provider";
 
-export const SearchBar = ({ children }: { children: ReactNode }) => (
-  <div className="border-b-light top-0 flex gap-6 border-b bg-white p-6">
+export const SearchBar = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={cn(
+      "border-b-light top-0 flex flex-col gap-3 border-b bg-white px-4 py-4 lg:flex-row lg:gap-6 lg:px-6 lg:py-6",
+      className,
+    )}
+  >
     {children}
   </div>
 );
 
 export const SearchSortWrap = ({ children }: { children: ReactNode }) => (
-  <div className="flex gap-3">{children}</div>
+  <div className="flex flex-col gap-3 lg:flex-row lg:gap-3">{children}</div>
 );
 
 const SearchBadge = ({
@@ -109,7 +121,7 @@ export const SearchTextFilter = ({
   };
 
   return (
-    <div className="relative flex grow gap-3">
+    <div className="relative flex grow gap-3 lg:gap-3">
       <div className="relative flex grow">
         <Input
           placeholder={placeholder}
@@ -136,10 +148,12 @@ export const SelectFilter = ({
   options,
   filterKey = "category",
   deafultText = "Todas as categorias",
+  className,
 }: {
   options: { id: string; name: string }[];
   filterKey?: string;
   deafultText?: string;
+  className?: string;
 }) => {
   const { state, dispatch } = useSearchContext();
   const currentValue =
@@ -152,7 +166,7 @@ export const SelectFilter = ({
 
   return (
     <Select value={currentValue || "all"} onValueChange={handleChange}>
-      <Button variant="secondary" asChild>
+      <Button variant="secondary" asChild className={className}>
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
@@ -169,7 +183,7 @@ export const SelectFilter = ({
   );
 };
 
-export const SearchSortPeriod = () => {
+export const SearchSortPeriod = ({ className }: { className?: string }) => {
   const { state, dispatch } = useSearchContext();
 
   return (
@@ -179,7 +193,7 @@ export const SearchSortPeriod = () => {
         dispatch({ type: "SET_SORT", payload: value as "DESC" | "ASC" })
       }
     >
-      <Button variant="secondary" asChild>
+      <Button variant="secondary" asChild className={className}>
         <SelectTrigger>
           <SelectValue placeholder="Ordenar" />
         </SelectTrigger>

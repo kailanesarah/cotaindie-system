@@ -1,5 +1,6 @@
 import { SupportDialog } from "@/app/_components/support-dialog";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { requireUserServer } from "@/modules/supabase/supabase-auth-service";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
@@ -10,11 +11,12 @@ import { QuestionsDialog } from "./questions-dialog";
 export const Navbar = async () => {
   const user = await requireUserServer();
 
+export const Navbar = ({ profile }: INavbar) => {
   return (
-    <nav className="border-b-light flex h-[4.5625rem] items-center border-b bg-white px-6 py-4">
+    <nav className="border-b-light hidden h-[4.5625rem] items-center border-b bg-white px-4 py-4 lg:flex lg:px-6">
       <div className="flex grow items-center justify-between gap-6">
         <NavbarBreadcrumb />
-        <div className="flex items-center gap-6">
+        <div className="hidden items-center gap-6 lg:flex">
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="link">

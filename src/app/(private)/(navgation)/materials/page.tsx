@@ -1,4 +1,4 @@
-import { AddMaterialButton } from "../_components/add-button";
+import { AddButton } from "../_components/add-button";
 import { EmptyDataBox } from "../_components/empty-data-box";
 import { LoadingBox } from "../_components/loading-box";
 import { PageContent } from "../_components/page-content";
@@ -42,9 +42,9 @@ export default async function MaterialsPage() {
           </PageHeaderHeading>
         </PageHeaderContent>
         <PageHeaderAction>
-          <AddMaterialButton text="Novo material">
+          <AddButton text="Novo material">
             <MaterialDialog />
-          </AddMaterialButton>
+          </AddButton>
         </PageHeaderAction>
       </PageHeader>
       <SearchProvider>

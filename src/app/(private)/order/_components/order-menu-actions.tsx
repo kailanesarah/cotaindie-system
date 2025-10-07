@@ -19,9 +19,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useSaveOrder } from "../_hooks/use-order-save";
+import { useOrderStore } from "../_stores/order-store";
 
 export const OrderMenuActions = () => {
+  const { order, setStatusInfo } = useOrderStore();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  const { execute: handleSave } = useSaveOrder();
 
   const handleDelete = () => {
     console.log("Deleted!");
@@ -29,11 +34,17 @@ export const OrderMenuActions = () => {
   };
 
   return (
-    <div className="flex gap-4">
-      <Select>
+    <div className="hidden gap-4 outline-0 lg:flex">
+      <Select
+        value={order.status ?? undefined}
+        onValueChange={(value) => setStatusInfo({ status: value as Status })}
+      >
         <Button variant="secondary" className="border-0" asChild>
-          <SelectTrigger className="outline-0" placeholder="Fase do pedido">
-            <SelectValue />
+          <SelectTrigger
+            className="hidden outline-0 lg:flex"
+            placeholder="Fase do pedido"
+          >
+            <SelectValue placeholder="Fase do pedido" />
           </SelectTrigger>
         </Button>
         <SelectContent
@@ -57,7 +68,10 @@ export const OrderMenuActions = () => {
         </SelectContent>
       </Select>
       <div className="flex">
-        <Button className="rounded-r-none border-0 border-r border-[#d2837cda] focus:z-10">
+        <Button
+          className="rounded-r-none border-0 border-r border-[#d2837cda] focus:z-10"
+          onClick={handleSave}
+        >
           <Icon name="folder_check" />
           Salvar
         </Button>

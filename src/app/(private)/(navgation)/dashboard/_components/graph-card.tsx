@@ -15,6 +15,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { Area, AreaChart, ReferenceLine, XAxis, YAxis } from "recharts";
 import { MetricIcon } from "./chart";
@@ -39,12 +40,13 @@ export const ChartAreaInteractive = ({
     profit: number;
   }[];
 }) => {
+  const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const maxValue = Math.max(...data.map((item) => item.total));
   const minValue = Math.min(...data.map((item) => item.total));
 
   return (
     <Card className={cn("rounded-default border-b-light bg-white")}>
-      <CardHeader className="border-b-light flex items-center justify-between gap-6 border-b px-6 py-4">
+      <CardHeader className="border-b-light flex items-center justify-between gap-6 border-b px-4 py-4 lg:px-6">
         <div className="flex flex-col gap-1">
           <CardTitle>Movimentações ao longo dos dias</CardTitle>
           <CardDescription>
@@ -53,10 +55,10 @@ export const ChartAreaInteractive = ({
         </div>
         <MetricIcon name="bar_chart_4_bars" />
       </CardHeader>
-      <CardContent className="px-6 py-4 pl-3">
+      <CardContent className="px-4 py-4 pl-3 lg:px-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[20rem] w-full"
+          className="aspect-auto h-[13rem] w-full lg:h-[20rem]"
         >
           <AreaChart data={data}>
             <defs>
@@ -77,6 +79,7 @@ export const ChartAreaInteractive = ({
                 />
               </linearGradient>
             </defs>
+
             <ReferenceLine
               y={maxValue}
               opacity={0.75}
@@ -109,12 +112,16 @@ export const ChartAreaInteractive = ({
                 })
               }
             />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              width={50}
-            />
+
+            {isLargeScreen && (
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                width={40}
+              />
+            )}
+
             <ChartTooltip
               cursor={{
                 stroke: "#aaa",
@@ -123,7 +130,7 @@ export const ChartAreaInteractive = ({
               }}
               content={
                 <ChartTooltipContent
-                  className="min-w-[10rem] p-2.5"
+                  className="min-w-[10rem] p-1.5 lg:p-2.5"
                   labelFormatter={(value) =>
                     new Date(value).toLocaleDateString("pt-BR", {
                       day: "2-digit",
@@ -140,6 +147,7 @@ export const ChartAreaInteractive = ({
                 </ChartTooltipContent>
               }
             />
+
             <Area
               dataKey="total"
               type="linear"

@@ -19,10 +19,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { paymentCategories } from "../_constants/payment-categories";
-import { rawAmount } from "../_constants/raw-amount";
+import { useOrderStore } from "../_stores/order-store";
 import { currencyFormatter } from "../_utils/currency-formatter";
 import {
   orderPaymentSchema,
@@ -32,7 +33,15 @@ import {
 export const OrderPaymentForm = () => {
   const form = useForm<orderPaymentType>({
     resolver: zodResolver(orderPaymentSchema),
+    defaultValues: {
+      installmentCount: "1",
+      advanceAmount: 0,
+    },
   });
+
+  const {
+    order: { rawAmount = 0 },
+  } = useOrderStore();
 
   const discount = form.watch("discount");
   const advanceAmount = form.watch("advanceAmount") ?? 0;
@@ -52,14 +61,21 @@ export const OrderPaymentForm = () => {
     ? `Restante: ${installmentCount} ${installmentsLabel} de ${currencyFormatter.format(remainingPerInstallment)}`
     : "Escolha o n° de parcelas";
 
+  const setTrigger = useOrderStore((state) => state.setTrigger);
+  const setPayment = useOrderStore((state) => state.setPayment);
+
+  useEffect(() => {
+    setTrigger("paymentForm", form.trigger);
+  }, [form.trigger, setTrigger]);
+
   return (
     <Form {...form}>
-      <form className="grid grid-cols-12 items-start gap-3">
+      <form className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:items-start">
         <FormField
           control={form.control}
           name="deliveryDays"
           render={({ field }) => (
-            <FormItem className="col-span-6">
+            <FormItem className="col-span-1 lg:col-span-6">
               <FormLabel>Previsão de entrega</FormLabel>
               <FormControl>
                 <NumericFormat
@@ -76,6 +92,10 @@ export const OrderPaymentForm = () => {
                     const { floatValue } = values;
                     return floatValue === undefined || floatValue >= 1;
                   }}
+                  onBlur={(e) => {
+                    field.onBlur();
+                    setPayment({ deliveryDays: field.value });
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -86,12 +106,17 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="paymentMethod"
           render={({ field }) => (
-            <FormItem className="col-span-6">
+            <FormItem className="col-span-1 lg:col-span-6">
               <FormLabel>Pagamento principal</FormLabel>
               <FormControl>
                 <Select
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val as Payment);
+                    setPayment({
+                      paymentMethod: val as Payment,
+                    });
+                  }}
                 >
                   <SelectTrigger
                     truncate
@@ -117,7 +142,7 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="discountPercent"
           render={({ field }) => (
-            <FormItem className="col-span-3">
+            <FormItem className="col-span-1 lg:col-span-3">
               <FormLabel>Percentual do desconto</FormLabel>
               <FormControl>
                 <NumericFormat
@@ -142,6 +167,11 @@ export const OrderPaymentForm = () => {
                       shouldValidate: true,
                       shouldDirty: true,
                     });
+                  }}
+                  onBlur={(e) => {
+                    field.onBlur();
+                    console.log(e.target.value);
+                    setPayment({ discountPercent: field.value });
                   }}
                   allowNegative={false}
                   decimalScale={4}
@@ -176,7 +206,7 @@ export const OrderPaymentForm = () => {
             };
 
             return (
-              <FormItem className="col-span-5">
+              <FormItem className="col-span-1 lg:col-span-5">
                 <FormLabel>Valor do desconto</FormLabel>
                 <FormControl>
                   <NumericFormat
@@ -203,8 +233,7 @@ export const OrderPaymentForm = () => {
             );
           }}
         />
-
-        <InputDisabled className="col-span-4 mt-[1.375rem]">
+        <InputDisabled className="col-span-1 lg:col-span-4 lg:mt-[1.375rem]">
           {discountMessage}
         </InputDisabled>
         <FormField
@@ -216,7 +245,7 @@ export const OrderPaymentForm = () => {
             };
 
             return (
-              <FormItem className="col-span-3">
+              <FormItem className="col-span-1 lg:col-span-3">
                 <FormLabel>Adiantamento</FormLabel>
                 <FormControl>
                   <NumericFormat
@@ -230,6 +259,11 @@ export const OrderPaymentForm = () => {
                     decimalSeparator=","
                     placeholder="Ex: R$ 250,00"
                     customInput={Input}
+                    onBlur={(e) => {
+                      field.onBlur();
+                      console.log(e.target.value);
+                      setPayment({ advanceAmount: field.value });
+                    }}
                     isAllowed={(values) => {
                       const { floatValue } = values;
                       const maxValue =
@@ -247,12 +281,17 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="advancePaymentMethod"
           render={({ field }) => (
-            <FormItem className="col-span-3">
+            <FormItem className="col-span-1 lg:col-span-3">
               <FormLabel>Pag. do adiantamento</FormLabel>
               <FormControl>
                 <Select
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val as Payment);
+                    setPayment({
+                      advancePaymentMethod: val as Payment,
+                    });
+                  }}
                 >
                   <SelectTrigger
                     truncate
@@ -278,12 +317,17 @@ export const OrderPaymentForm = () => {
           control={form.control}
           name="installmentCount"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Par. do restante</FormLabel>
               <FormControl>
                 <Select
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                    setPayment({
+                      installmentCount: Number(val),
+                    });
+                  }}
                 >
                   <SelectTrigger
                     truncate
@@ -313,17 +357,24 @@ export const OrderPaymentForm = () => {
             </FormItem>
           )}
         />
-        <InputDisabled className="col-span-4 mt-[1.375rem]">
+        <InputDisabled className="col-span-1 lg:col-span-4 lg:mt-[1.375rem]">
           {remainingMessage}
         </InputDisabled>
         <FormField
           control={form.control}
           name="notes"
           render={({ field }) => (
-            <FormItem className="col-span-12">
+            <FormItem className="col-span-1 lg:col-span-12">
               <FormLabel>Observações (cliente)</FormLabel>
               <FormControl>
-                <Textarea {...field} placeholder="Ex: Cliente deseja..." />
+                <Textarea
+                  {...field}
+                  placeholder="Ex: Cliente deseja..."
+                  onBlur={(e) => {
+                    field.onBlur();
+                    setPayment({ notes: e.target.value });
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

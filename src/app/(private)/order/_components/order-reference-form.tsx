@@ -18,32 +18,45 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useOrderStore } from "../_stores/order-store";
 import {
   orderReferenceSchema,
   type orderReferenceType,
 } from "../schema/order-reference-schema";
 
 export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
+  const setReference = useOrderStore((state) => state.setReference);
+  const setTrigger = useOrderStore((state) => state.setTrigger);
+
   const form = useForm<orderReferenceType>({
     resolver: zodResolver(orderReferenceSchema),
-    defaultValues: { startsAt: new Date() },
+    defaultValues: { startsAt: new Date(), endsAt: "" },
   });
+
+  useEffect(() => {
+    setTrigger("referencesForm", form.trigger);
+  }, [form.trigger, setTrigger]);
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-12 items-start gap-3">
+      <form className="grid grid-cols-1 items-start gap-3 lg:grid-cols-12">
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="col-span-5">
+            <FormItem className="col-span-1 lg:col-span-5">
               <FormLabel>Título</FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   value={field.value ?? ""}
                   placeholder="Título do orçamento"
+                  onBlur={(e) => {
+                    field.onBlur();
+                    setReference({ name: e.target.value });
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -54,13 +67,24 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
           control={form.control}
           name="client"
           render={({ field }) => (
-            <FormItem className="col-span-3">
+            <FormItem className="col-span-1 lg:col-span-3">
               <FormLabel>Cliente</FormLabel>
               <FormControl>
                 <Select
-                  {...field}
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                    const client = clients.find((c) => c.id === val);
+                    if (client) {
+                      setReference({
+                        client: {
+                          id: client.id,
+                          name: client.name,
+                          code: client.code,
+                        },
+                      });
+                    }
+                  }}
                 >
                   <SelectTrigger
                     truncate
@@ -86,13 +110,25 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
           control={form.control}
           name="startsAt"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Data inicial</FormLabel>
               <FormControl>
                 <DatePicker
                   {...field}
                   placeholder="Início..."
                   allowFutureDates
+                  onBlur={() => {
+                    field.onBlur();
+                    if (field.value) {
+                      setReference({ initialDate: field.value.toISOString() });
+                    }
+                  }}
+                  onChange={(val) => {
+                    field.onChange(val);
+                    if (val) {
+                      setReference({ initialDate: val.toISOString() });
+                    }
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -103,12 +139,15 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
           control={form.control}
           name="endsAt"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Validade</FormLabel>
               <FormControl>
                 <Select
                   value={field.value ?? ""}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                    setReference({ expirationDays: Number(val) });
+                  }}
                 >
                   <SelectTrigger
                     truncate

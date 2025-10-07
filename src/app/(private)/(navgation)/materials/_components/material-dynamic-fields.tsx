@@ -65,7 +65,9 @@ export const MaterialDinamicFields = () => {
               </FormItem>
             )}
           />
-          <div className="text-title-light -mt-1 pt-9 text-base">x</div>
+          <div className="text-title-light -mt-1 hidden pt-9 text-base lg:block">
+            x
+          </div>
           <FormField
             control={form.control}
             name="measure.1"
@@ -139,7 +141,7 @@ export const MaterialDinamicFields = () => {
           </FormItem>
         )}
       />
-      <InputDisabled className="mt-[1.375rem] w-full">
+      <InputDisabled className="w-full lg:mt-[1.375rem]">
         Por: {measureType.toUpperCase()}
       </InputDisabled>
     </>

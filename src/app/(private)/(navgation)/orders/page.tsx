@@ -1,4 +1,4 @@
-import { AddMaterialButton } from "../_components/add-button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { EmptyDataBox } from "../_components/empty-data-box";
 import { PageContent } from "../_components/page-content";
 import {
@@ -20,8 +20,8 @@ import {
   SelectFilter,
 } from "../_components/search-bar";
 import { SearchProvider } from "../_context/search-provider";
-import { ClientDialog } from "../clients/_components/client-dialog";
 import { clients } from "../clients/_constants/clients-list";
+import { AddOrderButton } from "./_components/add-order-button";
 import { OrderTable } from "./_components/order-table";
 import { statusList } from "./_constants/status-list";
 
@@ -40,9 +40,7 @@ export default async function OrdersPage() {
           </PageHeaderHeading>
         </PageHeaderContent>
         <PageHeaderAction>
-          <AddMaterialButton text="Novo orçamento">
-            <ClientDialog />
-          </AddMaterialButton>
+          <AddOrderButton>Novo orçamento</AddOrderButton>
         </PageHeaderAction>
       </PageHeader>
       <SearchProvider>
@@ -62,10 +60,12 @@ export default async function OrdersPage() {
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
-        <PageContent className="px-0">
-          <OrderTable />
-          <EmptyDataBox className="mx-6" />
-        </PageContent>
+        <ScrollArea className="grow px-0">
+          <PageContent className="max-w-dvw px-0 lg:px-0">
+            <OrderTable />
+            <EmptyDataBox className="mx-4 lg:mx-6" />
+          </PageContent>
+        </ScrollArea>
         <SearchPagination />
       </SearchProvider>
     </PageMain>

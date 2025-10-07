@@ -18,7 +18,7 @@ export function ClientAdressFields() {
         control={form.control}
         name="address.city"
         render={({ field }) => (
-          <FormItem className="col-span-2">
+          <FormItem className="col-span-1 lg:col-span-2">
             <FormLabel>Cidade</FormLabel>
             <FormControl>
               <Input {...field} placeholder="Ex: Viçosa do Ceará" />
@@ -31,7 +31,7 @@ export function ClientAdressFields() {
         control={form.control}
         name="address.cep"
         render={({ field }) => (
-          <FormItem className="col-span-2">
+          <FormItem className="col-span-1 lg:col-span-2">
             <FormLabel isOptional>CEP</FormLabel>
             <FormControl>
               <PatternFormat
@@ -51,7 +51,7 @@ export function ClientAdressFields() {
         control={form.control}
         name="address.neighborhood"
         render={({ field }) => (
-          <FormItem className="col-span-2">
+          <FormItem className="col-span-1 lg:col-span-2">
             <FormLabel>Bairro</FormLabel>
             <FormControl>
               <Input {...field} placeholder="Ex: Centro" />
@@ -64,7 +64,7 @@ export function ClientAdressFields() {
         control={form.control}
         name="address.street"
         render={({ field }) => (
-          <FormItem className="col-span-3">
+          <FormItem className="col-span-1 lg:col-span-3">
             <FormLabel>Endereço</FormLabel>
             <FormControl>
               <Input {...field} placeholder="Ex: Rua da...." />
@@ -77,7 +77,7 @@ export function ClientAdressFields() {
         control={form.control}
         name="address.complement"
         render={({ field }) => (
-          <FormItem className="col-span-3">
+          <FormItem className="col-span-1 lg:col-span-3">
             <FormLabel isOptional>Complemento ou referência</FormLabel>
             <FormControl>
               <Input {...field} placeholder="Ex: Próximo ao..." />

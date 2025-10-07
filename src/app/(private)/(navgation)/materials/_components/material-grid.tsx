@@ -10,14 +10,14 @@ export const ResultGrid = () => {
       console.log("Filtros recebidos:", filters);
       return {
         items: materials,
-        totalPages: 2,
+        totalPages: 10,
         page: 2,
       };
     },
   });
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-1 lg:gap-4 xl:grid-cols-2 2xl:grid-cols-3">
       {items?.map((item, index) => (
         <MaterialCard key={index} material={item} />
       ))}

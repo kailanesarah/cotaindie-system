@@ -14,7 +14,9 @@ export const InputDisabled = ({
       )}
       {...props}
     >
-      <span className="truncate">{children}</span>
+      <span className="flex items-center justify-center gap-2 truncate">
+        {children}
+      </span>
     </div>
   );
 };

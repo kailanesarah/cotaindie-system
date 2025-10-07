@@ -1,4 +1,5 @@
 import z from "zod";
+import { pieceSchema } from "./piece-form-schema";
 
 export const costSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório"),
@@ -15,6 +16,7 @@ export const projectSchema = z.object({
   qtde: z.number().positive("Insira um número positivo"),
 
   costs: z.array(costSchema),
+  pieces: z.array(pieceSchema),
 
   profitRate: z
     .number()
@@ -28,6 +30,8 @@ export const projectSchema = z.object({
     .number()
     .min(0, "Insira um número a partir de zero")
     .max(100, "Valor máximo é 100%"),
+
+  rawAmount: z.number().optional(), //only visual, in this dialog form
 });
 
 export const getProjectDefaultValues = (
@@ -38,6 +42,7 @@ export const getProjectDefaultValues = (
     qtde: project?.qtde || 1,
 
     costs: [],
+    pieces: project?.pieces || [],
 
     profitRate: project?.profitRate || 0,
     monthlyExpense: project?.monthlyExpense || 0,
