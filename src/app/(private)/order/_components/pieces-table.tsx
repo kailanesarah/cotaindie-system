@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { Fragment, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { formatMeasure } from "../../(navgation)/materials/_utils/format-mesure";
 import { currencyFormatter } from "../_utils/currency-formatter";
 import {
   groupPiecesByMaterial,
@@ -85,9 +86,15 @@ const PiecesTableRowSingle = ({
           >
             <TableCell className="pr-0">{gIndex + 1}</TableCell>
             <TableCell>
-              <span className="line-clamp-1" title={piece.name}>
+              <span
+                className="line-clamp-1 whitespace-nowrap lg:line-clamp-none lg:whitespace-normal"
+                title={piece.name}
+              >
                 {piece.material.name}{" "}
-                <span className="text-muted-foreground">({piece.qtde})</span>
+                <span className="text-muted-foreground">({piece.qtde})</span>{" "}
+                <span className="text-muted-foreground">
+                  ({formatMeasure(piece.measure, piece.material.unit)})
+                </span>
               </span>
             </TableCell>
             <TableCell>{calc.quantityInt}</TableCell>
@@ -134,7 +141,10 @@ const PiecesTableRowGroup = ({
       <TableRow className="text-title-light whitespace-nowrap last:border-0">
         <TableCell className="pr-0">{gIndex + 1}</TableCell>
         <TableCell>
-          <span className="line-clamp-1" title={group.material.name}>
+          <span
+            className="line-clamp-1 whitespace-nowrap lg:line-clamp-none lg:whitespace-normal"
+            title={group.material.name}
+          >
             {group.material.name}
           </span>
         </TableCell>
@@ -175,8 +185,16 @@ const PiecesTableRowGroup = ({
                 {gIndex + 1}.{i + 1}
               </TableCell>
               <TableCell>
-                {piece.name}{" "}
-                <span className="text-muted-foreground">({piece.qtde})</span>
+                <span
+                  className="line-clamp-1 whitespace-nowrap lg:line-clamp-none lg:whitespace-normal"
+                  title={piece.name}
+                >
+                  {piece.name}{" "}
+                  <span className="text-muted-foreground">({piece.qtde})</span>{" "}
+                  <span className="text-muted-foreground">
+                    ({formatMeasure(piece.measure, piece.material.unit)})
+                  </span>
+                </span>
               </TableCell>
               <TableCell>{calc.quantityInt}</TableCell>
               <TableCell>{calc.quantityFrac}</TableCell>

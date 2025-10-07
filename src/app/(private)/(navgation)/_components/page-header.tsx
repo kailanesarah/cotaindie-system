@@ -18,13 +18,7 @@ export const PageHeaderContent = ({ children }: { children: ReactNode }) => {
 };
 
 export const PageHeaderIcon = ({ name }: { name: string }) => {
-  return (
-    <Icon
-      name={name}
-      size={28}
-      className="text-red-default !hidden lg:!block"
-    />
-  );
+  return <Icon name={name} size={28} className="text-red-default" />;
 };
 
 export const PageHeaderHeading = ({ children }: { children: ReactNode }) => {

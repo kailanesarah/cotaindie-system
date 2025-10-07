@@ -41,12 +41,12 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-12 items-start gap-3">
+      <form className="grid grid-cols-1 items-start gap-3 lg:grid-cols-12">
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="col-span-5">
+            <FormItem className="col-span-1 lg:col-span-5">
               <FormLabel>Título</FormLabel>
               <FormControl>
                 <Input
@@ -67,7 +67,7 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
           control={form.control}
           name="client"
           render={({ field }) => (
-            <FormItem className="col-span-3">
+            <FormItem className="col-span-1 lg:col-span-3">
               <FormLabel>Cliente</FormLabel>
               <FormControl>
                 <Select
@@ -110,7 +110,7 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
           control={form.control}
           name="startsAt"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Data inicial</FormLabel>
               <FormControl>
                 <DatePicker
@@ -139,7 +139,7 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
           control={form.control}
           name="endsAt"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Validade</FormLabel>
               <FormControl>
                 <Select

@@ -57,7 +57,6 @@ export const PieceForm = ({
   const measureType = watch("material.measureType");
   const unit = watch("material.unit");
   const measure = watch("material.measure");
-
   const material = watch("material.name");
 
   const isFirstRender = useRef(true);
@@ -94,12 +93,12 @@ export const PieceForm = ({
   return (
     <Form {...form}>
       <form id={id}>
-        <DialogBody className="grid grid-cols-6 items-start gap-3">
+        <DialogBody className="grid grid-cols-1 items-start gap-3 lg:grid-cols-6">
           <FormField
             control={form.control}
             name="material.name"
             render={({ field }) => (
-              <FormItem className="col-span-4">
+              <FormItem className="order-1 col-span-1 lg:order-1 lg:col-span-4">
                 <FormLabel>Material</FormLabel>
                 <FormControl>
                   <Select
@@ -186,11 +185,26 @@ export const PieceForm = ({
               </FormItem>
             )}
           />
+          {material && measureType !== "un" && (
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="order-2 col-span-1 lg:order-3 lg:col-span-4">
+                  <FormLabel>Nome da peça</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Peça do local..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="material.baseValue"
             render={({ field }) => (
-              <FormItem className="col-span-2">
+              <FormItem className="order-3 col-span-1 lg:order-2 lg:col-span-2">
                 <FormLabel>Valor base</FormLabel>
                 <FormControl>
                   <NumericFormat
@@ -211,29 +225,16 @@ export const PieceForm = ({
               </FormItem>
             )}
           />
-          {material && measureType !== "un" && (
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className="col-span-4">
-                  <FormLabel>Nome da peça</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Peça do local..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
           <FormField
             control={form.control}
             name="qtde"
             render={({ field }) => (
               <FormItem
                 className={cn(
-                  "col-span-6",
-                  material && measureType !== "un" && "col-span-2",
+                  "order-4 col-span-1 lg:order-4 lg:col-span-6",
+                  material &&
+                    measureType !== "un" &&
+                    "col-span-1 lg:col-span-2",
                 )}
               >
                 <FormLabel>Quantidade</FormLabel>
@@ -266,8 +267,9 @@ export const PieceForm = ({
             )}
           />
         </DialogBody>
+
         {measureType && (
-          <DialogBody className="flex items-start gap-3">
+          <DialogBody className="flex flex-col items-start gap-3 lg:flex-row">
             {measureType === "m2" && (
               <>
                 <FormField
@@ -292,7 +294,9 @@ export const PieceForm = ({
                     </FormItem>
                   )}
                 />
-                <div className="text-title-light -mt-1 pt-9 text-base">x</div>
+                <div className="text-title-light -mt-1 hidden pt-9 text-base lg:flex">
+                  x
+                </div>
                 <FormField
                   control={form.control}
                   name="measure.1"
@@ -348,6 +352,7 @@ export const PieceForm = ({
             </InputDisabled>
           </DialogBody>
         )}
+
         <PieceFormActions onSubmit={() => onSubmit(form.getValues())} />
       </form>
     </Form>

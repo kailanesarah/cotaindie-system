@@ -34,13 +34,16 @@ export const OrderMenuActions = () => {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="hidden gap-4 outline-0 lg:flex">
       <Select
         value={order.status ?? undefined}
         onValueChange={(value) => setStatusInfo({ status: value as Status })}
       >
         <Button variant="secondary" className="border-0" asChild>
-          <SelectTrigger className="outline-0" placeholder="Fase do pedido">
+          <SelectTrigger
+            className="hidden outline-0 lg:flex"
+            placeholder="Fase do pedido"
+          >
             <SelectValue placeholder="Fase do pedido" />
           </SelectTrigger>
         </Button>

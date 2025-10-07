@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -30,12 +31,12 @@ export const ProjectStepOne = () => {
 
   return (
     <>
-      <DialogBody className="grid grid-cols-12 items-start gap-3">
+      <DialogBody className="grid grid-cols-1 items-start gap-3 lg:grid-cols-12">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="col-span-10">
+            <FormItem className="col-span-1 lg:col-span-10">
               <FormLabel>Nome</FormLabel>
               <FormControl>
                 <Input
@@ -52,7 +53,7 @@ export const ProjectStepOne = () => {
           control={form.control}
           name="qtde"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="col-span-1 lg:col-span-2">
               <FormLabel>Quantidade</FormLabel>
               <FormControl>
                 <Select
@@ -86,13 +87,17 @@ export const ProjectStepOne = () => {
       <DialogBody className="flex items-start gap-3">
         <ProjectPieces>
           <PiecesContent>
-            {!pieces.length && (
-              <OrderEmptyTable
-                title="Adicione uma peça"
-                text="Adicione uma peça a primeira peça do projeto."
-              />
-            )}
-            {!!pieces.length && <PiecesTable pieces={pieces} />}
+            <ScrollArea className="grow">
+              <div className="max-w-[calc(100vw-2rem)]">
+                {!pieces.length && (
+                  <OrderEmptyTable
+                    title="Adicione uma peça"
+                    text="Adicione uma peça a primeira peça do projeto."
+                  />
+                )}
+                {!!pieces.length && <PiecesTable pieces={pieces} />}
+              </div>
+            </ScrollArea>
             <PiecesActions />
           </PiecesContent>
           <PiecesTotal />
