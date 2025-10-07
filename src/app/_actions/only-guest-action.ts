@@ -1,13 +1,16 @@
 "use server";
 
 import { ROUTES } from "@/constants/urls";
-import { requireSession } from "@/modules/supabase/supabase-auth-service";
+import { requireSessionServer } from "@/modules/supabase/supabase-auth-service";
 import { redirect } from "next/navigation";
 
 export const onlyGuestAction = async (): Promise<void> => {
-  const session = await requireSession();
+  const user = await requireSessionServer();
 
-  if (session) {
+  // Se houver sessão, redireciona para o dashboard
+  if (user) {
     redirect(ROUTES.PRIVATE.DASHBOARD);
   }
+
+  // Se não houver sessão, apenas deixa continuar na página
 };
