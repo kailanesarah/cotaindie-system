@@ -26,8 +26,8 @@ export default async function NavigationLayout({
         <AppSidebar menuItems={sidebarLinks} />
       </div>
       <div className="relative flex grow flex-col">
-        <NavbarMobile profile={profile} />
         <Navbar profile={profile} />
+        <NavbarMobile profile={profile} />
         {children}
       </div>
     </SidebarProvider>

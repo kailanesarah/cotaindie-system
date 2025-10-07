@@ -31,10 +31,10 @@ export const ClientForm = ({ client }: { client?: Client }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <DialogBody className="grid grid-cols-6 items-start gap-3">
+        <DialogBody className="grid grid-cols-1 items-start gap-3 lg:grid-cols-6">
           <ClientBasicsFields />
         </DialogBody>
-        <DialogBody className="grid grid-cols-6 items-start gap-3">
+        <DialogBody className="grid grid-cols-1 items-start gap-3 lg:grid-cols-6">
           <ClientAdressFields />
         </DialogBody>
         <DialogBody>
