@@ -1,4 +1,4 @@
-import { AddMaterialButton } from "../_components/add-button";
+import { AddButton } from "../_components/add-button";
 import { EmptyDataBox } from "../_components/empty-data-box";
 import { PageContent } from "../_components/page-content";
 import {
@@ -38,9 +38,9 @@ export default async function ClientsPage() {
           </PageHeaderHeading>
         </PageHeaderContent>
         <PageHeaderAction>
-          <AddMaterialButton text="Novo cliente">
+          <AddButton text="Novo cliente">
             <ClientDialog />
-          </AddMaterialButton>
+          </AddButton>
         </PageHeaderAction>
       </PageHeader>
       <SearchProvider>
