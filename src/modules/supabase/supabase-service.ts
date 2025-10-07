@@ -3,8 +3,8 @@ import {
   type EntitiesByIdsOptions,
   type EntityOptionsInput,
 } from "./schema/services_schema";
-import { getAuthenticatedUser } from "./supabase-auth-service";
 import { createClient } from "./supabase-server";
+import { getAuthenticatedUser } from "./supabase-utils";
 
 export async function insertEntityToTable<T>(
   data: T,
