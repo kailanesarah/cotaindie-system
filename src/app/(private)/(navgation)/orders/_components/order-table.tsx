@@ -35,7 +35,10 @@ export const OrderTable = () => {
           <TableHead>Código</TableHead>
           <TableHead className="w-full">Nome do orçamento</TableHead>
           <TableHead className="max-w-[17.5rem]">Cliente</TableHead>
-          <TableHead className="max-w-[10.75rem]">Fase do pedido</TableHead>
+          <TableHead className="max-w-[10.75rem]">
+            <span className="hidden lg:block">Fase do pedido</span>
+            <span className="lg:hidden">Status</span>
+          </TableHead>
           <TableHead className="text-right">Ações</TableHead>
         </TableRow>
       </TableHeader>
@@ -52,9 +55,12 @@ export const OrderTable = () => {
             </TableCell>
             <TableCell>
               <Badge variant="secondary">
-                <span className="line-clamp-1">
-                  {order.client.name} | {order.client.code}
-                </span>
+                <div>
+                  {order.client.name}{" "}
+                  <span className="hidden lg:inline">
+                    | {order.client.code}
+                  </span>
+                </div>
               </Badge>
             </TableCell>
             <TableCell>

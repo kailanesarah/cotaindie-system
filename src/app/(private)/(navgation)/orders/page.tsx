@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { EmptyDataBox } from "../_components/empty-data-box";
 import { PageContent } from "../_components/page-content";
 import {
@@ -59,10 +60,12 @@ export default async function OrdersPage() {
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
-        <PageContent className="px-0">
-          <OrderTable />
-          <EmptyDataBox className="mx-6" />
-        </PageContent>
+        <ScrollArea className="grow px-0">
+          <PageContent className="max-w-dvw px-0 lg:px-0">
+            <OrderTable />
+            <EmptyDataBox className="mx-4 lg:mx-6" />
+          </PageContent>
+        </ScrollArea>
         <SearchPagination />
       </SearchProvider>
     </PageMain>
