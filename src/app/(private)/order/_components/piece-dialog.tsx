@@ -5,9 +5,12 @@ import {
   DialogIcon,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useFormContext } from "react-hook-form";
 import { PieceForm } from "./piece-form";
 
 export const PieceDialog = () => {
+  const form = useFormContext();
+
   return (
     <DialogContent>
       <DialogHeader>
@@ -16,7 +19,7 @@ export const PieceDialog = () => {
           <DialogTitle>Adicionar nova peça</DialogTitle>
         </DialogHeaderContent>
       </DialogHeader>
-      <PieceForm />
+      <PieceForm formParent={form} />
     </DialogContent>
   );
 };

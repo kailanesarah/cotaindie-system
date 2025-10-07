@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import type { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
+import { currencyFormatter } from "../_utils/currency-formatter";
 import { PieceDialog } from "./piece-dialog";
 
 export const ProjectPieces = ({ children }: { children: ReactNode }) => {
@@ -15,11 +17,15 @@ export const PiecesContent = ({ children }: { children: ReactNode }) => {
 };
 
 export const PiecesTotal = () => {
+  const form = useFormContext();
+  const qtde = (form.watch("pieces") || []).length;
+  const rawAmount = form.watch("rawAmount") || 0;
+
   return (
     <div className="text-title-light flex justify-end gap-2.5 text-xs font-semibold">
-      <span>Variedade de itens: 2</span>
+      <span>Variedade de itens: {qtde}</span>
       <span>-</span>
-      <span>Total com materiais: R$ 2.163,00</span>
+      <span>Total com materiais: {currencyFormatter.format(rawAmount)}</span>
     </div>
   );
 };

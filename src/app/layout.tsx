@@ -28,6 +28,7 @@ export default function RootLayout({
                 padding: 0,
                 margin: 0,
                 boxShadow: "none",
+                background: "transparent",
               },
             }}
             containerStyle={{

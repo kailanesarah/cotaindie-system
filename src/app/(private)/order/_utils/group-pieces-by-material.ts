@@ -1,5 +1,5 @@
-interface GroupedPieces {
-  material: Material;
+export interface GroupedPieces {
+  material: Partial<Material>;
   pieces: Piece[];
   totalQtde: number;
 }
@@ -11,7 +11,7 @@ interface GroupedPiecesResult {
 
 export function groupPiecesByMaterial(pieces: Piece[]): GroupedPiecesResult {
   const grouped = pieces.reduce<Record<string, GroupedPieces>>((acc, piece) => {
-    const materialId = piece.material.id;
+    const materialId = piece.material.name;
 
     if (!acc[materialId]) {
       acc[materialId] = {

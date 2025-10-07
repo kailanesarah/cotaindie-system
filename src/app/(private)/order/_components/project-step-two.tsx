@@ -20,6 +20,7 @@ import {
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { currencyFormatter } from "../_utils/currency-formatter";
+import { calculateProjectValue } from "../functions/calculate-project-value";
 import { OrderEmptyTable } from "./order-empty-table";
 import {
   PiecesCosts,
@@ -42,6 +43,18 @@ export const ProjectStepTwo = () => {
     0,
   );
 
+  const { rawAmount, monthlyExpense, profitRate, comission, qtde } =
+    form.watch();
+
+  const { finalValue: totalValue = 0 } = calculateProjectValue(
+    rawAmount,
+    totalCosts,
+    monthlyExpense,
+    profitRate,
+    comission,
+    qtde,
+  );
+
   return (
     <>
       <DialogBody>
@@ -54,7 +67,6 @@ export const ProjectStepTwo = () => {
                   text="Custos são opcionais e ajudam a precificar melhor."
                 />
               )}
-
               {fields.length > 0 && (
                 <div className="text-title-light grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-3 text-sm font-semibold">
                   <div>Nome do custo</div>
@@ -289,7 +301,9 @@ export const ProjectStepTwo = () => {
       </DialogBody>
       <DialogBody className="flex flex-col gap-2 text-right">
         <span>Resumo do projeto</span>
-        <h6 className="!text-[1.0625rem]">Valor total: R$ 3.149,20</h6>
+        <h6 className="!text-[1.0625rem]">
+          Valor total: {currencyFormatter.format(totalValue || 0)}
+        </h6>
       </DialogBody>
     </>
   );

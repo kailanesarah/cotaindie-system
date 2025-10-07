@@ -23,6 +23,7 @@ export const OrderMenu = ({ order }: { order?: Order }) => {
     <nav className="bg-black-default sticky top-0 z-10 flex h-[4.5625rem] items-center justify-between px-6 py-4 text-white shadow-[0_0_32px_0_rgba(0,0,0,0.16)]">
       <div className="flex items-center gap-4">
         <button
+          type="button"
           className="flex cursor-pointer items-center"
           onClick={handleClose}
         >

@@ -1,13 +1,22 @@
 type Status = "approved" | "open";
-type Payment = "credit" | "debit" | "bank_transfer" | "pix" | "others";
+type Payment =
+  | "credit"
+  | "debit"
+  | "bank_transfer"
+  | "pix"
+  | "to_agree"
+  | "others";
 
 interface Order {
-  //base infor
   id: string;
-  code: string;
-  name: string;
-  client: Pick<Client, "code" | "name">;
   status: Status;
+  code: string;
+
+  //base infor
+  name: string;
+  client: Pick<Client, "id" | "name" | "code">;
+  expirationDays: number;
+  initialDate: string;
 
   projects: Project[];
 

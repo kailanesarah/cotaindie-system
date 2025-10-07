@@ -27,6 +27,8 @@ export function Button({
   className,
   variant,
   asChild = false,
+  type = "button",
+  form,
   square = false,
   ...props
 }: React.ComponentProps<"button"> &
@@ -38,7 +40,9 @@ export function Button({
 
   return (
     <Comp
+      type={type}
       data-slot="button"
+      form={form}
       className={cn(
         buttonVariants({ variant }),
         square && "max-w-[2.875rem] min-w-[2.875rem] p-0",

@@ -10,19 +10,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
 import { useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 
-export const PiecesTableActions = ({
-  piece,
-  index,
-}: {
-  piece: Piece;
-  index: number;
-}) => {
+export const PiecesTableActions = ({ index }: { index: number }) => {
+  const { control } = useFormContext();
+  const { remove } = useFieldArray({ control, name: "pieces" });
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const handleDelete = () => {
-    console.log("Deleted!");
+    remove(index);
     setIsDeleteOpen(false);
   };
 

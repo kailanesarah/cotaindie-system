@@ -15,6 +15,7 @@ import { Icon } from "./icon";
 interface DatePickerProps {
   value?: Date;
   onChange?: (date: Date | undefined) => void;
+  onBlur?: () => void;
   placeholder?: string;
   format?: string;
   allowFutureDates?: boolean;
@@ -23,6 +24,7 @@ interface DatePickerProps {
 export function DatePicker({
   value,
   onChange,
+  onBlur,
   placeholder = "Pick a date",
   format = "MM/dd/yyyy",
   allowFutureDates = false,
@@ -35,7 +37,13 @@ export function DatePicker({
   };
 
   return (
-    <Popover>
+    <Popover
+      onOpenChange={(open) => {
+        if (!open) {
+          onBlur?.();
+        }
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="secondary"
@@ -55,7 +63,6 @@ export function DatePicker({
         sideOffset={0}
       >
         <Calendar
-          className=""
           mode="single"
           selected={selectedDate}
           onSelect={handleSelect}

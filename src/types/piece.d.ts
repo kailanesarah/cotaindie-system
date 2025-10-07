@@ -1,6 +1,17 @@
 interface Piece {
-  id: string;
+  id?: string;
   name?: string;
   qtde: number;
-  material: Material;
+  measure: [number] | [number, number];
+  material: Pick<
+    Material,
+    | "id"
+    | "name"
+    | "measure"
+    | "measureType"
+    | "baseValue"
+    | "unit"
+    | "wasteTax"
+    | "cutDirection"
+  >;
 }

@@ -22,19 +22,31 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useId, useRef } from "react";
+import {
+  useFieldArray,
+  useForm,
+  type FieldValues,
+  type UseFormReturn,
+} from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import type z from "zod";
 import { measureMap } from "../../(navgation)/_constants/mesure-map";
 import { materials } from "../../(navgation)/materials/_constants/material-list";
+import { formatMeasure } from "../_utils/format-measure";
 import {
   getPiecetDefaultValues,
   pieceSchema,
 } from "../schema/piece-form-schema";
 import { PieceFormActions } from "./piece-form-actions";
 
-export const PieceForm = () => {
+export const PieceForm = ({
+  formParent,
+}: {
+  formParent: UseFormReturn<FieldValues, any, FieldValues>;
+}) => {
+  const id = useId();
+
   const form = useForm<z.infer<typeof pieceSchema>>({
     resolver: zodResolver(pieceSchema),
     defaultValues: getPiecetDefaultValues(),
@@ -42,8 +54,11 @@ export const PieceForm = () => {
 
   const { watch, setValue } = form;
 
-  const measureType = watch("measureType");
-  const material = watch("material");
+  const measureType = watch("material.measureType");
+  const unit = watch("material.unit");
+  const measure = watch("material.measure");
+
+  const material = watch("material.name");
 
   const isFirstRender = useRef(true);
   const previousMeasureType = useRef(measureType);
@@ -62,32 +77,165 @@ export const PieceForm = () => {
     previousMeasureType.current = measureType;
   }, [measureType]);
 
-  const onSubmit = (values: z.infer<typeof pieceSchema>) => {
-    console.log(values);
+  const { append } = useFieldArray({
+    control: formParent.control,
+    name: "pieces",
+  });
+
+  const onSubmit = async (values: z.infer<typeof pieceSchema>) => {
+    const isValid = await form.trigger();
+
+    if (!isValid) return;
+
+    append(values);
+    form.reset(getPiecetDefaultValues());
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form id={id}>
         <DialogBody className="grid grid-cols-6 items-start gap-3">
           <FormField
             control={form.control}
-            name="name"
+            name="material.name"
             render={({ field }) => (
               <FormItem className="col-span-4">
-                <FormLabel>Nome da peça</FormLabel>
+                <FormLabel>Material</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Peça do local..." />
+                  <Select
+                    value={
+                      materials.find((opt) => opt.name === field.value)?.id ??
+                      ""
+                    }
+                    onValueChange={(value) => {
+                      const selectedMaterial = materials.find(
+                        (opt) => opt.id === value,
+                      );
+                      if (selectedMaterial) {
+                        form.setValue("material.id", selectedMaterial.id, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                        form.setValue("material.name", selectedMaterial.name, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                        form.setValue(
+                          "material.measureType",
+                          selectedMaterial.measureType,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
+                        form.setValue(
+                          "material.measure",
+                          selectedMaterial.measure,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
+                        form.setValue(
+                          "material.baseValue",
+                          selectedMaterial.baseValue,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
+                        form.setValue("material.unit", selectedMaterial.unit, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                        form.setValue(
+                          "material.wasteTax",
+                          selectedMaterial.wasteTax,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
+                      }
+                    }}
+                  >
+                    <SelectTrigger
+                      truncate
+                      placeholder="Selecione um material"
+                      className="justify-between"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent align="end">
+                      {materials.map((opt) => (
+                        <SelectItem key={opt.id} value={opt.id}>
+                          {opt.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
+                {material && (
+                  <FormList>
+                    <FormListItem>
+                      {formatMeasure(measure, unit, measureType)}
+                    </FormListItem>
+                  </FormList>
+                )}
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="qtde"
+            name="material.baseValue"
             render={({ field }) => (
               <FormItem className="col-span-2">
+                <FormLabel>Valor base</FormLabel>
+                <FormControl>
+                  <NumericFormat
+                    value={field.value ?? ""}
+                    onValueChange={(values) =>
+                      field.onChange(values.floatValue ?? 0)
+                    }
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale
+                    prefix="R$ "
+                    allowNegative={false}
+                    customInput={Input}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {material && measureType !== "un" && (
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="col-span-4">
+                  <FormLabel>Nome da peça</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Peça do local..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          <FormField
+            control={form.control}
+            name="qtde"
+            render={({ field }) => (
+              <FormItem
+                className={cn(
+                  "col-span-6",
+                  material && measureType !== "un" && "col-span-2",
+                )}
+              >
                 <FormLabel>Quantidade</FormLabel>
                 <FormControl>
                   <Select
@@ -112,87 +260,6 @@ export const PieceForm = () => {
                       })}
                     </SelectContent>
                   </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="material"
-            render={({ field }) => (
-              <FormItem className="col-span-4">
-                <FormLabel>Material</FormLabel>
-                <FormControl>
-                  <Select
-                    {...field}
-                    value={field.value ?? ""}
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      const selectedMaterial = materials.find(
-                        (opt) => opt.id === value,
-                      );
-                      if (selectedMaterial) {
-                        form.setValue(
-                          "measureType",
-                          selectedMaterial.measureType,
-                          {
-                            shouldValidate: true,
-                            shouldDirty: true,
-                          },
-                        );
-                        form.setValue("baseValue", selectedMaterial.baseValue, {
-                          shouldValidate: true,
-                          shouldDirty: true,
-                        });
-                      }
-                    }}
-                  >
-                    <SelectTrigger
-                      truncate
-                      placeholder="Selecione um material"
-                      className="justify-between"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent align="end">
-                      {materials.map((opt) => (
-                        <SelectItem key={opt.id} value={opt.id}>
-                          {opt.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                {material && (
-                  <FormList>
-                    <FormListItem>Medida padrão: 130cm x 219cm</FormListItem>
-                  </FormList>
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="baseValue"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>Valor base</FormLabel>
-                <FormControl>
-                  <NumericFormat
-                    value={field.value ?? ""}
-                    onValueChange={(values) =>
-                      field.onChange(values.floatValue ?? 0)
-                    }
-                    thousandSeparator="."
-                    decimalSeparator=","
-                    decimalScale={2}
-                    fixedDecimalScale
-                    prefix="R$ "
-                    allowNegative={false}
-                    customInput={Input}
-                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -281,7 +348,7 @@ export const PieceForm = () => {
             </InputDisabled>
           </DialogBody>
         )}
-        <PieceFormActions />
+        <PieceFormActions onSubmit={() => onSubmit(form.getValues())} />
       </form>
     </Form>
   );
