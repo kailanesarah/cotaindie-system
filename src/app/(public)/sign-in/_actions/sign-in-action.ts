@@ -1,19 +1,16 @@
 "use server";
 
 import { actionClient } from "@/lib/safe-action";
-import { signIn } from "@/modules/auth/api/auth";
+import { signInWithEmail } from "@/modules/supabase/supabase-auth-service";
 import { loginSchema } from "../_schema/sign-in-schema";
 
 export const signInAction = actionClient
   .schema(loginSchema)
   .action(async ({ parsedInput: { email, password } }) => {
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    const user = await signInWithEmail(email, password);
 
-    if (!result) {
+    if (!user) {
       throw new Error("Email ou senha inválidos");
     }
+    return user;
   });
