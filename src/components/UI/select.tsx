@@ -25,7 +25,7 @@ function SelectValue({
     <SelectPrimitive.Value
       data-slot="select-value"
       className={cx(
-        "border-b-light placeholder:body-lighter rounded-default h-12 w-full border px-5 pb-0.5",
+        "border-b-light placeholder:body-lighter rounded-default h-12 w-full border px-4 pb-0.5 lg:px-5",
         className,
       )}
       {...props}

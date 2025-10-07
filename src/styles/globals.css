@@ -109,32 +109,32 @@ h6,
 @media (max-width: 1023px) {
   h1,
   .heading-h1 {
-    font-size: 1.75rem; /* 28px */
+    font-size: 1.75rem;
   }
 
   h2,
   .heading-h2 {
-    font-size: 1.5rem; /* 24px */
+    font-size: 1.625rem;
   }
 
   h3,
   .heading-h3 {
-    font-size: 1.375rem; /* 22px */
+    font-size: 1.5rem;
   }
 
   h4,
   .heading-h4 {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.375rem;
   }
 
   h5,
   .heading-h5 {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.25rem;
   }
 
   h6,
   .heading-h6 {
-    font-size: 1rem; /* 16px */
+    font-size: 1.125rem;
   }
 }
 

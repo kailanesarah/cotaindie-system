@@ -13,7 +13,7 @@ export const EmptyDataBox = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "rounded-default border-b-light flex flex-col items-center gap-6 border bg-white p-6 pb-10",
+        "rounded-default border-b-light flex flex-col items-center gap-6 border bg-white p-4 text-center lg:p-6 lg:pb-10",
         className,
       )}
     >

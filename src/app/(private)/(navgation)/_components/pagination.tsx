@@ -26,9 +26,9 @@ export const SearchPagination = () => {
   };
 
   return (
-    <div className="border-b-light sticky bottom-0 flex items-center justify-end gap-6 border-t bg-white px-6 py-4">
+    <div className="border-b-light sticky bottom-0 flex items-center justify-end gap-6 border-t bg-white px-4 py-3 lg:px-6 lg:py-4">
       <div className="flex items-center gap-4 whitespace-nowrap">
-        Itens mostrados
+        <span className="hidden lg:block">Itens mostrados</span>
         <Select
           value={String(perPage)}
           onValueChange={(value) => changePerPage(Number(value))}
@@ -46,23 +46,25 @@ export const SearchPagination = () => {
           </SelectContent>
         </Select>
       </div>
-
       <div className="flex items-center gap-4 whitespace-nowrap">
-        Página {page} de {totalPages}
+        <div className="flex min-w-[4rem] justify-end gap-1 text-right lg:min-w-auto">
+          <span className="hidden lg:block">Página</span>
+          {page} de {totalPages}
+        </div>
         <div className="flex gap-3">
           <Button
             variant="secondary"
             square
             onClick={() => changePage(page - 1)}
           >
-            <Icon name="arrow_back_ios_new" />
+            <Icon name="arrow_back_ios_new" className="!text-lg lg:!text-xl" />
           </Button>
           <Button
             variant="secondary"
             square
             onClick={() => changePage(page + 1)}
           >
-            <Icon name="arrow_forward_ios" />
+            <Icon name="arrow_forward_ios" className="!text-lg lg:!text-xl" />
           </Button>
         </div>
       </div>

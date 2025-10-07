@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export const PageHeader = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="border-b-light flex items-center justify-between gap-6 border-b bg-white px-4 py-6 lg:px-6">
+    <div className="border-b-light flex flex-col justify-between gap-5 border-b bg-white px-4 py-6 lg:flex-row lg:items-center lg:gap-6 lg:px-6">
       {children}
     </div>
   );
@@ -11,7 +11,7 @@ export const PageHeader = ({ children }: { children: ReactNode }) => {
 
 export const PageHeaderContent = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex flex-col items-center gap-4 lg:flex-row">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
       {children}
     </div>
   );
@@ -28,7 +28,7 @@ export const PageHeaderIcon = ({ name }: { name: string }) => {
 };
 
 export const PageHeaderHeading = ({ children }: { children: ReactNode }) => {
-  return <div className="flex flex-col gap-1">{children}</div>;
+  return <div className="flex flex-col gap-2 lg:gap-1">{children}</div>;
 };
 
 export const PageHeaderTitle = ({ children }: { children: ReactNode }) => {
@@ -37,10 +37,12 @@ export const PageHeaderTitle = ({ children }: { children: ReactNode }) => {
 
 export const PageHeaderDescription = ({
   children,
+  className,
 }: {
   children: ReactNode;
+  className?: string;
 }) => {
-  return <p>{children}</p>;
+  return <p className={className}>{children}</p>;
 };
 
 export const PageHeaderAction = ({ children }: { children: ReactNode }) => {

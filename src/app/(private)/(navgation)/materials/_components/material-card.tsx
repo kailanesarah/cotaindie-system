@@ -12,7 +12,7 @@ export const MaterialCard = ({ material }: { material: Material }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="border-b-light rounded-default flex cursor-pointer flex-col gap-5 border bg-white p-6">
+        <div className="border-b-light rounded-default flex cursor-pointer flex-col gap-4 border bg-white p-4 lg:gap-5 lg:p-6">
           <div className="flex flex-col gap-2">
             <div className="text-title-light line-clamp-1 text-base font-semibold">
               {material.name}
@@ -22,9 +22,9 @@ export const MaterialCard = ({ material }: { material: Material }) => {
             </p>
           </div>
           <Separator />
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-3 lg:gap-2">
             <span
-              className="text-title-light line-clamp-1"
+              className="text-title-light line-clamp-1 text-xs lg:text-sm"
               title={`${currencyFormated} - Por: ${mesureFormated} (
               ${formatMeasure(material.measure, material.unit)})`}
             >

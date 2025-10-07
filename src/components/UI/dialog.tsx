@@ -132,6 +132,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="dialog-header"
       className={cn(
         "border-b-b-light flex items-center gap-4 border-b px-4 py-4 pr-14 lg:px-6 lg:pr-16",
+        "flex flex-col items-start gap-3 lg:flex-row lg:gap-4",
         className,
       )}
       {...props}
@@ -156,7 +157,10 @@ function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-body"
-      className={cn("border-b-light border-b px-4 py-6 lg:px-6", className)}
+      className={cn(
+        "border-b-light border-b px-4 py-4 lg:px-6 lg:py-6",
+        className,
+      )}
       {...props}
     />
   );
