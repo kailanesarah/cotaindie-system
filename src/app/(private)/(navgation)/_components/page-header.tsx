@@ -3,18 +3,28 @@ import type { ReactNode } from "react";
 
 export const PageHeader = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="border-b-light flex items-center justify-between gap-6 border-b bg-white p-6">
+    <div className="border-b-light flex items-center justify-between gap-6 border-b bg-white px-4 py-6 lg:px-6">
       {children}
     </div>
   );
 };
 
 export const PageHeaderContent = ({ children }: { children: ReactNode }) => {
-  return <div className="flex items-center gap-4">{children}</div>;
+  return (
+    <div className="flex flex-col items-center gap-4 lg:flex-row">
+      {children}
+    </div>
+  );
 };
 
 export const PageHeaderIcon = ({ name }: { name: string }) => {
-  return <Icon name={name} size={28} className="text-red-default" />;
+  return (
+    <Icon
+      name={name}
+      size={28}
+      className="text-red-default !hidden lg:!block"
+    />
+  );
 };
 
 export const PageHeaderHeading = ({ children }: { children: ReactNode }) => {

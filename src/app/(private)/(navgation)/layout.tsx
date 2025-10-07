@@ -11,7 +11,9 @@ export default function NavigationLayout({
 }>) {
   return (
     <SidebarProvider>
-      <AppSidebar menuItems={sidebarLinks} />
+      <div className="hidden lg:block">
+        <AppSidebar menuItems={sidebarLinks} />
+      </div>
       <div className="flex grow flex-col">
         <Navbar />
         {children}

@@ -54,7 +54,7 @@ export const MaterialCutFields = () => {
           </FormItem>
         )}
       />
-      <InputDisabled className="col-span-1 mt-[1.375rem] justify-center">
+      <InputDisabled className="col-span-1 mt-[1.375rem]">
         <Icon
           name={
             form.watch("cutDirection") === "vh"

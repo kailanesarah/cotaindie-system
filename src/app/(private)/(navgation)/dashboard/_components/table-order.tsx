@@ -47,7 +47,7 @@ export const TableOrder = ({ orders }: { orders: Order[] }) => {
                 {statusMap[order.status].text}
               </Badge>
             </TableCell>
-            <TableCell className="text-right">
+            <TableCell className="flex items-center justify-center text-right">
               <OrderTableActions order={order} />
             </TableCell>
           </TableRow>

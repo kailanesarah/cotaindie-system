@@ -41,8 +41,8 @@ export default async function DashboardPage() {
           </PageHeaderHeading>
         </PageHeaderContent>
       </PageHeader>
-      <PageContent className="flex flex-col gap-4 pb-6">
-        <div className="flex gap-4">
+      <PageContent className="flex flex-col gap-2 pb-0 lg:gap-4 lg:pb-6">
+        <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <MetricCard>
             <MetricWrapper>
               <MetricWrap>
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
           </MetricCard>
         </div>
         <ChartAreaInteractive data={graphData} />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="mt-4 hidden grid-cols-1 gap-6 lg:mt-0 lg:grid lg:grid-cols-2 lg:gap-4">
           <TableWrap>
             <TableTitle>Orçamentos recentes</TableTitle>
             <TableContent>
