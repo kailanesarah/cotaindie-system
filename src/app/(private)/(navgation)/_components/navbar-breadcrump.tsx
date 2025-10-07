@@ -24,9 +24,9 @@ export function NavbarBreadcrumb() {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList>
+      <BreadcrumbList className="lg:text-title-light text-body-dark">
         <BreadcrumbItem>
-          <Icon name="home" size={20} className="-mt-1" />
+          <Icon name="home" size={20} className="-mt-1 !hidden lg:!block" />
           <BreadcrumbLink asChild>
             <Link href={ROUTES.PRIVATE.DASHBOARD}>Início</Link>
           </BreadcrumbLink>

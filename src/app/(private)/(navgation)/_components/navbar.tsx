@@ -1,18 +1,18 @@
 import { SupportDialog } from "@/app/_components/support-dialog";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
-import { auth } from "@/modules/auth/api/auth";
-import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { NavbarBreadcrumb } from "./navbar-breadcrump";
 import { NavbarProfile } from "./navbar-profile";
 import { QuestionsDialog } from "./questions-dialog";
 
-export const Navbar = async () => {
-  const session = await auth();
-  const user = session?.user;
+interface INavbarMobile {
+  profile: { name: string; role: string; imageUrl?: string };
+}
 
+export const Navbar = ({ profile }: INavbarMobile) => {
   return (
-    <nav className="border-b-light flex h-[4.5625rem] items-center border-b bg-white px-4 py-4 lg:px-6">
+    <nav className="border-b-light hidden h-[4.5625rem] items-center border-b bg-white px-4 py-4 lg:flex lg:px-6">
       <div className="flex grow items-center justify-between gap-6">
         <NavbarBreadcrumb />
         <div className="hidden items-center gap-6 lg:flex">
@@ -34,10 +34,7 @@ export const Navbar = async () => {
             </DialogTrigger>
             <SupportDialog />
           </Dialog>
-          <NavbarProfile
-            name={user?.name || "user_name"}
-            role="administrador"
-          />
+          <NavbarProfile profile={profile} />
         </div>
       </div>
     </nav>
