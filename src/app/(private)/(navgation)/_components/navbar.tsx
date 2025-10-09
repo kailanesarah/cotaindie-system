@@ -2,13 +2,14 @@ import { SupportDialog } from "@/app/_components/support-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
+import { requireUserServer } from "@/modules/supabase/supabase-auth-service";
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { NavbarBreadcrumb } from "./navbar-breadcrump";
 import { NavbarProfile } from "./navbar-profile";
 import { QuestionsDialog } from "./questions-dialog";
 
-interface INavbar {
-  profile: { name: string; role: string; imageUrl?: string };
-}
+export const Navbar = async () => {
+  const user = await requireUserServer();
 
 export const Navbar = ({ profile }: INavbar) => {
   return (
@@ -34,7 +35,14 @@ export const Navbar = ({ profile }: INavbar) => {
             </DialogTrigger>
             <SupportDialog />
           </Dialog>
-          <NavbarProfile profile={profile} />
+          <NavbarProfile
+            name={
+              typeof user?.user_metadata?.user_name === "string"
+                ? user.user_metadata.user_name
+                : "Usuário"
+            }
+            role="administrador"
+          />
         </div>
       </div>
     </nav>
