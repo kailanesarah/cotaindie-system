@@ -1,80 +1,82 @@
 "use client";
 
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
+import type { SearchResult } from "../../_types/search-result";
 import {
-  type ExtraFilter,
   useSearchContext,
+  type SearchState,
 } from "../_context/search-provider";
 
-interface IUseSearch<T> {
-  action: (params: {
-    text: string[];
-    sort: "DESC" | "ASC";
-    pagination: { page: number; perPage: number };
-    extras: ExtraFilter[];
-  }) => Promise<{ items: T[]; totalPages: number }>;
+export interface UseSearchOptions<T> {
+  onSuccess?: (data: SearchResult<T>) => void;
+  onError?: (error: string) => void;
 }
 
-export function useSearch<T>({ action }: IUseSearch<T>) {
-  const {
-    state,
-    setData,
-    setLoading,
-    setError,
-    dispatch,
-    reset,
-    data,
-    loading,
-    error,
-  } = useSearchContext<T>();
+interface UseSearchParams<T> {
+  name: string;
+  action: (params: SearchState) => Promise<SearchResult<T>>;
+  options?: UseSearchOptions<T>;
+}
 
-  useEffect(() => {
-    let canceled = false;
+export function useSearch<T>({ name, action, options }: UseSearchParams<T>) {
+  const { state, setData, setLoading, setError, dispatch } =
+    useSearchContext<T>();
 
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
+  const lastDataRef = useRef<SearchResult<T> | null>(null);
+  const lastErrorRef = useRef<string | null>(null);
 
-      try {
-        const result = await action({
-          text: state.text,
-          sort: state.sort,
-          pagination: state.pagination,
-          extras: state.extras,
-        });
-
-        if (!canceled) {
-          setData(result.items);
-          dispatch({ type: "SET_TOTAL_PAGES", payload: result.totalPages });
-        }
-      } catch {
-        if (!canceled) setError("Erro ao buscar dados");
-      } finally {
-        if (!canceled) setLoading(false);
-      }
-    };
-
-    fetchData();
-    return () => {
-      canceled = true;
-    };
-  }, [
+  const queryKey = [
+    name,
     state.text,
     state.sort,
     state.pagination.page,
     state.pagination.perPage,
     state.extras.map((e) => `${e.key}:${e.value}`).join(","),
-  ]);
+  ] as const;
+
+  const query = useQuery<SearchResult<T>, Error>({
+    queryKey,
+    queryFn: () =>
+      action({
+        text: state.text,
+        sort: state.sort,
+        pagination: state.pagination,
+        extras: state.extras,
+      }),
+  });
+
+  useEffect(() => {
+    setLoading(query.isFetching);
+  }, [query.isFetching, setLoading]);
+
+  useEffect(() => {
+    if (query.data && query.data !== lastDataRef.current) {
+      lastDataRef.current = query.data;
+
+      setData(query.data.items);
+      dispatch({ type: "SET_TOTAL_PAGES", payload: query.data.totalPages });
+      dispatch({ type: "SET_PAGE", payload: query.data.page });
+
+      options?.onSuccess?.(query.data);
+    }
+  }, [query.data, dispatch, setData, options]);
+
+  useEffect(() => {
+    if (query.error && query.error.message !== lastErrorRef.current) {
+      lastErrorRef.current = query.error.message;
+
+      console.error("Seach error:", query.error);
+
+      setError(query.error.message || "Um erro desconhecido ocorreu");
+      options?.onError?.(query.error.message || "Um erro desconhecido ocorreu");
+    }
+  }, [query.error, setError, options]);
 
   return {
-    state,
-    data,
-    loading,
-    error,
     dispatch,
-    reset,
-    setData,
-    setLoading,
-    setError,
+    data: query.data,
+    loading: query.isFetching,
+    error: query.error?.message || null,
   };
 }
