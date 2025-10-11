@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { onlyUsersAction } from "../_actions/only-users-action";
+import { QueryProvider } from "./(navgation)/_context/query-provider";
 
 export default async function PrivateLayout({
   children,
@@ -8,5 +9,5 @@ export default async function PrivateLayout({
 }>) {
   await onlyUsersAction();
 
-  return <>{children}</>;
+  return <QueryProvider>{children}</QueryProvider>;
 }
