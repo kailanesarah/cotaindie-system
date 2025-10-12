@@ -13,19 +13,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type z from "zod";
+import { useUpsertClient } from "../_hooks/use-upsert-client";
 import { clientSchema, getClientDefaultValues } from "../_schema/client-schema";
 import { ClientActions } from "./client-actions";
 import { ClientAdressFields } from "./client-address-feilds";
 import { ClientBasicsFields } from "./client-basic-fields";
 
 export const ClientForm = ({ client }: { client?: Client }) => {
+  const { isPending, execute } = useUpsertClient();
+
   const form = useForm<z.infer<typeof clientSchema>>({
     resolver: zodResolver(clientSchema),
     defaultValues: getClientDefaultValues(client),
   });
 
-  const onSubmit = (values: z.infer<typeof clientSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof clientSchema>) => {
+    execute(values);
   };
 
   return (
@@ -52,7 +55,7 @@ export const ClientForm = ({ client }: { client?: Client }) => {
             )}
           />
         </DialogBody>
-        <ClientActions />
+        <ClientActions isPending={isPending} />
       </form>
     </Form>
   );

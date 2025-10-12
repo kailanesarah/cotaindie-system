@@ -7,7 +7,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { useFormContext } from "react-hook-form";
 import { DeleteDialog } from "../../_components/delete-dialog";
 
-export const ClientActions = () => {
+export const ClientActions = ({ isPending }: { isPending: boolean }) => {
   const { watch, reset } = useFormContext();
   const id = watch("id");
 
@@ -31,7 +31,11 @@ export const ClientActions = () => {
         </Dialog>
       )}
       <DialogClose asChild>
-        <Button variant={id ? "outline" : "secondary"} onClick={handleReset}>
+        <Button
+          variant={id ? "outline" : "secondary"}
+          onClick={handleReset}
+          disabled={isPending}
+        >
           Cancelar
         </Button>
       </DialogClose>
