@@ -62,14 +62,14 @@ export default async function OrdersPage() {
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
-        <ScrollArea className="grow px-0">
-          <PageContent className="max-w-dvw px-0 lg:px-0">
+        <ScrollArea className="flex grow items-stretch px-0">
+          <PageContent className="flex max-w-dvw grow flex-col px-0 !py-0 lg:px-0">
             <OrderTable />
-            <LoadingBox className="mx-4 lg:mx-6" />
-            <EmptyDataBox className="mx-4 lg:mx-6" />
-            <ErrorDataBox className="mx-4 lg:mx-6" />
+            <EmptyDataBox className="mx-4 my-3 lg:mx-6 lg:my-4" />
+            <ErrorDataBox className="mx-4 my-3 lg:mx-6 lg:my-4" />
           </PageContent>
         </ScrollArea>
+        <LoadingBox className="mx-4 my-3 lg:mx-6 lg:my-4" />
         <SearchPagination />
       </SearchProvider>
     </PageMain>
