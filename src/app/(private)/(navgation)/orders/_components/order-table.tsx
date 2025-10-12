@@ -10,23 +10,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { statusMap } from "../../_constants/status-map";
-import { useSearch } from "../../_hooks/use-search";
-import { orders } from "../_constants/orders-list";
+import { useOrdersSearch } from "../_hooks/use-search-orders";
 import { OrderTableActions } from "./order-table-actions";
 
 export const OrderTable = () => {
-  const { data } = useSearch<Order>({
-    action: async (filters) => {
-      console.log("Filtros recebidos:", filters);
-      return {
-        items: orders,
-        totalPages: 1,
-        page: 1,
-      };
-    },
-  });
+  const { data } = useOrdersSearch();
 
-  if (data.length === 0 || !data) return;
+  if (!data?.items || data?.items.length === 0) return;
 
   return (
     <Table>
@@ -43,7 +33,7 @@ export const OrderTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((order) => (
+        {data.items.map((order) => (
           <TableRow key={order.code}>
             <TableCell>
               <Badge className="text-xs">{order.code}</Badge>

@@ -1,5 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { EmptyDataBox } from "../_components/empty-data-box";
+import { ErrorDataBox } from "../_components/error-data-box";
+import { LoadingBox } from "../_components/loading-box";
 import { PageContent } from "../_components/page-content";
 import {
   PageHeader,
@@ -63,7 +65,9 @@ export default async function OrdersPage() {
         <ScrollArea className="grow px-0">
           <PageContent className="max-w-dvw px-0 lg:px-0">
             <OrderTable />
+            <LoadingBox className="mx-4 lg:mx-6" />
             <EmptyDataBox className="mx-4 lg:mx-6" />
+            <ErrorDataBox className="mx-4 lg:mx-6" />
           </PageContent>
         </ScrollArea>
         <SearchPagination />
