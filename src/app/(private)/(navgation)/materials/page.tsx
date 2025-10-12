@@ -19,13 +19,12 @@ import {
   SearchSortPeriod,
   SearchSortWrap,
   SearchTextFilter,
-  SelectFilter,
 } from "../_components/search-bar";
-import { categories } from "../_constants/categories";
 import { DialogProvider } from "../_context/dialog-provider";
 import { SearchProvider } from "../_context/search-provider";
 import { MaterialDialog } from "./_components/material-dialog";
 import { ResultGrid } from "./_components/material-grid";
+import { SelectCategories } from "./_components/select-categories";
 
 export default async function MaterialsPage() {
   return (
@@ -54,7 +53,7 @@ export default async function MaterialsPage() {
           <SearchBar>
             <SearchTextFilter />
             <SearchSortWrap>
-              <SelectFilter options={categories} />
+              <SelectCategories />
               <SearchSortPeriod />
             </SearchSortWrap>
           </SearchBar>
