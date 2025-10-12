@@ -1,6 +1,6 @@
 import z from "zod";
 
-const paymentMethod = [
+export const paymentMethod = [
   "credit",
   "debit",
   "bank_transfer",
@@ -29,8 +29,10 @@ export const orderPaymentSchema = z
       .min(0, "O adiantamento deve ser a partir de zero"),
     advancePaymentMethod: z.enum(paymentMethod).optional(),
     installmentCount: z
-      .string()
-      .regex(/^[1-9]\d*$/, "Insira um número positivo válido"),
+      .number("Insira a quantidade de parcelas")
+      .int("O valor deve ser um número inteiro")
+      .positive("O valor deve ser maior que zero"),
+
     notes: z.string().optional(),
   })
   .superRefine((data, ctx) => {

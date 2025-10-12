@@ -9,11 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
-import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
-import { useSaveOrder } from "../_hooks/use-order-save";
+import { upseUpsertOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
 interface FavButtonWrapperProps {
@@ -27,7 +26,7 @@ export const FavButtonWrapper = ({ children }: FavButtonWrapperProps) => (
 );
 
 export const SaveButton = () => {
-  const { execute: handleSave } = useSaveOrder();
+  const { execute: handleSave } = upseUpsertOrder();
 
   return (
     <Button
@@ -81,27 +80,21 @@ export const OptionsButton = () => {
               <Icon name="file_copy" /> Fazer cópia
             </DropdownMenuItem>
           )}
-          <Separator />
           <DropdownMenuItem>
             <Icon name="picture_as_pdf" /> Exportar PDF
           </DropdownMenuItem>
-          <Separator />
           <DropdownMenuItem>
             <Icon name="crop" /> Plano de corte
           </DropdownMenuItem>
-          <Separator />
           <DropdownMenuItem>
             <Icon name="download" /> Espelho de materiais
           </DropdownMenuItem>
-          <Separator />
           <DropdownMenuItem>
             <Icon name="contract" /> Baixar contrato
           </DropdownMenuItem>
-          <Separator />
           <DropdownMenuItem>
             <Icon name="logout" /> Finalizar e salvar
           </DropdownMenuItem>
-          <Separator />
           <DropdownMenuItem
             className="text-red-default"
             onClick={() => setIsDeleteOpen(true)}

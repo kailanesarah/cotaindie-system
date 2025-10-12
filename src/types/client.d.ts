@@ -1,18 +1,17 @@
 interface Client {
   id: string;
-  code: string;
+  code?: string;
   name: string;
-  note: string;
+  notes?: string;
   type: "pf" | "pj";
 
   document: {
     type: "cpf" | "cnpj";
-    value: string;
+    value?: string;
   };
 
   email?: string;
   phone?: string;
-  details?: string;
 
   address: {
     street: string;

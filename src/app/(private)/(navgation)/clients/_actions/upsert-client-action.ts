@@ -4,10 +4,12 @@ import { actionClient } from "@/lib/safe-action";
 import { clients } from "../_constants/clients-list";
 import { clientSchema } from "../_schema/client-schema";
 
-export const usertClientAction = actionClient
+export const upsertClientAction = actionClient
   .schema(clientSchema)
   .action(async ({ parsedInput }): Promise<Client> => {
     const { id } = parsedInput;
+
+    console.log(parsedInput);
 
     try {
       if (id) {

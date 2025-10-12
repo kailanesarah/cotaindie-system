@@ -37,7 +37,7 @@ export const QueryProvider = ({ children }: QueryProviderProps) => {
     const [, promise] = persistQueryClient({
       queryClient,
       persister: localStoragePersistor,
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 1,
     });
 
     promise.catch((error) => {

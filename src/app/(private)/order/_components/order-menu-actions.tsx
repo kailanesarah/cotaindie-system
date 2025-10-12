@@ -20,14 +20,15 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
-import { useSaveOrder } from "../_hooks/use-order-save";
+
+import { upseUpsertOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
 export const OrderMenuActions = () => {
   const { order, setStatusInfo } = useOrderStore();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const { execute: handleSave } = useSaveOrder();
+  const { execute: handleSave } = upseUpsertOrder();
 
   const handleDelete = () => {
     console.log("Deleted!");

@@ -45,8 +45,8 @@ export const ClientsTable = () => {
               </span>
             </TableCell>
             <TableCell className="hidden lg:block">
-              <span className="line-clamp-1" title={client.note}>
-                {client.note}
+              <span className="line-clamp-1" title={client.notes}>
+                {client.notes}
               </span>
             </TableCell>
             <TableCell>

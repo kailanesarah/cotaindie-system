@@ -1,5 +1,4 @@
 import { PageMain } from "../(navgation)/_components/page-main";
-import { clients } from "../(navgation)/clients/_constants/clients-list";
 import {
   FormContent,
   FormDescription,
@@ -34,7 +33,7 @@ export default async function OrderPage() {
           </FormHeading>
           <FormSeparator />
           <FormContent>
-            <OrderReferenceForm clients={clients} />
+            <OrderReferenceForm />
           </FormContent>
         </FormSection>
         <FormSection>

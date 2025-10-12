@@ -43,7 +43,7 @@ export const ClientForm = ({ client }: { client?: Client }) => {
         <DialogBody>
           <FormField
             control={form.control}
-            name="details"
+            name="notes"
             render={({ field }) => (
               <FormItem>
                 <FormLabel isOptional>Observações</FormLabel>

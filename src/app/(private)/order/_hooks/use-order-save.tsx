@@ -1,11 +1,41 @@
 "use client";
 
 import { ToastCard } from "@/components/ui/toast-card";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAction } from "next-safe-action/hooks";
 import toast from "react-hot-toast";
+import { upsertOrderAction } from "../_actions/upsert-order-action";
 import { useOrderStore } from "../_stores/order-store";
 
-export function useSaveOrder() {
+export const upseUpsertOrder = () => {
+  const queryClient = useQueryClient();
   const { order, triggers } = useOrderStore();
+
+  const { execute: executeAction, isPending } = useAction(upsertOrderAction, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="success"
+          title="Informação salva com sucesso!"
+          text="Orçamento adicionado ou atualizado."
+        />
+      ));
+    },
+    onError: (err) => {
+      console.log(err);
+
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="error"
+          title="Erro ao inserir ou atualizar o orçamento!"
+          text={err.error?.thrownError?.message || "Ocorreu um erro."}
+        />
+      ));
+    },
+  });
 
   const execute = async () => {
     if (!order.projects || order.projects.length === 0) {
@@ -21,9 +51,6 @@ export function useSaveOrder() {
     }
 
     const triggerKeys = Object.keys(triggers);
-
-    console.log(triggerKeys);
-
     if (triggerKeys.length === 0) {
       toast((t) => (
         <ToastCard
@@ -43,24 +70,10 @@ export function useSaveOrder() {
       if (!trigger) continue;
 
       const isValid = await trigger();
-
-      if (!isValid) {
-        allValid = false;
-      }
+      if (!isValid) allValid = false;
     }
 
-    if (allValid) {
-      toast((t) => (
-        <ToastCard
-          id={t.id}
-          status="success"
-          title="Dados salvos com sucesso!"
-          text="Todas as mudanças estão salvas."
-        />
-      ));
-      console.log("Forms are valid: ", order);
-      return true;
-    } else {
+    if (!allValid) {
       toast((t) => (
         <ToastCard
           id={t.id}
@@ -69,10 +82,13 @@ export function useSaveOrder() {
           text="Alguns campos obrigatórios ainda não foram preenchidos."
         />
       ));
-
       return false;
     }
+
+    executeAction(order as Order);
+
+    return true;
   };
 
-  return { execute };
-}
+  return { execute, isPending };
+};
