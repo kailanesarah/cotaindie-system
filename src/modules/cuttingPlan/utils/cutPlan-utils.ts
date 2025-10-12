@@ -1,0 +1,119 @@
+import { fetchPieces } from "@/modules/piece/utils/fetch-pieces-utils";
+import { getProductByIdService } from "@/modules/products/products-service";
+import { generateSheetsPNG } from "../drawCanva/draw-canvas-utils"; // função atualizada
+import type { CleanSheet } from "../schemas/sheet-schema";
+import { packMaxRects, type Sheet } from "./packing-utils";
+import { calculateSheetMetrics } from "./waste-rate-utils";
+
+type Product = {
+  product_id: string;
+  product_measurements: string; // exemplo: "m²" ou "m"
+};
+
+export async function generateSheetsForProject(
+  project_id: string,
+  sheetW: number,
+  sheetH: number,
+  defaultMargin = 30,
+): Promise<{
+  message: string;
+  totalSheets: number;
+  totalWasteRate: number;
+  sheets: CleanSheet[];
+  tmpPath: string;
+  base64Png: string;
+}> {
+  // Buscar peças do projeto
+  const pieces = await fetchPieces(project_id);
+  if (!pieces || pieces.length === 0) {
+    throw new Error("Nenhuma peça encontrada");
+  }
+
+  // Extrair IDs únicos de produtos
+  const productIds = [
+    ...new Set(
+      pieces
+        .map((p) => p.product_id?.product_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
+  ];
+
+  // Buscar produtos no back
+  const products = await Promise.all(
+    productIds.map((id) => getProductByIdService(id)),
+  );
+
+  // Criar mapa de produtos válidos
+  const productMap = new Map<string, Product>();
+  for (const res of products) {
+    if ("data" in res && res.data && !("error" in res.data)) {
+      const product = res.data as Product;
+      productMap.set(product.product_id, product);
+    } else {
+      console.warn("Produto não encontrado ou erro:", res);
+    }
+  }
+
+  // Validar tipo de medida das peças
+  productMap.forEach((product, id) => {
+    console.log(`ID: ${id}, Tipo de medida: ${product.product_measurements}`);
+    if (
+      product.product_measurements !== "m2" &&
+      product.product_measurements !== "m"
+    ) {
+      throw new Error(
+        `Produto ${id} possui tipo de medida inválido: ${product.product_measurements}`,
+      );
+    }
+  });
+
+  // Gerar chapas (packing)
+  const rawSheets: Sheet[] = packMaxRects(
+    sheetW,
+    sheetH,
+    pieces,
+    defaultMargin,
+  );
+
+  // Gerar PNG temporário + base64
+  const { base64Png, tmpPath, sheetsForDrawing } = await generateSheetsPNG(
+    rawSheets,
+    defaultMargin,
+  );
+
+  // Calcular métricas e preparar CleanSheet
+  const sheets: CleanSheet[] = rawSheets.map((sheet) => {
+    const { used, totalArea, usedArea, wasteRate } = calculateSheetMetrics(
+      sheet,
+      defaultMargin,
+    );
+    return {
+      width: sheet.w,
+      height: sheet.h,
+      used,
+      freeSpace: { totalArea, usedArea, wasteRate },
+    };
+  });
+
+  // Calcular taxa de desperdício total
+  const totalAreaAllSheets = sheets.reduce(
+    (sum, s) => sum + s.width * s.height,
+    0,
+  );
+  const totalUsedArea = sheets.reduce(
+    (sum, s) => sum + s.freeSpace.usedArea,
+    0,
+  );
+  const totalWasteRate =
+    ((totalAreaAllSheets - totalUsedArea) / totalAreaAllSheets) * 100;
+
+  // Retornar resultado
+  return {
+    message: "Chapas geradas com sucesso",
+    totalSheets: sheets.length,
+    totalWasteRate,
+    sheets,
+    tmpPath, // caminho temporário do PNG
+    base64Png, // PNG em base64 para frontend
+  };
+}
