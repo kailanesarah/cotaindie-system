@@ -19,7 +19,7 @@ export const ClientsTable = () => {
   if (!data?.items || data?.items.length === 0) return;
 
   return (
-    <Table>
+    <Table className="my-3 lg:my-4">
       <TableHeader>
         <TableRow>
           <TableHead>Código</TableHead>

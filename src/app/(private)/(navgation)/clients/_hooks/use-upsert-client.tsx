@@ -1,17 +1,22 @@
 "use client";
 
 import { ToastCard } from "@/components/ui/toast-card";
+import {} from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAction } from "next-safe-action/hooks";
 import toast from "react-hot-toast";
+import { useDialog } from "../../_hooks/use-dialog";
 import { usertClientAction } from "../_actions/upsert-client-action";
 
 export const useUpsertClient = () => {
   const queryClient = useQueryClient();
+  const { setOpen } = useDialog();
 
   const { execute, isPending } = useAction(usertClientAction, {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["clients"] });
+
+      setOpen(false);
 
       toast((t) => (
         <ToastCard
