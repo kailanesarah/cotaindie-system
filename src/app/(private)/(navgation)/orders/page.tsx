@@ -22,9 +22,9 @@ import {
   SelectFilter,
 } from "../_components/search-bar";
 import { SearchProvider } from "../_context/search-provider";
-import { clients } from "../clients/_constants/clients-list";
 import { AddOrderButton } from "./_components/add-order-button";
 import { OrderTable } from "./_components/order-table";
+import { SelectClients } from "./_components/select-clients";
 import { statusList } from "./_constants/status-list";
 
 export default async function OrdersPage() {
@@ -54,11 +54,7 @@ export default async function OrdersPage() {
               filterKey="status"
               options={statusList}
             />
-            <SelectFilter
-              filterKey="client"
-              deafultText="Todos os clientes"
-              options={clients}
-            />
+            <SelectClients />
             <SearchSortPeriod />
           </SearchSortWrap>
         </SearchBar>
