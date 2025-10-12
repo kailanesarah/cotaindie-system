@@ -6,10 +6,16 @@ import { Icon } from "@/components/ui/icon";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useFormContext } from "react-hook-form";
 import { DeleteDialog } from "../../_components/delete-dialog";
+import { useDialog } from "../../_hooks/use-dialog";
+import { useDeleteClient } from "../_hooks/use-delete-client";
 
 export const ClientActions = ({ isPending }: { isPending: boolean }) => {
+  const { execute, isPending: isPendingDelete } = useDeleteClient();
   const { watch, reset } = useFormContext();
+
   const id = watch("id");
+
+  const { open, setOpen } = useDialog(id);
 
   const handleReset = () => setTimeout(() => reset(), 200);
 
@@ -20,14 +26,14 @@ export const ClientActions = ({ isPending }: { isPending: boolean }) => {
         Salvar
       </Button>
       {id && (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="secondary">
+            <Button variant="secondary" disabled={isPendingDelete}>
               <Icon name="delete" />
               Apagar
             </Button>
           </DialogTrigger>
-          <DeleteDialog handleDelete={() => {}} />
+          <DeleteDialog handleDelete={() => execute(id)} />
         </Dialog>
       )}
       <DialogClose asChild>
