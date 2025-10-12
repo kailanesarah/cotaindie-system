@@ -12,7 +12,9 @@ import { Icon } from "@/components/ui/icon";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
 import { useSaveOrder } from "../_hooks/use-order-save";
+import { useOrderStore } from "../_stores/order-store";
 
 interface FavButtonWrapperProps {
   children: React.ReactNode;
@@ -40,10 +42,18 @@ export const SaveButton = () => {
 
 export const OptionsButton = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const { order } = useOrderStore();
 
   const handleDelete = () => {
     console.log("Deleted!");
     setIsDeleteOpen(false);
+  };
+
+  const id = order.id;
+
+  const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
+  const handleCopy = () => {
+    if (id) executeCopy(id);
   };
 
   return (
@@ -66,9 +76,11 @@ export const OptionsButton = () => {
           align="end"
           className="min-w-[12.5rem]"
         >
-          <DropdownMenuItem>
-            <Icon name="file_copy" /> Duplicar e salvar
-          </DropdownMenuItem>
+          {id && (
+            <DropdownMenuItem onClick={handleCopy} disabled={isPendingCopy}>
+              <Icon name="file_copy" /> Fazer cópia
+            </DropdownMenuItem>
+          )}
           <Separator />
           <DropdownMenuItem>
             <Icon name="picture_as_pdf" /> Exportar PDF

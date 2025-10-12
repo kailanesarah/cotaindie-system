@@ -19,6 +19,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
 import { useSaveOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
@@ -31,6 +32,13 @@ export const OrderMenuActions = () => {
   const handleDelete = () => {
     console.log("Deleted!");
     setIsDeleteOpen(false);
+  };
+
+  const id = order.id;
+
+  const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
+  const handleCopy = () => {
+    if (id) executeCopy(id);
   };
 
   return (
@@ -85,30 +93,26 @@ export const OrderMenuActions = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[12.5rem]">
-            <DropdownMenuItem>
-              <Icon name="file_copy" /> Duplicar e salvar
-            </DropdownMenuItem>
-            <Separator />
+            {id && (
+              <DropdownMenuItem onClick={handleCopy} disabled={isPendingCopy}>
+                <Icon name="file_copy" /> Fazer cópia
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem>
               <Icon name="picture_as_pdf" /> Exportar PDF
             </DropdownMenuItem>
-            <Separator />
             <DropdownMenuItem>
               <Icon name="crop" /> Plano de corte
             </DropdownMenuItem>
-            <Separator />
             <DropdownMenuItem>
               <Icon name="download" /> Espelho de materiais
             </DropdownMenuItem>
-            <Separator />
             <DropdownMenuItem>
               <Icon name="contract" /> Baixar contrato
             </DropdownMenuItem>
-            <Separator />
             <DropdownMenuItem>
               <Icon name="logout" /> Finalizar e salvar
             </DropdownMenuItem>
-            <Separator />
             <DropdownMenuItem
               className="text-red-default"
               onClick={() => setIsDeleteOpen(true)}
