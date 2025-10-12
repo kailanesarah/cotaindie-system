@@ -30,8 +30,8 @@ import { clientsCategories } from "./_constants/clients-categories";
 
 export default async function ClientsPage() {
   return (
-    <PageMain>
-      <DialogProvider>
+    <DialogProvider>
+      <PageMain>
         <PageHeader>
           <PageHeaderContent>
             <PageHeaderIcon name="article_person" />
@@ -66,7 +66,7 @@ export default async function ClientsPage() {
           <LoadingBox className="mx-4 my-3 lg:mx-6 lg:my-4" />
           <SearchPagination />
         </SearchProvider>
-      </DialogProvider>
-    </PageMain>
+      </PageMain>
+    </DialogProvider>
   );
 }
