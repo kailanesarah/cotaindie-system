@@ -21,12 +21,12 @@ import { Area, AreaChart, ReferenceLine, XAxis, YAxis } from "recharts";
 import { MetricIcon } from "./chart";
 
 const COLOR_TOTAL = "var(--color-black-default)";
-const COLOR_SOLD = "var(--color-red-default)";
+const COLOR_APPROVED = "var(--color-red-default)";
 const COLOR_PROFIT = "var(--color-blue-default)";
 
 const chartConfig = {
   total: { label: "Total geral", color: COLOR_TOTAL },
-  sold: { label: "Vendas", color: COLOR_SOLD },
+  approved: { label: "Vendas", color: COLOR_APPROVED },
   profit: { label: "Lucro bruto", color: COLOR_PROFIT },
 } satisfies ChartConfig;
 
@@ -36,7 +36,7 @@ export const ChartAreaInteractive = ({
   data: {
     date: string;
     total: number;
-    sold: number;
+    approved: number;
     profit: number;
   }[];
 }) => {
@@ -66,9 +66,17 @@ export const ChartAreaInteractive = ({
                 <stop offset="5%" stopColor={COLOR_TOTAL} stopOpacity={0.6} />
                 <stop offset="95%" stopColor={COLOR_TOTAL} stopOpacity={0.05} />
               </linearGradient>
-              <linearGradient id="fillSold" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={COLOR_SOLD} stopOpacity={0.6} />
-                <stop offset="95%" stopColor={COLOR_SOLD} stopOpacity={0.05} />
+              <linearGradient id="fillapproved" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={COLOR_APPROVED}
+                  stopOpacity={0.6}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={COLOR_APPROVED}
+                  stopOpacity={0.05}
+                />
               </linearGradient>
               <linearGradient id="fillProfit" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={COLOR_PROFIT} stopOpacity={0.6} />
@@ -156,10 +164,10 @@ export const ChartAreaInteractive = ({
               strokeWidth={1}
             />
             <Area
-              dataKey="sold"
+              dataKey="approved"
               type="linear"
-              fill="url(#fillSold)"
-              stroke={COLOR_SOLD}
+              fill="url(#fillapproved)"
+              stroke={COLOR_APPROVED}
               strokeWidth={1}
             />
             <Area
