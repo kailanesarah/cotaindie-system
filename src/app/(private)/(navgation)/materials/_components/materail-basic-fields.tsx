@@ -18,9 +18,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useFormContext } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-import { categories } from "../../_constants/categories";
+import { useGetCategories } from "../../_hooks/use-get-categories";
 
 export const MaterialBasicFields = () => {
+  const { data: categories } = useGetCategories();
   const form = useFormContext();
 
   return (

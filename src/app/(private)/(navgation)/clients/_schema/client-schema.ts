@@ -3,7 +3,7 @@ import z from "zod";
 export const clientSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Nome obrigatório"),
-  category: z.enum(["pf", "pj"], { message: "Categoria obrigatória" }),
+  type: z.enum(["pf", "pj"], { message: "Categoria obrigatória" }),
 
   document: z.object({
     type: z.enum(["cpf", "cnpj"], { message: "Tipo de documento obrigatório" }),
@@ -19,8 +19,8 @@ export const clientSchema = z.object({
     .email("Digite um email válido")
     .optional()
     .or(z.literal("")),
-  phone: z.string().min(10, "Digite o número de telefone"),
-  details: z.string().optional(),
+  phone: z.string().min(10, "Digite o número de telefone").optional(),
+  notes: z.string().optional(),
   address: z.object({
     street: z.string().min(1, "Digite o nome do endereço"),
     complement: z.string().optional(),
@@ -36,7 +36,7 @@ export function getClientDefaultValues(
   return {
     id: client?.id ?? "",
     name: client?.name ?? "",
-    category: client?.type ?? "pf",
+    type: client?.type ?? "pf",
 
     document: {
       type: client?.document?.type ?? "cpf",
@@ -45,7 +45,7 @@ export function getClientDefaultValues(
 
     email: client?.email ?? "",
     phone: client?.phone ?? "",
-    details: client?.details ?? "",
+    notes: client?.notes ?? "",
 
     address: {
       street: client?.address?.street ?? "",

@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 import { useSearchContext } from "../_context/search-provider";
 
 export const EmptyDataBox = ({ className }: { className?: string }) => {
-  const { reset, data, loading } = useSearchContext<Material[]>();
+  const { reset, data, loading, error } = useSearchContext();
 
-  if (data.length > 0 || loading) return;
+  if (data.length > 0 || loading || error) return;
 
   return (
     <div

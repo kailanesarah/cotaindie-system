@@ -1,24 +1,14 @@
 "use client";
 
-import { useSearch } from "../../_hooks/use-search";
-import { materials } from "../_constants/material-list";
+import { useMaterialsSearch } from "../_hooks/use-search-materials";
 import { MaterialCard } from "./material-card";
 
 export const ResultGrid = () => {
-  const { data: items } = useSearch<Material>({
-    action: async (filters) => {
-      console.log("Filtros recebidos:", filters);
-      return {
-        items: materials,
-        totalPages: 10,
-        page: 2,
-      };
-    },
-  });
+  const { data } = useMaterialsSearch();
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-1 lg:gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-      {items?.map((item, index) => (
+      {data?.items.map((item, index) => (
         <MaterialCard key={index} material={item} />
       ))}
     </div>

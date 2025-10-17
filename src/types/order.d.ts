@@ -14,16 +14,16 @@ interface Order {
 
   //base infor
   name: string;
-  client: Pick<Client, "id" | "name" | "code">;
+  client: Client;
   expirationDays: number;
   initialDate: string;
 
   projects: Project[];
 
   //projet material
-  included: string;
-  excluded: string;
-  teamNotes: strinf;
+  included?: string;
+  excluded?: string;
+  teamNotes?: strinf;
 
   //payment
   rawAmount: number;
@@ -34,7 +34,7 @@ interface Order {
   installmentCount: number;
 
   advanceAmount: number;
-  advancePaymentMethod: Payment;
+  advancePaymentMethod?: Payment;
 
-  notes: string;
+  notes?: string;
 }

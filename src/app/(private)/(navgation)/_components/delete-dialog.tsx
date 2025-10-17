@@ -14,8 +14,10 @@ import { Icon } from "@/components/ui/icon";
 
 export const DeleteDialog = ({
   handleDelete,
+  isPending = false,
 }: {
   handleDelete: () => void;
+  isPending?: boolean;
 }) => {
   return (
     <DialogContent size="xsmall">
@@ -30,7 +32,12 @@ export const DeleteDialog = ({
         </DialogDescription>
       </DialogBody>
       <DialogFooter className="flex flex-row gap-3">
-        <Button variant="destructive" className="grow" onClick={handleDelete}>
+        <Button
+          variant="destructive"
+          className="grow"
+          onClick={handleDelete}
+          disabled={isPending}
+        >
           <Icon name="delete" />
           Deletar
         </Button>

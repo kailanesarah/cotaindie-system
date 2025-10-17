@@ -1,16 +1,22 @@
 "use client";
 
 import { Icon } from "@/components/ui/icon";
+import { cn } from "@/lib/utils";
 import { useSearchContext } from "../_context/search-provider";
 
-export const LoadingBox = () => {
+export const LoadingBox = ({ className }: { className?: string }) => {
   const { loading } = useSearchContext();
 
   if (!loading) return;
 
   return (
-    <div className="rounded-default border-b-light flex h-full grow flex-col items-center justify-center gap-6 border-[1.5px] border-dashed p-6 pb-10">
-      <div className="mb-8 flex flex-col items-center gap-2">
+    <div
+      className={cn(
+        "rounded-default border-b-light flex h-full grow flex-col items-center justify-center gap-6 border-[1.5px] border-dashed p-4 lg:p-6",
+        className,
+      )}
+    >
+      <div className="flex flex-col items-center gap-2">
         <Icon
           name="cached"
           className="text-red-default animate-spin"

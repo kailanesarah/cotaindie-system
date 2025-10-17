@@ -1,16 +1,19 @@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { useDialog } from "../../_hooks/use-dialog";
 import { parseCurency } from "../../_utils/parse-currency";
 import { formatMeasure } from "../_utils/format-mesure";
 import { MaterialDialog } from "./material-dialog";
 
 export const MaterialCard = ({ material }: { material: Material }) => {
+  const { open, setOpen } = useDialog(`materials:edit-${material.id}`);
+
   const currencyFormated = parseCurency(material.baseValue);
   const mesureFormated = material.measureType.toUpperCase();
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div className="border-b-light rounded-default flex cursor-pointer flex-col gap-4 border bg-white p-4 lg:gap-5 lg:p-6">
           <div className="flex flex-col gap-2">

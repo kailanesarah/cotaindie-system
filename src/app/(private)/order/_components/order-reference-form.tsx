@@ -20,13 +20,15 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useGetClients } from "../../(navgation)/_hooks/use-get-clients";
 import { useOrderStore } from "../_stores/order-store";
 import {
   orderReferenceSchema,
   type orderReferenceType,
 } from "../schema/order-reference-schema";
 
-export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
+export const OrderReferenceForm = () => {
+  const { data: clients } = useGetClients();
   const setReference = useOrderStore((state) => state.setReference);
   const setTrigger = useOrderStore((state) => state.setTrigger);
 
@@ -76,13 +78,7 @@ export const OrderReferenceForm = ({ clients }: { clients: Client[] }) => {
                     field.onChange(val);
                     const client = clients.find((c) => c.id === val);
                     if (client) {
-                      setReference({
-                        client: {
-                          id: client.id,
-                          name: client.name,
-                          code: client.code,
-                        },
-                      });
+                      setReference({ client });
                     }
                   }}
                 >

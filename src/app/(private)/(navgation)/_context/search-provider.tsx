@@ -23,7 +23,7 @@ export interface ExtraFilter {
   value: string;
 }
 
-interface SearchState {
+export interface SearchState {
   text: string[];
   sort: SortOrder;
   pagination: PaginationState;
@@ -43,11 +43,7 @@ type SearchAction =
 const initialState: SearchState = {
   text: [],
   sort: "DESC",
-  pagination: {
-    page: 1,
-    perPage: 5,
-    totalPages: 1,
-  },
+  pagination: { page: 1, perPage: 5, totalPages: 1 },
   extras: [],
 };
 
@@ -122,12 +118,10 @@ export function SearchProvider<T>({
 }: Readonly<{ children: ReactNode }>) {
   const [state, dispatch] = useReducer(searchReducer, initialState);
   const [data, setData] = useState<T[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const reset = useCallback(() => {
-    dispatch({ type: "RESET" });
-  }, []);
+  const reset = useCallback(() => dispatch({ type: "RESET" }), []);
 
   const value = useMemo(
     () => ({
@@ -151,6 +145,7 @@ export function SearchProvider<T>({
 
 export function useSearchContext<T>() {
   const context = useContext<SearchContextProps<T> | undefined>(SearchContext);
-  if (!context) throw new Error("useSearchContext not found");
+  if (!context)
+    throw new Error("useSearchContext must be used within SearchProvider");
   return context;
 }

@@ -5,6 +5,7 @@ import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type z from "zod";
+import { useUpsertMaterial } from "../_hooks/use-upsert-material";
 import {
   getMaterialDefaultValues,
   materialSchema,
@@ -15,13 +16,15 @@ import { MaterialCutFields } from "./material-cut-fields";
 import { MaterialDinamicFields } from "./material-dynamic-fields";
 
 export const MateriaForm = ({ material }: { material?: Material }) => {
+  const { isPending, execute } = useUpsertMaterial();
+
   const form = useForm<z.infer<typeof materialSchema>>({
     resolver: zodResolver(materialSchema),
     defaultValues: getMaterialDefaultValues(material),
   });
 
   const onSubmit = (values: z.infer<typeof materialSchema>) => {
-    console.log(values);
+    execute(values);
   };
 
   return (
@@ -36,7 +39,7 @@ export const MateriaForm = ({ material }: { material?: Material }) => {
         <DialogBody className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:items-start">
           <MaterialCutFields />
         </DialogBody>
-        <MaterialActions />
+        <MaterialActions isPending={isPending} />
       </form>
     </Form>
   );

@@ -3,7 +3,7 @@ export const clients: Client[] = [
     id: "1",
     code: "C-2394",
     name: "Maria do Carmo Almeida",
-    note: "Cliente prefere entrega pela manhã, entre 8h e 10h",
+    notes: "Cliente prefere entrega pela manhã, entre 8h e 10h",
     type: "pf",
     document: {
       type: "cpf",
@@ -11,7 +11,6 @@ export const clients: Client[] = [
     },
     email: "maria.almeida@email.com",
     phone: "(11) 91234-5678",
-    details: "Cliente antiga, sempre paga em dia",
     address: {
       street: "Rua das Flores, 123",
       neighborhood: "Centro",
@@ -23,7 +22,7 @@ export const clients: Client[] = [
     id: "2",
     code: "C-6543",
     name: "José Roberto Madeiras Ltda",
-    note: "Cliente prefere entrega pela manhã, entre 8h e 10h",
+    notes: "Cliente prefere entrega pela manhã, entre 8h e 10h",
     type: "pj",
     document: {
       type: "cnpj",
@@ -31,7 +30,6 @@ export const clients: Client[] = [
     },
     email: "contato@madeirasltda.com",
     phone: "(11) 3344-5566",
-    details: "Compra em grande volume, condições especiais de frete",
     address: {
       street: "Av. Paulista, 1500",
       neighborhood: "Bela Vista",
@@ -43,7 +41,7 @@ export const clients: Client[] = [
     id: "3",
     code: "C-8943",
     name: "Eliane Souza Pereira",
-    note: "Solicita que a entrega seja agendada sempre para às sextas-feiras",
+    notes: "Solicita que a entrega seja agendada sempre para às sextas-feiras",
     type: "pf",
     document: {
       type: "cpf",
@@ -51,7 +49,6 @@ export const clients: Client[] = [
     },
     email: "elianesp@email.com",
     phone: "(21) 99876-5432",
-    details: "Prefere contato por telefone",
     address: {
       street: "Rua do Mercado, 45",
       neighborhood: "Centro",
@@ -63,7 +60,7 @@ export const clients: Client[] = [
     id: "4",
     code: "C-1234",
     name: "Moveis Delmar ME",
-    note: "Aceita entrega apenas com nota fiscal impressa",
+    notes: "Aceita entrega apenas com nota fiscal impressa",
     type: "pj",
     document: {
       type: "cnpj",
@@ -71,7 +68,6 @@ export const clients: Client[] = [
     },
     email: "vendas@moveisdelmar.com",
     phone: "(41) 3322-7788",
-    details: "Solicita sempre embalagens reforçadas",
     address: {
       street: "Rua XV de Novembro, 800",
       neighborhood: "Centro",
@@ -83,7 +79,7 @@ export const clients: Client[] = [
     id: "5",
     code: "C-7433",
     name: "André Luiz Tavares",
-    note: "Cliente costuma viajar, recomenda confirmar por WhatsApp antes",
+    notes: "Cliente costuma viajar, recomenda confirmar por WhatsApp antes",
     type: "pf",
     document: {
       type: "cpf",
@@ -91,7 +87,6 @@ export const clients: Client[] = [
     },
     email: "andre.tavares@email.com",
     phone: "(31) 97777-8888",
-    details: "Confirma sempre presença antes da entrega",
     address: {
       street: "Rua das Palmeiras, 250",
       neighborhood: "Savassi",
@@ -103,7 +98,7 @@ export const clients: Client[] = [
     id: "6",
     code: "C-0632",
     name: "MDF Pro Suprimentos Ltda",
-    note: "Entregas somente de segunda a quinta, no horário comercial",
+    notes: "Entregas somente de segunda a quinta, no horário comercial",
     type: "pj",
     document: {
       type: "cnpj",
@@ -111,7 +106,6 @@ export const clients: Client[] = [
     },
     email: "contato@mdfpro.com",
     phone: "(47) 3555-6677",
-    details: "Exige conferência de nota fiscal eletrônica na entrega",
     address: {
       street: "Rodovia BR-101, Km 1200",
       neighborhood: "Industrial",
@@ -123,7 +117,8 @@ export const clients: Client[] = [
     id: "7",
     code: "C-2257",
     name: "Cláudia Ribeiro Fonseca",
-    note: "Solicita que entregas sejam feitas na casa da mãe, endereço alternativo",
+    notes:
+      "Solicita que entregas sejam feitas na casa da mãe, endereço alternativo",
     type: "pf",
     document: {
       type: "cpf",
@@ -131,7 +126,6 @@ export const clients: Client[] = [
     },
     email: "claudia.rf@email.com",
     phone: "(85) 98888-9999",
-    details: "Prefere contato por e-mail",
     address: {
       street: "Rua das Acácias, 90",
       complement: "Casa da mãe",

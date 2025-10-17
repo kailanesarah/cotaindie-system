@@ -17,7 +17,7 @@ import { clientsCategories } from "../_constants/clients-categories";
 
 export function ClientBasicsFields() {
   const form = useFormContext();
-  const category = form.watch("category");
+  const category = form.watch("type");
 
   const isFirstRender = useRef(true);
   const previousCategory = useRef(form.getValues("category"));
@@ -54,7 +54,7 @@ export function ClientBasicsFields() {
       />
       <FormField
         control={form.control}
-        name="category"
+        name="type"
         render={({ field }) => (
           <FormItem className="col-span-3">
             <FormLabel>Categoria</FormLabel>
@@ -127,7 +127,7 @@ export function ClientBasicsFields() {
         name="phone"
         render={({ field }) => (
           <FormItem className="col-span-2">
-            <FormLabel>Telefone</FormLabel>
+            <FormLabel isOptional>Telefone</FormLabel>
             <FormControl>
               <PatternFormat
                 format="(##) #####-####"

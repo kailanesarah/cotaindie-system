@@ -9,18 +9,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
-import { useState } from "react";
 import { DeleteDialog } from "../../_components/delete-dialog";
+import { useDialog } from "../../_hooks/use-dialog";
+import { useDeleteClient } from "../_hooks/use-delete-client";
 import { ClientDialog } from "./client-dialog";
 
 export const ClientTableActions = ({ client }: { client: Client }) => {
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const { open, setOpen } = useDialog(`clients:edit-${client.id}`);
 
-  const handleDelete = () => {
-    console.log("Deleted!");
-    setIsDeleteOpen(false);
-  };
+  const { open: openDelete, setOpen: setOpenDelete } = useDialog(client.id);
+  const { execute, isPending: isPendingDelete } = useDeleteClient();
 
   return (
     <>
@@ -31,22 +29,25 @@ export const ClientTableActions = ({ client }: { client: Client }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent sideOffset={12} align="end" alignOffset={16}>
-          <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
             <Icon name="edit_square" /> Editar
           </DropdownMenuItem>
           <DropdownMenuItem
             className="text-red-default"
-            onClick={() => setIsDeleteOpen(true)}
+            onClick={() => setOpenDelete(true)}
           >
             <Icon name="delete" /> Apagar
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <ClientDialog client={client} />
       </Dialog>
-      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DeleteDialog handleDelete={handleDelete} />
+      <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+        <DeleteDialog
+          handleDelete={() => execute(client.id)}
+          isPending={isPendingDelete}
+        />
       </Dialog>
     </>
   );

@@ -9,27 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useSearch } from "../../_hooks/use-search";
-import { clients } from "../_constants/clients-list";
+import { useClientsSearch } from "../_hooks/use-search-clients";
 import { clientTypeMap } from "../_utils/client-type-map";
 import { ClientTableActions } from "./client-table-actions";
 
 export const ClientsTable = () => {
-  const { data } = useSearch<Client>({
-    action: async (filters) => {
-      console.log("Filtros recebidos:", filters);
-      return {
-        items: clients,
-        totalPages: 2,
-        page: 2,
-      };
-    },
-  });
+  const { data } = useClientsSearch();
 
-  if (data.length === 0 || !data) return;
+  if (!data?.items || data?.items.length === 0) return;
 
   return (
-    <Table>
+    <Table className="my-3 lg:my-4">
       <TableHeader>
         <TableRow>
           <TableHead>Código</TableHead>
@@ -44,7 +34,7 @@ export const ClientsTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((client) => (
+        {data.items.map((client) => (
           <TableRow key={client.code}>
             <TableCell>
               <Badge className="text-xs">{client.code}</Badge>
@@ -55,8 +45,8 @@ export const ClientsTable = () => {
               </span>
             </TableCell>
             <TableCell className="hidden lg:block">
-              <span className="line-clamp-1" title={client.note}>
-                {client.note}
+              <span className="line-clamp-1" title={client.notes}>
+                {client.notes}
               </span>
             </TableCell>
             <TableCell>

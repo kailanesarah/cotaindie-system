@@ -35,17 +35,17 @@ export const MetricWrap = ({ children }: { children: ReactNode }) => {
 export const MetricPieChart = ({
   values,
 }: {
-  values: { sold: number; quoted: number };
+  values: { approved: number; open: number };
 }) => {
   const data = [
     {
       status: "Finalizadas",
-      value: values.sold,
+      value: values.approved,
       fill: "var(--color-red-default)",
     },
     {
       status: "Orçadas",
-      value: values.quoted,
+      value: values.open,
       fill: "var(--color-b-light)",
     },
   ];

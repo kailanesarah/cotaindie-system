@@ -34,7 +34,7 @@ export const OrderPaymentForm = () => {
   const form = useForm<orderPaymentType>({
     resolver: zodResolver(orderPaymentSchema),
     defaultValues: {
-      installmentCount: "1",
+      installmentCount: 1,
       advanceAmount: 0,
     },
   });
@@ -282,7 +282,7 @@ export const OrderPaymentForm = () => {
           name="advancePaymentMethod"
           render={({ field }) => (
             <FormItem className="col-span-1 lg:col-span-3">
-              <FormLabel>Pag. do adiantamento</FormLabel>
+              <FormLabel isOptional>Pag. do adiantamento</FormLabel>
               <FormControl>
                 <Select
                   value={field.value ?? ""}
@@ -321,9 +321,9 @@ export const OrderPaymentForm = () => {
               <FormLabel>Par. do restante</FormLabel>
               <FormControl>
                 <Select
-                  value={field.value ?? ""}
+                  value={field.value != null ? String(field.value) : ""}
                   onValueChange={(val) => {
-                    field.onChange(val);
+                    field.onChange(Number(val));
                     setPayment({
                       installmentCount: Number(val),
                     });
