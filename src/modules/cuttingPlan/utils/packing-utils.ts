@@ -1,13 +1,4 @@
-export interface Piece {
-  w: number;
-  h: number;
-  name: string;
-  category_id: string;
-  product_id?: {
-    product_id: string;
-    product_category: string;
-  };
-}
+import type { Piece } from "../schemas/sheet-types";
 
 export interface Rect {
   x: number;
@@ -17,7 +8,7 @@ export interface Rect {
   name?: string;
   rotated?: boolean;
   oversize?: boolean;
-  margin?: number; // margem de segurança
+  margin?: number;
 }
 
 export interface Sheet {
@@ -27,13 +18,19 @@ export interface Sheet {
   usedRects: Rect[];
 }
 
-// Packing MaxRects com margem
+/**
+ * Algoritmo MaxRects:
+ * - Respeita margem
+ * - Rotaciona apenas se allowRotateGlobal === true
+ * - Realoca peças em novas chapas se não couberem
+ * - Oversize se peça > chapa
+ */
 export function packMaxRects(
   sheetW: number,
   sheetH: number,
   items: Piece[],
   margin = 0,
-  allowRotate = true,
+  allowRotateGlobal = false, // novo parâmetro
 ): Sheet[] {
   const sheets: Sheet[] = [];
   const epsilon = 1e-6;
@@ -53,38 +50,35 @@ export function packMaxRects(
 
   function splitFreeRect(freeRect: Rect, placed: Rect): Rect[] {
     const splits: Rect[] = [];
-    if (placed.x > freeRect.x + epsilon) {
+    if (placed.x > freeRect.x + epsilon)
       splits.push({
         x: freeRect.x,
         y: freeRect.y,
         w: placed.x - freeRect.x,
         h: freeRect.h,
       });
-    }
-    if (placed.x + placed.w < freeRect.x + freeRect.w - epsilon) {
+    if (placed.x + placed.w < freeRect.x + freeRect.w - epsilon)
       splits.push({
         x: placed.x + placed.w,
         y: freeRect.y,
         w: freeRect.x + freeRect.w - (placed.x + placed.w),
         h: freeRect.h,
       });
-    }
-    if (placed.y > freeRect.y + epsilon) {
+    if (placed.y > freeRect.y + epsilon)
       splits.push({
         x: freeRect.x,
         y: freeRect.y,
         w: freeRect.w,
         h: placed.y - freeRect.y,
       });
-    }
-    if (placed.y + placed.h < freeRect.y + freeRect.h - epsilon) {
+    if (placed.y + placed.h < freeRect.y + freeRect.h - epsilon)
       splits.push({
         x: freeRect.x,
         y: placed.y + placed.h,
         w: freeRect.w,
         h: freeRect.y + freeRect.h - (placed.y + placed.h),
       });
-    }
+
     return splits.filter((r) => r.w > epsilon && r.h > epsilon);
   }
 
@@ -109,8 +103,8 @@ export function packMaxRects(
 
   function placeRect(sheet: Sheet, rect: Rect) {
     sheet.usedRects.push(rect);
-    let newFreeRects: Rect[] = [];
-    sheet.freeRects.forEach((fr) => {
+    const newFreeRects: Rect[] = [];
+    for (const fr of sheet.freeRects) {
       if (
         fr.x < rect.x + rect.w - epsilon &&
         fr.x + fr.w > rect.x + epsilon &&
@@ -121,72 +115,85 @@ export function packMaxRects(
       } else {
         newFreeRects.push(fr);
       }
-    });
+    }
     pruneFreeRects(newFreeRects);
     sheet.freeRects = newFreeRects;
   }
 
-  function findPosition(sheet: Sheet, w: number, h: number): Rect | null {
+  function findBestPosition(sheet: Sheet, item: Piece): Rect | null {
     let best: Rect | null = null;
-    let bestScore = Infinity;
+    let bestWaste = Infinity;
 
-    const options = allowRotate
+    // usa a rotação global
+    const orientations = allowRotateGlobal
       ? [
-          { w, h, rotated: false },
-          { w: h, h: w, rotated: true },
+          { w: item.width, h: item.height, rotated: false },
+          { w: item.height, h: item.width, rotated: true },
         ]
-      : [{ w, h, rotated: false }];
+      : [{ w: item.width, h: item.height, rotated: false }];
 
-    for (const fr of sheet.freeRects) {
-      for (const opt of options) {
+    for (const opt of orientations) {
+      if (opt.w + 2 * margin > sheet.w || opt.h + 2 * margin > sheet.h)
+        continue;
+
+      for (const fr of sheet.freeRects) {
         const totalW = opt.w + 2 * margin;
         const totalH = opt.h + 2 * margin;
-        if (fits(fr, totalW, totalH)) {
-          const leftover = (fr.w - totalW) * (fr.h - totalH);
-          if (leftover < bestScore) {
-            bestScore = leftover;
-            best = {
-              ...opt,
-              x: fr.x + margin,
-              y: fr.y + margin,
-              margin: margin,
-            };
-          }
+        if (!fits(fr, totalW, totalH)) continue;
+
+        const x = fr.x + margin;
+        const y = fr.y + margin;
+        const waste = fr.w * fr.h - totalW * totalH;
+
+        if (waste < bestWaste) {
+          bestWaste = waste;
+          best = {
+            x,
+            y,
+            w: opt.w,
+            h: opt.h,
+            rotated: opt.rotated,
+            name: item.name,
+            margin,
+          };
         }
       }
     }
+
     return best;
   }
 
-  items = items.slice().sort((a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h));
+  // ordena do maior para o menor
+  const sortedItems = items
+    .slice()
+    .sort((a, b) => b.width * b.height - a.width * a.height);
 
-  for (const item of items) {
+  for (const item of sortedItems) {
     let placed = false;
+
     for (const sheet of sheets) {
-      const node = findPosition(sheet, item.w, item.h);
-      if (node) {
-        node.name = item.name;
-        placeRect(sheet, node);
+      const rect = findBestPosition(sheet, item);
+      if (rect) {
+        placeRect(sheet, rect);
         placed = true;
         break;
       }
     }
+
     if (!placed) {
       const newSheet = createSheet();
-      const node = findPosition(newSheet, item.w, item.h);
-      if (node) {
-        node.name = item.name;
-        placeRect(newSheet, node);
+      const rect = findBestPosition(newSheet, item);
+      if (rect) {
+        placeRect(newSheet, rect);
       } else {
-        // Caso não caiba, adiciona como oversize
         newSheet.usedRects.push({
           x: margin,
           y: margin,
-          w: item.w,
-          h: item.h,
+          w: item.width,
+          h: item.height,
           name: item.name,
           oversize: true,
-          margin: margin,
+          margin,
         });
       }
       sheets.push(newSheet);
