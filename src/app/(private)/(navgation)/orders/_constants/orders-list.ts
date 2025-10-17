@@ -12,7 +12,6 @@ export const orders: Order[] = [
       document: { type: "cpf", value: "123.456.789-01" },
       email: "carla.ferreira@email.com",
       phone: "11987654321",
-      details: "Pagamento em 2x",
       address: {
         street: "Rua das Flores, 123",
         complement: "Apto 45",
@@ -96,7 +95,6 @@ export const orders: Order[] = [
       document: { type: "cpf", value: "987.654.321-00" },
       email: "felipe.rocha@email.com",
       phone: "11999887766",
-      details: "Pagamento via Pix",
       address: {
         street: "Av. Paulista, 1000",
         complement: "Conj. 101",
@@ -197,7 +195,6 @@ export const orders: Order[] = [
       document: { type: "cnpj", value: "12.345.678/0001-99" },
       email: "contato@analima.com",
       phone: "1133224455",
-      details: "Pagamento via boleto bancário",
       address: {
         street: "Rua do Comércio, 50",
         complement: "Sala 2",
