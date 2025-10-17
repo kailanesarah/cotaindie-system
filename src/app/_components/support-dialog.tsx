@@ -4,6 +4,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogHeaderContent,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SupportForm } from "./support-form";
@@ -11,19 +12,20 @@ import { SupportForm } from "./support-form";
 export const SupportDialog = () => {
   return (
     <DialogContent size="small">
-      <DialogHeader className="flex-col gap-2">
-        <DialogTitle>Envie uma mensagem para o suporte</DialogTitle>
-        <DialogDescription>
-          Algum problema técnico? A nossa equipe irá resolver o mais rápido!
-        </DialogDescription>
+      <DialogHeader>
+        <DialogHeaderContent>
+          <DialogTitle>Envie uma mensagem para o suporte</DialogTitle>
+          <DialogDescription>
+            A nossa equipe irá resolver o mais rápido!
+          </DialogDescription>
+        </DialogHeaderContent>
       </DialogHeader>
       <DialogBody>
         <SupportForm />
       </DialogBody>
       <DialogFooter>
         <p className="text-body-lighter text-xs/normal">
-          O suporte pode demorar até 24h para retornar o seu chamado, em média o
-          atendimento é em poucas horas ou minutos.
+          O suporte pode demorar até 24h para retornar o seu chamado.
         </p>
       </DialogFooter>
     </DialogContent>

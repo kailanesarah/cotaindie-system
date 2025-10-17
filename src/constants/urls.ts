@@ -7,6 +7,8 @@ export const ROUTES = {
   PRIVATE: {
     DASHBOARD: "/dashboard",
     CLIENTS: "/clients",
-    PRODUCTS: "/products",
+    PRODUCTS: "/materials",
+    ORDERS: "/orders",
+    ORDER: "/order",
   },
 };
