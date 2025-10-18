@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { ROUTES } from "@/constants/urls";
+import Link from "next/link";
 import { RedirectCountdown } from "./_components/redirect-count-down";
 
 export default async function NotFoundPage() {
@@ -23,11 +24,12 @@ export default async function NotFoundPage() {
           A página que você procura pode ter sido movida ou você pode ter
           digitado o link de forma errada, por favor, tente novamente.
         </p>
-        <Button variant="destructive" className="mt-6 mb-4">
-          Retornar
-          <Icon name="keyboard_arrow_right" />
+        <Button variant="destructive" className="w-full" asChild>
+          <Link href={ROUTES.PRIVATE.DASHBOARD} className="mt-6 mb-4">
+            Retornar
+            <Icon name="keyboard_arrow_right" />
+          </Link>
         </Button>
-
         <RedirectCountdown redirectTo={ROUTES.PRIVATE.DASHBOARD} />
       </div>
     </main>
