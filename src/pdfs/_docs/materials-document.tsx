@@ -35,13 +35,13 @@ export const MaterialsDocument = () => (
         <DataGridRow noBorderBottom>
           <DataGridCell width="70%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Nome: </Text>
+              <Text style={{ fontWeight: 700 }}>Nome: </Text>
               Cliente exemplo
             </Text>
           </DataGridCell>
           <DataGridCell width="30%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Código: </Text>
+              <Text style={{ fontWeight: 700 }}>Código: </Text>
               C38223
             </Text>
           </DataGridCell>
@@ -95,10 +95,10 @@ export const MaterialsDocument = () => (
             Qtde
           </DataGridCell>
           <DataGridCell width="10%" align="center" isHeader>
-            Med.
+            Medida
           </DataGridCell>
           <DataGridCell width="15%" isHeader>
-            Vlr. unitário
+            Valor unitário
           </DataGridCell>
           <DataGridCell width="15%" isHeader noBorderRight>
             Total
@@ -177,7 +177,7 @@ export const MaterialsDocument = () => (
             2
           </DataGridCell>
           <DataGridCell flex={1}>Auxiliar de montagem</DataGridCell>
-          <DataGridCell width="11%" align="center">
+          <DataGridCell width="15%" align="center">
             2
           </DataGridCell>
           <DataGridCell width="20%">R$ 75,00</DataGridCell>
