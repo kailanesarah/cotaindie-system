@@ -48,7 +48,7 @@ const mockPlan = {
   notes: "Realizar pedido de materiais com antecedência.",
 };
 
-export const mockCuttingPlanDocument = {
+export const cuttingPlanDocMock = {
   client: mockClient,
   plan: mockPlan,
 };

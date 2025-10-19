@@ -99,7 +99,7 @@ const mockContract = {
   signatureDateLocation: "Viçosa do Ceará, 01 de agosto de 2025",
 };
 
-export const mockContractMock = {
+export const contractDocMock = {
   company: mockCompany,
   client: mockClient,
   contract: mockContract,

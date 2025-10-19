@@ -1,4 +1,4 @@
-import { quoteCompanyInfo } from "./mock-data";
+import { quoteCompanyInfo } from "./company-mock";
 
 const mockClient = {
   name: "Antônio José",
@@ -47,7 +47,7 @@ const mockOrder = {
   notes: "A entrega deve ser feita durante o dia e com cuidado na instalação.",
 };
 
-export const mockQuoteDocument = {
+export const quoteDocMock = {
   company: quoteCompanyInfo,
   client: mockClient,
   order: mockOrder,
