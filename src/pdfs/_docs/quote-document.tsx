@@ -8,17 +8,77 @@ import { PdfPageLayout } from "../_components/pdf-layout";
 import { SectionTitle } from "../_components/section-title";
 import { SummaryBlock } from "../_components/summary-block";
 import { TitledTextSection } from "../_components/title-text-section";
-import { quoteCompanyInfo } from "../_constants/mock-data";
-import { getFormattedDateTime } from "../_utils/get-formatted-date-time";
 
-export const QuoteDocument = () => (
+interface ClientProps {
+  name: string;
+  code?: string;
+  document?: string;
+  phone?: string;
+  email?: string;
+  address: {
+    street: string;
+    complement?: string;
+    neighborhood: string;
+    city: string;
+    cep?: string;
+  };
+}
+
+interface QuoteProjectProps {
+  name: string;
+  qtde: number;
+  unitPrice: string;
+  totalPrice: string;
+}
+
+interface PaymentProps {
+  initialDate: string;
+  paymentMethod: string;
+  advanceAmount: string;
+  deliveryDays: number;
+  remainingPaymentInfo: string;
+  installmentsInfo: string;
+}
+
+interface QuoteDataProps {
+  code: string;
+  name: string;
+  generationDate: string;
+  expirationDays: number;
+
+  projects: QuoteProjectProps[];
+
+  included?: string;
+  excluded?: string;
+
+  rawAmount: string;
+  discountPercent: number;
+  discountAmount: string;
+  finalAmount: string;
+
+  notes?: string;
+}
+
+interface QuoteDocumentProps {
+  company: Company;
+  client: ClientProps;
+  order: QuoteDataProps;
+  payment: PaymentProps;
+}
+
+export const QuoteDocument = ({
+  company,
+  client,
+  order,
+  payment, // Desestruturado aqui
+}: QuoteDocumentProps) => (
   <Document>
     <PdfPageLayout
       header={
         <Header
           variant="detailed"
-          companyInfo={quoteCompanyInfo}
-          dateTime={getFormattedDateTime()}
+          companyInfo={company}
+          dateTime={order.generationDate}
         />
       }
       footer={({ pageNumber, totalPages }) => (
@@ -26,26 +86,26 @@ export const QuoteDocument = () => (
           variant="quote"
           pageNumber={pageNumber}
           totalPages={totalPages}
-          dateTime={getFormattedDateTime()}
-          validity={7}
+          dateTime={order.generationDate}
+          validity={order.expirationDays}
         />
       )}
     >
       <Hr />
-      <DocumentTitle code="C29115" title="Orçamento de projeto" />
+      <DocumentTitle code={order.code} title={order.name} />
       <SectionTitle>Dados do cliente</SectionTitle>
       <DataGrid>
         <DataGridRow>
           <DataGridCell width="60%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Nome: </Text>
-              Antônio José
+              {client.name}
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Código: </Text>
-              C38223
+              {client.code || "N/A"}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -53,32 +113,33 @@ export const QuoteDocument = () => (
           <DataGridCell width="35%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Cidade: </Text>
-              Viçosa do Ceará
+              {client.address.city}
             </Text>
           </DataGridCell>
           <DataGridCell width="25%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Cep: </Text>
-              62300000
+              {client.address.cep || "N/A"}
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Bairro: </Text>
-              Centro
+              {client.address.neighborhood}
             </Text>
           </DataGridCell>
         </DataGridRow>
         <DataGridRow>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontWeight: 700 }}>Número: </Text>SN
+              <Text style={{ fontWeight: 700 }}>Número: </Text>
+              {client.address.complement || "SN"}
             </Text>
           </DataGridCell>
           <DataGridCell width="65%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Endereço: </Text>
-              Rua Dr Júlio de Carvalho
+              {client.address.street}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -86,19 +147,19 @@ export const QuoteDocument = () => (
           <DataGridCell width="35%">
             <Text>
               <Text style={{ fontWeight: 700 }}>CPF/ CNPJ: </Text>
-              075.322.111-32
+              {client.document || "N/A"}
             </Text>
           </DataGridCell>
           <DataGridCell width="25%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Telefone: </Text>
-              (88) 9 9332 - 6040
+              {client.phone || "N/A"}
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Email: </Text>
-              oi@gmail.com
+              {client.email || "N/A"}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -122,46 +183,54 @@ export const QuoteDocument = () => (
             Valor total
           </DataGridCell>
         </DataGridRow>
-        <DataGridRow noBorderBottom>
-          <DataGridCell width="10%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="50%">Bancada de MDF</DataGridCell>
-          <DataGridCell width="10%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="15%">R$ 2.432,54</DataGridCell>
-          <DataGridCell width="15%" noBorderRight>
-            R$ 2.432,54
-          </DataGridCell>
-        </DataGridRow>
+        {order.projects.map((project, index) => (
+          <DataGridRow
+            key={index}
+            noBorderBottom={index === order.projects.length - 1}
+          >
+            <DataGridCell width="10%" align="center">
+              {index + 1}
+            </DataGridCell>
+            <DataGridCell width="50%">{project.name}</DataGridCell>
+            <DataGridCell width="10%" align="center">
+              {project.qtde}
+            </DataGridCell>
+            <DataGridCell width="15%">{project.unitPrice}</DataGridCell>
+            <DataGridCell width="15%" noBorderRight>
+              {project.totalPrice}
+            </DataGridCell>
+          </DataGridRow>
+        ))}
       </DataGrid>
       <SummaryBlock
-        discountLabel="Desconto de: 10%"
-        orderValue="R$ 2.432,54"
-        discountValue="R$ -432,54"
-        totalValue="R$ 1.832,54"
+        discountLabel={`Desconto de: ${order.discountPercent}%`}
+        orderValue={order.rawAmount}
+        discountValue={order.discountAmount}
+        totalValue={order.finalAmount}
       />
-      <TitledTextSection title="Materiais inclusos:">
-        Estrutura confeccionada em MDF de alta qualidade, garantindo
-        durabilidade e bom acabamento.
-      </TitledTextSection>
-      <TitledTextSection title="Materiais exclusos:">
-        Espelhos, independentemente do tamanho ou espessura.
-      </TitledTextSection>
+      {order.included && (
+        <TitledTextSection title="Materiais inclusos:">
+          {order.included}
+        </TitledTextSection>
+      )}
+      {order.excluded && (
+        <TitledTextSection title="Materiais exclusos:">
+          {order.excluded}
+        </TitledTextSection>
+      )}
       <SectionTitle>Condições de pagamento</SectionTitle>
       <DataGrid>
         <DataGridRow>
           <DataGridCell width="50%">
             <Text>
-              <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>A
-              combinar
+              <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>
+              {payment.paymentMethod} {/* Alterado de order.payment */}
             </Text>
           </DataGridCell>
           <DataGridCell width="50%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Adiantamento: </Text>
-              R$ 432,54
+              {payment.advanceAmount} {/* Alterado de order.payment */}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -169,13 +238,13 @@ export const QuoteDocument = () => (
           <DataGridCell width="50%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Data da venda: </Text>
-              30/05/2025
+              {payment.initialDate} {/* Alterado de order.payment */}
             </Text>
           </DataGridCell>
           <DataGridCell width="50%" noBorderRight>
             <Text>
-              <Text style={{ fontWeight: 700 }}>Pagamento do restante: </Text>A
-              combinar
+              <Text style={{ fontWeight: 700 }}>Pagamento do restante: </Text>
+              {payment.remainingPaymentInfo} {/* Alterado de order.payment */}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -183,20 +252,23 @@ export const QuoteDocument = () => (
           <DataGridCell width="50%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Previsão de entrega: </Text>
-              45 dias úteis após a data da venda
+              {`${payment.deliveryDays} dias úteis após a data da venda`}{" "}
+              {/* Alterado de order.payment */}
             </Text>
           </DataGridCell>
           <DataGridCell width="50%" noBorderRight>
             <Text>
-              <Text style={{ fontWeight: 700 }}>Restante: </Text>1 X de R$
-              805,60 = 805,60
+              <Text style={{ fontWeight: 700 }}>Restante: </Text>
+              {payment.installmentsInfo} {/* Alterado de order.payment */}
             </Text>
           </DataGridCell>
         </DataGridRow>
       </DataGrid>
-      <TitledTextSection title="Observações e outros:">
-        A entrega deve ser feita durante o dia e com cuidado na instalação.
-      </TitledTextSection>
+      {order.notes && (
+        <TitledTextSection title="Observações e outros:">
+          {order.notes}
+        </TitledTextSection>
+      )}
     </PdfPageLayout>
   </Document>
 );

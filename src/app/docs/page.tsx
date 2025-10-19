@@ -1,5 +1,6 @@
 "use client";
 
+import { mockQuoteDocument } from "@/pdfs/_constants/quote-document-mock";
 import { QuoteDocument } from "@/pdfs/_docs/quote-document";
 import dynamic from "next/dynamic";
 const PDFViewer = dynamic(
@@ -14,7 +15,7 @@ export default function Home() {
 
       <div className="h-[80vh] w-full rounded-lg border shadow-md">
         <PDFViewer width="100%" height="100%">
-          {<QuoteDocument />}
+          {<QuoteDocument {...mockQuoteDocument} />}
         </PDFViewer>
       </div>
     </main>
