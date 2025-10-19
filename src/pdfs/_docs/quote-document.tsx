@@ -9,6 +9,13 @@ import { SectionTitle } from "../_components/section-title";
 import { SummaryBlock } from "../_components/summary-block";
 import { TitledTextSection } from "../_components/title-text-section";
 
+interface CompanyProps {
+  name: string;
+  details: string;
+  address: string;
+  phone: string;
+}
+
 interface ClientProps {
   name: string;
   code?: string;
@@ -60,7 +67,7 @@ interface QuoteDataProps {
 }
 
 interface QuoteDocumentProps {
-  company: Company;
+  company: CompanyProps;
   client: ClientProps;
   order: QuoteDataProps;
   payment: PaymentProps;
@@ -70,14 +77,14 @@ export const QuoteDocument = ({
   company,
   client,
   order,
-  payment, // Desestruturado aqui
+  payment,
 }: QuoteDocumentProps) => (
   <Document>
     <PdfPageLayout
       header={
         <Header
           variant="detailed"
-          companyInfo={company}
+          company={company}
           dateTime={order.generationDate}
         />
       }
@@ -224,13 +231,13 @@ export const QuoteDocument = ({
           <DataGridCell width="50%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>
-              {payment.paymentMethod} {/* Alterado de order.payment */}
+              {payment.paymentMethod}
             </Text>
           </DataGridCell>
           <DataGridCell width="50%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Adiantamento: </Text>
-              {payment.advanceAmount} {/* Alterado de order.payment */}
+              {payment.advanceAmount}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -238,13 +245,13 @@ export const QuoteDocument = ({
           <DataGridCell width="50%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Data da venda: </Text>
-              {payment.initialDate} {/* Alterado de order.payment */}
+              {payment.initialDate}
             </Text>
           </DataGridCell>
           <DataGridCell width="50%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Pagamento do restante: </Text>
-              {payment.remainingPaymentInfo} {/* Alterado de order.payment */}
+              {payment.remainingPaymentInfo}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -253,13 +260,12 @@ export const QuoteDocument = ({
             <Text>
               <Text style={{ fontWeight: 700 }}>Previsão de entrega: </Text>
               {`${payment.deliveryDays} dias úteis após a data da venda`}{" "}
-              {/* Alterado de order.payment */}
             </Text>
           </DataGridCell>
           <DataGridCell width="50%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Restante: </Text>
-              {payment.installmentsInfo} {/* Alterado de order.payment */}
+              {payment.installmentsInfo}
             </Text>
           </DataGridCell>
         </DataGridRow>

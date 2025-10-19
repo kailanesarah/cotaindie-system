@@ -1,6 +1,13 @@
 interface Company {
   name: string;
-  details: string;
-  address: string;
+  document: string;
   phone: string;
+  email: string;
+  address: {
+    street: string;
+    complement?: string;
+    neighborhood: string;
+    city: string;
+    cep?: string;
+  };
 }

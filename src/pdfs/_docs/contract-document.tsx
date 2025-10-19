@@ -10,17 +10,83 @@ import { SectionTitle } from "../_components/section-title";
 import { SignatureBlock } from "../_components/signature-block";
 import { SummaryBlock } from "../_components/summary-block";
 import { TitledTextSection } from "../_components/title-text-section";
-import { contractClauses } from "../_constants/mock-data";
-import { getFormattedDateTime } from "../_utils/get-formatted-date-time";
 
-export const ContractDocument = () => (
+interface ClientProps {
+  name: string;
+  code?: string;
+  document?: string;
+  phone?: string;
+  email?: string;
+  address: {
+    street: string;
+    complement?: string;
+    neighborhood: string;
+    city: string;
+    cep?: string;
+  };
+}
+
+interface ContractProjectProps {
+  name: string;
+  qtde: number;
+  unitPrice: string;
+  totalPrice: string;
+}
+
+interface PaymentProps {
+  initialDate: string;
+  paymentMethod: string;
+  advanceAmount: string;
+  deliveryDays: number;
+  remainingPaymentInfo: string;
+  installmentsInfo: string;
+}
+
+interface ClauseItem {
+  id: string;
+  text: string;
+}
+
+interface ContractDataProps {
+  quoteCode: string;
+  saleCode: string;
+  name: string;
+  generationDate: string;
+
+  projects: ContractProjectProps[];
+
+  included?: string;
+  excluded?: string;
+
+  rawAmount: string;
+  discountPercent: number;
+  discountAmount: string;
+  finalAmount: string;
+
+  clauses: ClauseItem[];
+  signatureDateLocation: string;
+}
+
+interface ContractDocumentProps {
+  company: Company;
+  client: ClientProps;
+  contract: ContractDataProps;
+  payment: PaymentProps;
+}
+
+export const ContractDocument = ({
+  company,
+  client,
+  contract,
+  payment,
+}: ContractDocumentProps) => (
   <Document>
     <PdfPageLayout
       header={
         <Header
           variant="simple"
-          docCode="C29115"
-          dateTime={getFormattedDateTime()}
+          docCode={contract.quoteCode}
+          dateTime={contract.generationDate}
         />
       }
       footer={({ pageNumber, totalPages }) => (
@@ -32,14 +98,14 @@ export const ContractDocument = () => (
       )}
     >
       <Hr />
-      <DocumentTitle code="V29115" title="Contrato de venda" />
+      <DocumentTitle code={contract.saleCode} title={contract.name} />
       <SectionTitle>Dados da contratada</SectionTitle>
       <DataGrid>
         <DataGridRow>
           <DataGridCell noBorderRight>
             <Text>
-              <Text style={{ fontWeight: 700 }}>Nome: </Text>Paulo César Arruda
-              Aragão
+              <Text style={{ fontWeight: 700 }}>Nome: </Text>
+              {company.name}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -47,100 +113,33 @@ export const ContractDocument = () => (
           <DataGridCell width="35%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Cidade: </Text>
-              Viçosa do Ceará
+              {company.address.city}
             </Text>
           </DataGridCell>
           <DataGridCell width="30%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Cep: </Text>
-              62300000
-            </Text>
-          </DataGridCell>
-          <DataGridCell width="35%" noBorderRight>
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Bairro: </Text>Zona Rural
-            </Text>
-          </DataGridCell>
-        </DataGridRow>
-        <DataGridRow>
-          <DataGridCell width="35%">
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Número: </Text>SN
-            </Text>
-          </DataGridCell>
-          <DataGridCell width="65%" noBorderRight>
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Endereço: </Text>
-              Sítio São Paulo
-            </Text>
-          </DataGridCell>
-        </DataGridRow>
-        <DataGridRow noBorderBottom>
-          <DataGridCell width="35%">
-            <Text>
-              <Text style={{ fontWeight: 700 }}>CPF/ CNPJ: </Text>
-              23.933.978/0001-07
-            </Text>
-          </DataGridCell>
-          <DataGridCell width="30%">
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Telefone: </Text>
-              (88) 9 781 - 5906
-            </Text>
-          </DataGridCell>
-          <DataGridCell width="35%" noBorderRight>
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Email: </Text>
-              oi@gmail.com
-            </Text>
-          </DataGridCell>
-        </DataGridRow>
-      </DataGrid>
-      <SectionTitle>Dados da contratante **(cliente)</SectionTitle>
-      <DataGrid>
-        <DataGridRow>
-          <DataGridCell width="65%">
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Nome: </Text>Maria Ivani
-            </Text>
-          </DataGridCell>
-          <DataGridCell width="35%" noBorderRight>
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Código: </Text>
-              C38223
-            </Text>
-          </DataGridCell>
-        </DataGridRow>
-        <DataGridRow>
-          <DataGridCell width="35%">
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Cidade: </Text>
-              Tianguá
-            </Text>
-          </DataGridCell>
-          <DataGridCell width="30%">
-            <Text>
-              <Text style={{ fontWeight: 700 }}>Cep: </Text>
-              62520000
+              {company.address.cep || "N/A"}
             </Text>
           </DataGridCell>
           <DataGridCell width="35%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Bairro: </Text>
-              Centro
+              {company.address.neighborhood}
             </Text>
           </DataGridCell>
         </DataGridRow>
         <DataGridRow>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontWeight: 700 }}>Número: </Text>221
+              <Text style={{ fontWeight: 700 }}>Número: </Text>
+              {company.address.complement || "SN"}
             </Text>
           </DataGridCell>
           <DataGridCell width="65%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Endereço: </Text>
-              Rua do Estádio
+              {company.address.street}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -148,19 +147,90 @@ export const ContractDocument = () => (
           <DataGridCell width="35%">
             <Text>
               <Text style={{ fontWeight: 700 }}>CPF/ CNPJ: </Text>
-              075.322.111-32
+              {company.document}
             </Text>
           </DataGridCell>
           <DataGridCell width="30%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Telefone: </Text>
-              (88) 9 9921 - 3234
+              {company.phone}
             </Text>
           </DataGridCell>
           <DataGridCell width="35%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Email: </Text>
-              maria@gmail.com
+              {company.email}
+            </Text>
+          </DataGridCell>
+        </DataGridRow>
+      </DataGrid>
+      <SectionTitle>Dados da contratante (cliente)</SectionTitle>
+      <DataGrid>
+        <DataGridRow>
+          <DataGridCell width="65%">
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Nome: </Text>
+              {client.name}
+            </Text>
+          </DataGridCell>
+          <DataGridCell width="35%" noBorderRight>
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Código: </Text>
+              {client.code || "N/A"}
+            </Text>
+          </DataGridCell>
+        </DataGridRow>
+        <DataGridRow>
+          <DataGridCell width="35%">
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Cidade: </Text>
+              {client.address.city}
+            </Text>
+          </DataGridCell>
+          <DataGridCell width="30%">
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Cep: </Text>
+              {client.address.cep || "N/A"}
+            </Text>
+          </DataGridCell>
+          <DataGridCell width="35%" noBorderRight>
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Bairro: </Text>
+              {client.address.neighborhood}
+            </Text>
+          </DataGridCell>
+        </DataGridRow>
+        <DataGridRow>
+          <DataGridCell width="35%">
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Número: </Text>
+              {client.address.complement || "SN"}
+            </Text>
+          </DataGridCell>
+          <DataGridCell width="65%" noBorderRight>
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Endereço: </Text>
+              {client.address.street}
+            </Text>
+          </DataGridCell>
+        </DataGridRow>
+        <DataGridRow noBorderBottom>
+          <DataGridCell width="35%">
+            <Text>
+              <Text style={{ fontWeight: 700 }}>CPF/ CNPJ: </Text>
+              {client.document || "N/A"}
+            </Text>
+          </DataGridCell>
+          <DataGridCell width="30%">
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Telefone: </Text>
+              {client.phone || "N/A"}
+            </Text>
+          </DataGridCell>
+          <DataGridCell width="35%" noBorderRight>
+            <Text>
+              <Text style={{ fontWeight: 700 }}>Email: </Text>
+              {client.email || "N/A"}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -184,46 +254,54 @@ export const ContractDocument = () => (
             Valor total
           </DataGridCell>
         </DataGridRow>
-        <DataGridRow noBorderBottom>
-          <DataGridCell width="10%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="50%">Bancada de MDF</DataGridCell>
-          <DataGridCell width="10%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="15%">R$ 2.432,54</DataGridCell>
-          <DataGridCell width="15%" noBorderRight>
-            R$ 2.432,54
-          </DataGridCell>
-        </DataGridRow>
+        {contract.projects.map((project, index) => (
+          <DataGridRow
+            key={index}
+            noBorderBottom={index === contract.projects.length - 1}
+          >
+            <DataGridCell width="10%" align="center">
+              {index + 1}
+            </DataGridCell>
+            <DataGridCell width="50%">{project.name}</DataGridCell>
+            <DataGridCell width="10%" align="center">
+              {project.qtde}
+            </DataGridCell>
+            <DataGridCell width="15%">{project.unitPrice}</DataGridCell>
+            <DataGridCell width="15%" noBorderRight>
+              {project.totalPrice}
+            </DataGridCell>
+          </DataGridRow>
+        ))}
       </DataGrid>
       <SummaryBlock
-        discountLabel="Desconto de: 10%"
-        orderValue="R$ 2.432,54"
-        discountValue="R$ -432,54"
-        totalValue="R$ 2.132,54"
+        discountLabel={`Desconto de: ${contract.discountPercent}%`}
+        orderValue={contract.rawAmount}
+        discountValue={contract.discountAmount}
+        totalValue={contract.finalAmount}
       />
-      <TitledTextSection title="Materiais inclusos:">
-        Estrutura confeccionada em MDF de alta qualidade, garantindo
-        durabilidade e bom acabamento.
-      </TitledTextSection>
-      <TitledTextSection title="Materiais exclusos:">
-        Espelhos, independentemente do tamanho ou espessura.
-      </TitledTextSection>
+      {contract.included && (
+        <TitledTextSection title="Materiais inclusos:">
+          {contract.included}
+        </TitledTextSection>
+      )}
+      {contract.excluded && (
+        <TitledTextSection title="Materiais exclusos:">
+          {contract.excluded}
+        </TitledTextSection>
+      )}
       <SectionTitle>Condições de pagamento</SectionTitle>
       <DataGrid>
         <DataGridRow>
           <DataGridCell width="60%">
             <Text>
-              <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>A
-              combinar
+              <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>
+              {payment.paymentMethod}
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Adiantamento: </Text>
-              R$ 432,54
+              {payment.advanceAmount}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -231,13 +309,13 @@ export const ContractDocument = () => (
           <DataGridCell width="60%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Data da venda: </Text>
-              30/05/2025
+              {payment.initialDate}
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
-              <Text style={{ fontWeight: 700 }}>Pagamento do restante: </Text>A
-              combinar
+              <Text style={{ fontWeight: 700 }}>Pagamento do restante: </Text>
+              {payment.remainingPaymentInfo}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -245,13 +323,13 @@ export const ContractDocument = () => (
           <DataGridCell width="60%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Previsão de entrega: </Text>
-              45 dias úteis após a data da venda
+              {`${payment.deliveryDays} dias úteis após a data da venda`}
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
-              <Text style={{ fontWeight: 700 }}>Restante: </Text>1 X de R$
-              805,60 = 805,60
+              <Text style={{ fontWeight: 700 }}>Restante: </Text>
+              {payment.installmentsInfo}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -261,8 +339,8 @@ export const ContractDocument = () => (
       header={
         <Header
           variant="simple"
-          docCode="C29115"
-          dateTime={getFormattedDateTime()}
+          docCode={contract.quoteCode}
+          dateTime={contract.generationDate}
         />
       }
       footer={({ pageNumber, totalPages }) => (
@@ -274,11 +352,11 @@ export const ContractDocument = () => (
       )}
     >
       <Hr />
-      <ClausesBlock title="Cláusulas Contratuais" items={contractClauses} />
+      <ClausesBlock title="Cláusulas Contratuais" items={contract.clauses} />
       <SignatureBlock
-        date="Viçosa do Ceará, 01 de agosto de 2025"
-        partyA="Paulo César Arruda Aragão"
-        partyB="Cliente exemplo"
+        date={contract.signatureDateLocation}
+        partyA={company.name}
+        partyB={client.name}
       />
     </PdfPageLayout>
   </Document>

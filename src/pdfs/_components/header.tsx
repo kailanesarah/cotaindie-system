@@ -4,7 +4,7 @@ interface HeaderProps {
   variant: "simple" | "detailed";
   docCode?: string;
   dateTime: string;
-  companyInfo?: {
+  company?: {
     name: string;
     details: string;
     address: string;
@@ -16,7 +16,7 @@ export const Header = ({
   variant,
   docCode,
   dateTime,
-  companyInfo,
+  company,
 }: Readonly<HeaderProps>) => (
   <View
     style={{
@@ -47,15 +47,15 @@ export const Header = ({
         </Text>
       </View>
     )}
-    {variant === "detailed" && companyInfo && (
+    {variant === "detailed" && company && (
       <View style={{ width: 350, fontSize: 8, lineHeight: 1.4 }}>
         <Text>
           <Text style={{ fontWeight: 700 }}>Empresa: </Text>
-          {companyInfo.name} - <Text>{companyInfo.details}</Text>
+          {company.name} - <Text>{company.details}</Text>
           <Text style={{ fontWeight: 700 }}>Endereço: </Text> -{" "}
-          {companyInfo.address} -{" "}
+          {company.address} -{" "}
           <Text style={{ fontWeight: 700 }}>Whatsapp: </Text>
-          {companyInfo.phone}
+          {company.phone}
         </Text>
       </View>
     )}
