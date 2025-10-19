@@ -38,40 +38,39 @@ export const ContractDocument = () => (
         <DataGridRow>
           <DataGridCell noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Nome: </Text>Paulo
-              César Arruda Aragão
+              <Text style={{ fontWeight: 700 }}>Nome: </Text>Paulo César Arruda
+              Aragão
             </Text>
           </DataGridCell>
         </DataGridRow>
         <DataGridRow>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Cidade: </Text>
+              <Text style={{ fontWeight: 700 }}>Cidade: </Text>
               Viçosa do Ceará
             </Text>
           </DataGridCell>
           <DataGridCell width="30%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Cep: </Text>
+              <Text style={{ fontWeight: 700 }}>Cep: </Text>
               62300000
             </Text>
           </DataGridCell>
           <DataGridCell width="35%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Bairro: </Text>Zona
-              Rural
+              <Text style={{ fontWeight: 700 }}>Bairro: </Text>Zona Rural
             </Text>
           </DataGridCell>
         </DataGridRow>
         <DataGridRow>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Número: </Text>SN
+              <Text style={{ fontWeight: 700 }}>Número: </Text>SN
             </Text>
           </DataGridCell>
           <DataGridCell width="65%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Endereço: </Text>
+              <Text style={{ fontWeight: 700 }}>Endereço: </Text>
               Sítio São Paulo
             </Text>
           </DataGridCell>
@@ -79,19 +78,19 @@ export const ContractDocument = () => (
         <DataGridRow noBorderBottom>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>CPF/ CNPJ: </Text>
+              <Text style={{ fontWeight: 700 }}>CPF/ CNPJ: </Text>
               23.933.978/0001-07
             </Text>
           </DataGridCell>
           <DataGridCell width="30%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Telefone: </Text>
+              <Text style={{ fontWeight: 700 }}>Telefone: </Text>
               (88) 9 781 - 5906
             </Text>
           </DataGridCell>
           <DataGridCell width="35%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Email: </Text>
+              <Text style={{ fontWeight: 700 }}>Email: </Text>
               oi@gmail.com
             </Text>
           </DataGridCell>
@@ -102,13 +101,12 @@ export const ContractDocument = () => (
         <DataGridRow>
           <DataGridCell width="65%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Nome: </Text>Maria
-              Ivani
+              <Text style={{ fontWeight: 700 }}>Nome: </Text>Maria Ivani
             </Text>
           </DataGridCell>
           <DataGridCell width="35%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Código: </Text>
+              <Text style={{ fontWeight: 700 }}>Código: </Text>
               C38223
             </Text>
           </DataGridCell>
@@ -116,19 +114,19 @@ export const ContractDocument = () => (
         <DataGridRow>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Cidade: </Text>
+              <Text style={{ fontWeight: 700 }}>Cidade: </Text>
               Tianguá
             </Text>
           </DataGridCell>
           <DataGridCell width="30%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Cep: </Text>
+              <Text style={{ fontWeight: 700 }}>Cep: </Text>
               62520000
             </Text>
           </DataGridCell>
           <DataGridCell width="35%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Bairro: </Text>
+              <Text style={{ fontWeight: 700 }}>Bairro: </Text>
               Centro
             </Text>
           </DataGridCell>
@@ -136,12 +134,12 @@ export const ContractDocument = () => (
         <DataGridRow>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Número: </Text>221
+              <Text style={{ fontWeight: 700 }}>Número: </Text>221
             </Text>
           </DataGridCell>
           <DataGridCell width="65%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Endereço: </Text>
+              <Text style={{ fontWeight: 700 }}>Endereço: </Text>
               Rua do Estádio
             </Text>
           </DataGridCell>
@@ -149,19 +147,19 @@ export const ContractDocument = () => (
         <DataGridRow noBorderBottom>
           <DataGridCell width="35%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>CPF/ CNPJ: </Text>
+              <Text style={{ fontWeight: 700 }}>CPF/ CNPJ: </Text>
               075.322.111-32
             </Text>
           </DataGridCell>
           <DataGridCell width="30%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Telefone: </Text>
+              <Text style={{ fontWeight: 700 }}>Telefone: </Text>
               (88) 9 9921 - 3234
             </Text>
           </DataGridCell>
           <DataGridCell width="35%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Email: </Text>
+              <Text style={{ fontWeight: 700 }}>Email: </Text>
               maria@gmail.com
             </Text>
           </DataGridCell>
@@ -218,17 +216,13 @@ export const ContractDocument = () => (
         <DataGridRow>
           <DataGridCell width="60%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>
-                Plano de pagamento:{" "}
-              </Text>
-              A combinar
+              <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>A
+              combinar
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>
-                Adiantamento:{" "}
-              </Text>
+              <Text style={{ fontWeight: 700 }}>Adiantamento: </Text>
               R$ 432,54
             </Text>
           </DataGridCell>
@@ -236,34 +230,28 @@ export const ContractDocument = () => (
         <DataGridRow>
           <DataGridCell width="60%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>
-                Data da venda:{" "}
-              </Text>
+              <Text style={{ fontWeight: 700 }}>Data da venda: </Text>
               30/05/2025
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>
-                Pagamento do restante:{" "}
-              </Text>
-              A combinar
+              <Text style={{ fontWeight: 700 }}>Pagamento do restante: </Text>A
+              combinar
             </Text>
           </DataGridCell>
         </DataGridRow>
         <DataGridRow noBorderBottom>
           <DataGridCell width="60%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>
-                Previsão de entrega:{" "}
-              </Text>
+              <Text style={{ fontWeight: 700 }}>Previsão de entrega: </Text>
               45 dias úteis após a data da venda
             </Text>
           </DataGridCell>
           <DataGridCell width="40%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Restante: </Text>1
-              X de R$ 805,60 = 805,60
+              <Text style={{ fontWeight: 700 }}>Restante: </Text>1 X de R$
+              805,60 = 805,60
             </Text>
           </DataGridCell>
         </DataGridRow>

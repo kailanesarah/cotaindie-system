@@ -19,7 +19,6 @@ export const SignatureBlock = ({
         alignItems: "center",
       }}
     >
-      {/* Assinatura A */}
       <View style={{ width: "45%", textAlign: "center" }}>
         <View style={{ height: 1, backgroundColor: "#000", marginBottom: 4 }} />
         <Text
@@ -33,7 +32,6 @@ export const SignatureBlock = ({
         </Text>
         <Text style={{ fontSize: 9, marginTop: 2 }}>{partyA}</Text>
       </View>
-      {/* Assinatura B */}
       <View style={{ width: "45%", textAlign: "center" }}>
         <View style={{ height: 1, backgroundColor: "#000", marginBottom: 4 }} />
         <Text

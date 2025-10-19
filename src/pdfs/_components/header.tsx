@@ -21,7 +21,7 @@ export const Header = ({
   <View
     style={{
       flexDirection: "row",
-      justifyContent: "space-between",
+      gap: 16,
       alignItems: "center",
       paddingBottom: 8,
     }}
@@ -39,22 +39,16 @@ export const Header = ({
         Insira sua logo aqui
       </Text>
     </View>
-
     {variant === "simple" && (
-      <View
-        style={{ width: 350, textAlign: "right", fontSize: 8, lineHeight: 1.4 }}
-      >
+      <View style={{ width: 350, fontSize: 8, lineHeight: 1.4 }}>
         <Text>
           Documento emitido em {dateTime} com base no orçamento/pedido de
           código: {docCode || "C29115"}
         </Text>
       </View>
     )}
-
     {variant === "detailed" && companyInfo && (
-      <View
-        style={{ width: 350, textAlign: "left", fontSize: 8, lineHeight: 1.4 }}
-      >
+      <View style={{ width: 350, fontSize: 8, lineHeight: 1.4 }}>
         <Text>
           <Text style={{ fontFamily: "Helvetica-Bold" }}>Empresa: </Text>
           {companyInfo.name} -{" "}

@@ -16,13 +16,22 @@ export const SummaryBlock = ({
   <View
     style={{
       flexDirection: "row",
-      justifyContent: "space-between",
+      justifyContent: "flex-end",
       marginTop: 15,
       fontSize: 9,
+      alignItems: "flex-end",
     }}
   >
-    <View style={{ width: "50%", paddingTop: 16 }}>
-      {discountLabel && <Text>{discountLabel}</Text>}
+    <View style={{ marginRight: 24 }}>
+      {discountLabel && (
+        <Text
+          style={{
+            paddingBottom: 33,
+          }}
+        >
+          {discountLabel}
+        </Text>
+      )}
     </View>
     <View style={{ width: "50%" }}>
       <View
