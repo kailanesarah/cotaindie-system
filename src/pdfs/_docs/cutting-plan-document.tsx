@@ -1,4 +1,4 @@
-import { Document, Text, View } from "@react-pdf/renderer";
+import { Document, Image, Text, View } from "@react-pdf/renderer";
 import { DataGrid, DataGridCell, DataGridRow } from "../_components/data-grid";
 import { DocumentTitle } from "../_components/document-title";
 import { Footer } from "../_components/footer";
@@ -34,13 +34,13 @@ export const CuttingPlanDocument = () => (
         <DataGridRow noBorderBottom>
           <DataGridCell width="70%">
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Nome: </Text>
+              <Text style={{ fontWeight: 700 }}>Nome: </Text>
               Cliente exemplo
             </Text>
           </DataGridCell>
           <DataGridCell width="30%" noBorderRight>
             <Text>
-              <Text style={{ fontFamily: "Helvetica-Bold" }}>Código: </Text>
+              <Text style={{ fontWeight: 700 }}>Código: </Text>
               C38223
             </Text>
           </DataGridCell>
@@ -50,7 +50,7 @@ export const CuttingPlanDocument = () => (
         Projeto 01 - Móveis da cozinha (quantidade - 2)
       </SectionTitle>
       <DataGrid>
-        <DataGridRow isHeader>
+        <DataGridRow>
           <DataGridCell width="10%" align="center" isHeader>
             N°
           </DataGridCell>
@@ -65,8 +65,11 @@ export const CuttingPlanDocument = () => (
           <DataGridCell width="10%" align="center">
             1
           </DataGridCell>
-          <DataGridCell flex={1} style={{ fontFamily: "Helvetica-Bold" }}>
+          <DataGridCell style={{ fontWeight: 700 }} flex={1}>
             MDF Branco 18MM - M28321
+          </DataGridCell>
+          <DataGridCell style={{ fontWeight: 700 }} flex={1}>
+            Corte: Horizontal e vertical
           </DataGridCell>
           <DataGridCell width="15%" align="center" noBorderRight>
             <></>
@@ -97,9 +100,25 @@ export const CuttingPlanDocument = () => (
         <DataGridRow noBorderBottom>
           <DataGridCell width="100%" noBorderRight style={{ padding: 0 }}>
             <View style={{ padding: 8 }}>
-              <Text style={{ fontFamily: "Helvetica-Bold", marginBottom: 4 }}>
-                Chapa 1 (2.75x1.83 m)
-              </Text>
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 8,
+                }}
+              >
+                <Text style={{ marginBottom: 4 }}>Chapa 1 (2.75x1.83 m)</Text>
+                <View style={{ width: 20, height: 20 }}>
+                  <Image
+                    src={
+                      true
+                        ? "images/horizontal_vertical.png"
+                        : "images/vertical.png"
+                    }
+                  />
+                </View>
+              </View>
               <View
                 style={{
                   width: "100%",
