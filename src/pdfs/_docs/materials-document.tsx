@@ -8,16 +8,63 @@ import { PdfPageLayout } from "../_components/pdf-layout";
 import { SectionTitle } from "../_components/section-title";
 import { SummaryTotalRow } from "../_components/summary-total-row";
 import { TitledTextSection } from "../_components/title-text-section";
-import { getFormattedDateTime } from "../_utils/get-formatted-date-time";
 
-export const MaterialsDocument = () => (
+interface ClientProps {
+  name: string;
+  code?: string;
+}
+
+interface ReportProjectProps {
+  name: string;
+  qtde: number;
+}
+
+interface UsedMaterialProps {
+  code: string;
+  name: string;
+  intQtde: number | string;
+  qtde: number | string;
+  measure: string;
+  unitPrice: string;
+  total: string;
+}
+
+interface OtherCostProps {
+  name: string;
+  qtde: number | string;
+  value: string;
+  total: string;
+}
+
+interface ReportDataProps {
+  quoteCode: string;
+  reportCode: string;
+  title: string;
+  generationDate: string;
+  projects: ReportProjectProps[];
+  usedMaterials: UsedMaterialProps[];
+  materialsTotal: string;
+  otherCosts: OtherCostProps[];
+  otherCostsTotal: string;
+  notes?: string;
+}
+
+interface MaterialsDocumentProps {
+  client: ClientProps;
+  report: ReportDataProps;
+}
+
+export const MaterialsDocument = ({
+  client,
+  report,
+}: MaterialsDocumentProps) => (
   <Document>
     <PdfPageLayout
       header={
         <Header
           variant="simple"
-          docCode="C29115"
-          dateTime={getFormattedDateTime()}
+          docCode={report.quoteCode}
+          dateTime={report.generationDate}
         />
       }
       footer={({ pageNumber, totalPages }) => (
@@ -29,20 +76,20 @@ export const MaterialsDocument = () => (
       )}
     >
       <Hr />
-      <DocumentTitle code="E29115" title="Relatório de materiais e custos" />
+      <DocumentTitle code={report.reportCode} title={report.title} />
       <SectionTitle>Dados do cliente</SectionTitle>
       <DataGrid>
         <DataGridRow noBorderBottom>
           <DataGridCell width="70%">
             <Text>
               <Text style={{ fontWeight: 700 }}>Nome: </Text>
-              Cliente exemplo
+              {client.name}
             </Text>
           </DataGridCell>
           <DataGridCell width="30%" noBorderRight>
             <Text>
               <Text style={{ fontWeight: 700 }}>Código: </Text>
-              C38223
+              {client.code || "N/A"}
             </Text>
           </DataGridCell>
         </DataGridRow>
@@ -60,24 +107,20 @@ export const MaterialsDocument = () => (
             Qtde
           </DataGridCell>
         </DataGridRow>
-        <DataGridRow>
-          <DataGridCell width="15%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="70%">Bancada de MDF</DataGridCell>
-          <DataGridCell width="15%" align="center" noBorderRight>
-            1
-          </DataGridCell>
-        </DataGridRow>
-        <DataGridRow noBorderBottom>
-          <DataGridCell width="15%" align="center">
-            2
-          </DataGridCell>
-          <DataGridCell width="70%">Armários para cozinha</DataGridCell>
-          <DataGridCell width="15%" align="center" noBorderRight>
-            1
-          </DataGridCell>
-        </DataGridRow>
+        {report.projects.map((project, index) => (
+          <DataGridRow
+            key={index}
+            noBorderBottom={index === report.projects.length - 1}
+          >
+            <DataGridCell width="15%" align="center">
+              {index + 1}
+            </DataGridCell>
+            <DataGridCell width="70%">{project.name}</DataGridCell>
+            <DataGridCell width="15%" align="center" noBorderRight>
+              {project.qtde}
+            </DataGridCell>
+          </DataGridRow>
+        ))}
       </DataGrid>
       <SectionTitle>Materiais utilizados</SectionTitle>
       <DataGrid>
@@ -104,42 +147,30 @@ export const MaterialsDocument = () => (
             Total
           </DataGridCell>
         </DataGridRow>
-        <DataGridRow>
-          <DataGridCell width="12%">M27212</DataGridCell>
-          <DataGridCell flex={1}>Dobradiça de pressão com pistão</DataGridCell>
-          <DataGridCell width="10%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="10%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="10%" align="center">
-            UN
-          </DataGridCell>
-          <DataGridCell width="15%">R$ 432,54</DataGridCell>
-          <DataGridCell width="15%" noBorderRight>
-            R$ 2.432,54
-          </DataGridCell>
-        </DataGridRow>
-        <DataGridRow noBorderBottom>
-          <DataGridCell width="12%">M82112</DataGridCell>
-          <DataGridCell flex={1}>Chapa de MDF de alta qualidade</DataGridCell>
-          <DataGridCell width="10%" align="center">
-            4
-          </DataGridCell>
-          <DataGridCell width="10%" align="center">
-            3.21
-          </DataGridCell>
-          <DataGridCell width="10%" align="center">
-            M2
-          </DataGridCell>
-          <DataGridCell width="15%">R$ 262,24</DataGridCell>
-          <DataGridCell width="15%" noBorderRight>
-            R$ 1.552,04
-          </DataGridCell>
-        </DataGridRow>
+        {report.usedMaterials.map((material, index) => (
+          <DataGridRow
+            key={index}
+            noBorderBottom={index === report.usedMaterials.length - 1}
+          >
+            <DataGridCell width="12%">{material.code}</DataGridCell>
+            <DataGridCell flex={1}>{material.name}</DataGridCell>
+            <DataGridCell width="10%" align="center">
+              {material.intQtde}
+            </DataGridCell>
+            <DataGridCell width="10%" align="center">
+              {material.qtde}
+            </DataGridCell>
+            <DataGridCell width="10%" align="center">
+              {material.measure}
+            </DataGridCell>
+            <DataGridCell width="15%">{material.unitPrice}</DataGridCell>
+            <DataGridCell width="15%" noBorderRight>
+              {material.total}
+            </DataGridCell>
+          </DataGridRow>
+        ))}
       </DataGrid>
-      <SummaryTotalRow label="Total:" value="R$ 2.132,54" />
+      <SummaryTotalRow label="Total:" value={report.materialsTotal} />
       <SectionTitle>Equipe e outros custos</SectionTitle>
       <DataGrid>
         <DataGridRow isHeader>
@@ -159,50 +190,31 @@ export const MaterialsDocument = () => (
             Total
           </DataGridCell>
         </DataGridRow>
-        <DataGridRow>
-          <DataGridCell width="15%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell flex={1}>Montador de móveis</DataGridCell>
-          <DataGridCell width="15%" align="center">
-            4
-          </DataGridCell>
-          <DataGridCell width="20%">R$ 100,00</DataGridCell>
-          <DataGridCell width="20%" noBorderRight>
-            R$ 400,00
-          </DataGridCell>
-        </DataGridRow>
-        <DataGridRow>
-          <DataGridCell width="15%" align="center">
-            2
-          </DataGridCell>
-          <DataGridCell flex={1}>Auxiliar de montagem</DataGridCell>
-          <DataGridCell width="15%" align="center">
-            2
-          </DataGridCell>
-          <DataGridCell width="20%">R$ 75,00</DataGridCell>
-          <DataGridCell width="20%" noBorderRight>
-            R$ 150,00
-          </DataGridCell>
-        </DataGridRow>
-        <DataGridRow noBorderBottom>
-          <DataGridCell width="15%" align="center">
-            3
-          </DataGridCell>
-          <DataGridCell flex={1}>Frete e manuseio</DataGridCell>
-          <DataGridCell width="15%" align="center">
-            1
-          </DataGridCell>
-          <DataGridCell width="20%">R$ 150,00</DataGridCell>
-          <DataGridCell width="20%" noBorderRight>
-            R$ 150,00
-          </DataGridCell>
-        </DataGridRow>
+        {report.otherCosts.map((cost, index) => (
+          <DataGridRow
+            key={index}
+            noBorderBottom={index === report.otherCosts.length - 1}
+          >
+            <DataGridCell width="15%" align="center">
+              {index + 1}
+            </DataGridCell>
+            <DataGridCell flex={1}>{cost.name}</DataGridCell>
+            <DataGridCell width="15%" align="center">
+              {cost.qtde}
+            </DataGridCell>
+            <DataGridCell width="20%">{cost.value}</DataGridCell>
+            <DataGridCell width="20%" noBorderRight>
+              {cost.total}
+            </DataGridCell>
+          </DataGridRow>
+        ))}
       </DataGrid>
-      <SummaryTotalRow label="Total:" value="R$ 700,00" />
-      <TitledTextSection title="Observações e outros:">
-        Realizar pedido de materiais com antecedência.
-      </TitledTextSection>
+      <SummaryTotalRow label="Total:" value={report.otherCostsTotal} />
+      {report.notes && (
+        <TitledTextSection title="Observações e outros:">
+          {report.notes}
+        </TitledTextSection>
+      )}
     </PdfPageLayout>
   </Document>
 );
