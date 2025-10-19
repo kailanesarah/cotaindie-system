@@ -1,6 +1,6 @@
 import { Text, View } from "@react-pdf/renderer";
 
-interface AppHeaderProps {
+interface HeaderProps {
   variant: "simple" | "detailed";
   docCode?: string;
   dateTime: string;
@@ -17,7 +17,7 @@ export const Header = ({
   docCode,
   dateTime,
   companyInfo,
-}: Readonly<AppHeaderProps>) => (
+}: Readonly<HeaderProps>) => (
   <View
     style={{
       flexDirection: "row",
@@ -50,21 +50,12 @@ export const Header = ({
     {variant === "detailed" && companyInfo && (
       <View style={{ width: 350, fontSize: 8, lineHeight: 1.4 }}>
         <Text>
-          <Text style={{ fontFamily: "Helvetica-Bold" }}>Empresa: </Text>
-          {companyInfo.name} -{" "}
-          <Text style={{ fontFamily: "Helvetica" }}>{companyInfo.details}</Text>
-        </Text>
-        <Text>
-          <Text style={{ fontFamily: "Helvetica-Bold" }}>Endereço: </Text>
-          {companyInfo.address}
-        </Text>
-        <Text>
-          <Text style={{ fontFamily: "Helvetica-Bold" }}>Whatsapp: </Text>
+          <Text style={{ fontWeight: 700 }}>Empresa: </Text>
+          {companyInfo.name} - <Text>{companyInfo.details}</Text>
+          <Text style={{ fontWeight: 700 }}>Endereço: </Text> -{" "}
+          {companyInfo.address} -{" "}
+          <Text style={{ fontWeight: 700 }}>Whatsapp: </Text>
           {companyInfo.phone}
-        </Text>
-        <Text>
-          <Text style={{ fontFamily: "Helvetica-Bold" }}>Emitido em: </Text>
-          {dateTime}
         </Text>
       </View>
     )}

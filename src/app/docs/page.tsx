@@ -1,6 +1,6 @@
 "use client";
 
-import { MaterialsDocument } from "@/pdfs/_docs/materials-document";
+import { QuoteDocument } from "@/pdfs/_docs/quote-document";
 import dynamic from "next/dynamic";
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
@@ -14,7 +14,7 @@ export default function Home() {
 
       <div className="h-[80vh] w-full rounded-lg border shadow-md">
         <PDFViewer width="100%" height="100%">
-          {<MaterialsDocument />}
+          {<QuoteDocument />}
         </PDFViewer>
       </div>
     </main>

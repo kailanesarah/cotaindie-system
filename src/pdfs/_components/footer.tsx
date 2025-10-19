@@ -5,16 +5,27 @@ interface FooterProps {
   variant: "quote" | "default";
   pageNumber: number;
   totalPages: number;
+  dateTime?: string;
+  validity?: number;
 }
 
 export const Footer = ({
   variant,
   pageNumber,
   totalPages,
+  dateTime,
+  validity,
 }: Readonly<FooterProps>) => {
-  const quoteText = "Orçamento gerado em 10/08/2025 - Válido por 7 dias";
-  const defaultText = "";
+  let quoteText = "";
 
+  if (dateTime) {
+    quoteText = `Orçamento gerado em ${dateTime}`;
+    if (validity) {
+      quoteText += ` — Válido por ${validity} dias`;
+    }
+  }
+
+  const defaultText = "";
   const footerText = variant === "quote" ? quoteText : defaultText;
 
   return (

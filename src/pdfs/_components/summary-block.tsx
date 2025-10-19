@@ -59,8 +59,8 @@ export const SummaryBlock = ({
           flexDirection: "row",
           justifyContent: "space-between",
           paddingVertical: 6,
-          borderTopWidth: 1,
-          borderColor: "#e0e0e0",
+          borderTopWidth: 0.5,
+          borderColor: "#000",
           marginTop: 4,
         }}
       >
