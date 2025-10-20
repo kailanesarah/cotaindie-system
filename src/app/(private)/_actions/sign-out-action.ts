@@ -1,7 +1,7 @@
 "use server";
 
 import { actionClient } from "@/lib/safe-action";
-import { signOut } from "@/modules/auth/supabase-auth-service";
+import { signOut } from "@/services/auth/supabase-auth-service";
 import { redirect } from "next/navigation";
 
 export const signOutAction = actionClient.action(async () => {

@@ -56,7 +56,7 @@ export async function signUpWithEmail(input: registerInput) {
     }
 
     // Salvar usuário na tabela customizada
-    const { error: insertError } = await supabase.from("table_users").insert({
+    const { error: insertError } = await supabase.from("users").insert({
       user_id: authData.user.id,
       user_name,
       user_email: authData.user.email,

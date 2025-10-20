@@ -1,5 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { requireUserServer } from "@/modules/auth/supabase-auth-service";
+import { requireUserServer } from "@/services/auth/supabase-auth-service";
 import type { ReactNode } from "react";
 import { AppSidebar } from "./_components/app-sidebar";
 import { Navbar } from "./_components/navbar";
