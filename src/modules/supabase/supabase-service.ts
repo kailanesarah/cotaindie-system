@@ -3,7 +3,7 @@ import {
   type EntitiesByIdsOptions,
   type EntityOptionsInput,
 } from "./schema/services_schema";
-import { createClient } from "./server";
+import { supabaseServer } from "./server";
 import { getAuthenticatedUser } from "./supabase-utils";
 
 export async function insertEntityToTable<T>(
@@ -11,7 +11,7 @@ export async function insertEntityToTable<T>(
   options: EntityOptionsInput,
 ) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const user = await getAuthenticatedUser(supabase);
 
     const insertPayload = {
@@ -43,7 +43,7 @@ export async function insertEntityToTable<T>(
 
 export async function getEntitiesService(options: EntityOptionsInput) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const user = await getAuthenticatedUser(supabase);
 
     const { data, error } = await supabase
@@ -66,7 +66,7 @@ export async function getEntitiesService(options: EntityOptionsInput) {
 
 export async function getEntityByIdService(options: EntityOptionsInput) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const user = await getAuthenticatedUser(supabase);
 
     const { data, error } = await supabase
@@ -92,7 +92,7 @@ export async function getEntityByIdService(options: EntityOptionsInput) {
 
 export async function getEntitiesByIdsService(options: EntitiesByIdsOptions) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const user = await getAuthenticatedUser(supabase);
 
     const { data, error } = await supabase
@@ -115,7 +115,7 @@ export async function updateEntityInTable<T>(
   options: EntityOptionsInput,
 ) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const user = await getAuthenticatedUser(supabase);
 
     const { data: updatedEntity, error } = await supabase
@@ -142,7 +142,7 @@ export async function updateEntityInTable<T>(
 
 export async function deleteEntityService(options: EntityOptionsInput) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const user = await getAuthenticatedUser(supabase);
 
     const { data: deleted, error } = await supabase

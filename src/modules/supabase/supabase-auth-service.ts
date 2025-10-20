@@ -1,7 +1,7 @@
 // src/modules/supabase/supabase-auth-service.ts
 import type { Session, User } from "@supabase/supabase-js";
 import { registerSchema, type registerInput } from "./schema/register_schema";
-import { createClient } from "./server";
+import { supabaseServer } from "./server";
 
 let cachedUser: User | null = null;
 let cachedSession: Session | null = null;
@@ -9,7 +9,7 @@ let cachedSession: Session | null = null;
 /** Sign in com email e senha */
 export async function signInWithEmail(email: string, password: string) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -28,7 +28,7 @@ export async function signInWithEmail(email: string, password: string) {
 /** Sign up com email e senha + salvar dados na tabela + user_metadata */
 export async function signUpWithEmail(input: registerInput) {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
 
     // Validação do input
     const parsed = registerSchema.safeParse(input);
@@ -82,7 +82,7 @@ export async function signUpWithEmail(input: registerInput) {
 /** Sign out */
 export async function signOut() {
   try {
-    const supabase = await createClient();
+    const supabase = await supabaseServer();
     const { error } = await supabase.auth.signOut();
 
     if (error) throw new Error(`Erro ao desconectar usuário: ${error.message}`);
@@ -100,7 +100,7 @@ export async function signOut() {
 export async function requireUser(): Promise<User> {
   if (cachedUser) return cachedUser;
 
-  const supabase = await createClient();
+  const supabase = await supabaseServer();
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user)
@@ -112,7 +112,7 @@ export async function requireUser(): Promise<User> {
 
 /** Retorna o usuário no server (ou null se não existir) */
 export async function requireUserServer(): Promise<User | null> {
-  const supabase = await createClient();
+  const supabase = await supabaseServer();
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
@@ -125,7 +125,7 @@ export async function requireUserServer(): Promise<User | null> {
 
 /** Retorna a sessão no server (ou null se não existir) */
 export async function requireSessionServer(): Promise<Session | null> {
-  const supabase = await createClient();
+  const supabase = await supabaseServer();
   const user = await requireUserServer(); // garante que o usuário está autenticado
 
   if (!user) return null;
