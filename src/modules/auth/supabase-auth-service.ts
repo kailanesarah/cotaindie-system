@@ -1,7 +1,7 @@
 // src/modules/supabase/supabase-auth-service.ts
 import type { Session, User } from "@supabase/supabase-js";
+import { supabaseServer } from "../supabase/server";
 import { registerSchema, type registerInput } from "./schema/register_schema";
-import { supabaseServer } from "./server";
 
 let cachedUser: User | null = null;
 let cachedSession: Session | null = null;

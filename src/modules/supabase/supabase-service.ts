@@ -4,7 +4,17 @@ import {
   type EntityOptionsInput,
 } from "./schema/services_schema";
 import { supabaseServer } from "./server";
-import { getAuthenticatedUser } from "./supabase-utils";
+
+export async function getSupabaseUser() {
+  const supabase = await supabaseServer();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  const data = user;
+  return { data, error };
+}
 
 export async function insertEntityToTable<T>(
   data: T,
@@ -12,11 +22,11 @@ export async function insertEntityToTable<T>(
 ) {
   try {
     const supabase = await supabaseServer();
-    const user = await getAuthenticatedUser(supabase);
+    const { data: user } = await getSupabaseUser();
 
     const insertPayload = {
       [options.idColumnName]: options.idObject,
-      user_id: user.id,
+      user_id: user?.id,
       ...data,
     };
 
@@ -44,12 +54,12 @@ export async function insertEntityToTable<T>(
 export async function getEntitiesService(options: EntityOptionsInput) {
   try {
     const supabase = await supabaseServer();
-    const user = await getAuthenticatedUser(supabase);
+    const { data: user } = await getSupabaseUser();
 
     const { data, error } = await supabase
       .from(options.tableName)
       .select(options.selectFields || "*")
-      .eq("user_id", user.id);
+      .eq("user_id", user?.id);
 
     if (error) return { success: false, ...Errors.INTERNAL(error.message) };
 
@@ -67,13 +77,13 @@ export async function getEntitiesService(options: EntityOptionsInput) {
 export async function getEntityByIdService(options: EntityOptionsInput) {
   try {
     const supabase = await supabaseServer();
-    const user = await getAuthenticatedUser(supabase);
+    const { data: user } = await getSupabaseUser();
 
     const { data, error } = await supabase
       .from(options.tableName)
       .select(options.selectFields || "*")
       .eq(options.idColumnName, options.idObject)
-      .eq("user_id", user.id)
+      .eq("user_id", user?.id)
       .single();
 
     if (error || !data)
@@ -93,13 +103,13 @@ export async function getEntityByIdService(options: EntityOptionsInput) {
 export async function getEntitiesByIdsService(options: EntitiesByIdsOptions) {
   try {
     const supabase = await supabaseServer();
-    const user = await getAuthenticatedUser(supabase);
+    const { data: user } = await getSupabaseUser();
 
     const { data, error } = await supabase
       .from(options.tableName)
       .select(options.selectFields || "*")
       .in(options.idColumnName, options.ids)
-      .eq("user_id", user.id);
+      .eq("user_id", user?.id);
 
     if (error || !data || data.length === 0)
       return { success: false, ...Errors.NOT_FOUND("registros") };
@@ -116,13 +126,13 @@ export async function updateEntityInTable<T>(
 ) {
   try {
     const supabase = await supabaseServer();
-    const user = await getAuthenticatedUser(supabase);
+    const { data: user } = await getSupabaseUser();
 
     const { data: updatedEntity, error } = await supabase
       .from(options.tableName)
       .update(data)
       .eq(options.idColumnName, options.idObject)
-      .eq("user_id", user.id)
+      .eq("user_id", user?.id)
       .select(options.selectFields || "*")
       .single();
 
@@ -143,13 +153,13 @@ export async function updateEntityInTable<T>(
 export async function deleteEntityService(options: EntityOptionsInput) {
   try {
     const supabase = await supabaseServer();
-    const user = await getAuthenticatedUser(supabase);
+    const { data: user } = await getSupabaseUser();
 
     const { data: deleted, error } = await supabase
       .from(options.tableName)
       .delete()
       .eq(options.idColumnName, options.idObject)
-      .eq("user_id", user.id)
+      .eq("user_id", user?.id)
       .select()
       .single();
 
