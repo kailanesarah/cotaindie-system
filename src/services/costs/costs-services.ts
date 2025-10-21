@@ -1,12 +1,12 @@
 import { Errors } from "@/utils/errors";
-import { generateId } from "@/utils/idGenerator";
+import { generateId } from "@/utils/generate-nano-id";
 import {
   deleteEntityService,
   getEntitiesService,
   getEntityByIdService,
   insertEntityToTable,
   updateEntityInTable,
-} from "../supabase/supabase-service";
+} from "../../lib/supabase/supabase-service";
 import { costSchema, type costInput } from "./schemas/costs-schemas";
 
 // Criação de múltiplos custos

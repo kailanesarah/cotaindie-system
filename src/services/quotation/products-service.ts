@@ -1,6 +1,6 @@
 import { Errors } from "@/utils/errors";
-import { generateId } from "@/utils/idGenerator";
-import { insertEntityToTable } from "../supabase/supabase-service";
+import { generateId } from "@/utils/generate-nano-id";
+import { insertEntityToTable } from "../../lib/supabase/supabase-service";
 
 export const insertQuotationProducts = async (
   quotation_id: string,

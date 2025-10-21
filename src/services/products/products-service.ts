@@ -1,12 +1,12 @@
 import { Errors } from "@/utils/errors";
-import { generateId } from "@/utils/idGenerator";
+import { generateId } from "@/utils/generate-nano-id";
 import {
   deleteEntityService,
   getEntitiesService,
   getEntityByIdService,
   insertEntityToTable,
   updateEntityInTable,
-} from "../supabase/supabase-service";
+} from "../../lib/supabase/supabase-service";
 import { productSchema, type ProductInput } from "./schema/products-schema";
 
 // Criação de produto

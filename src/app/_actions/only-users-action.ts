@@ -1,15 +1,13 @@
 "use server";
 
 import { ROUTES } from "@/constants/urls";
-import { requireUserServer } from "@/services/auth/supabase-auth-service";
+import { AuthService } from "@/services/auth-services";
 import { redirect } from "next/navigation";
 
 export const onlyUsersAction = async () => {
-  const user = await requireUserServer();
+  const data = await AuthService.getUser();
 
-  if (!user) {
+  if (!data) {
     redirect(ROUTES.PUBLIC.SIGNIN);
   }
-
-  return user;
 };
