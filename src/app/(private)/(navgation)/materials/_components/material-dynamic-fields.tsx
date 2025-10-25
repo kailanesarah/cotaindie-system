@@ -27,9 +27,9 @@ export const MaterialDinamicFields = () => {
     setValue("unit", measureMap[measureType]);
 
     if (!isFirstRender.current && previousMeasureType.current !== measureType) {
-      if (measureType === "m2") setValue("measure", [0, 0]);
-      if (measureType === "ml") setValue("measure", [0]);
-      if (measureType === "un") setValue("measure", [1]);
+      if (measureType === "M2") setValue("measure", [0, 0]);
+      if (measureType === "ML") setValue("measure", [0]);
+      if (measureType === "UN") setValue("measure", [1]);
     }
 
     if (isFirstRender.current) {
@@ -41,7 +41,7 @@ export const MaterialDinamicFields = () => {
 
   return (
     <>
-      {measureType === "m2" && (
+      {measureType === "M2" && (
         <>
           <FormField
             control={form.control}
@@ -55,7 +55,7 @@ export const MaterialDinamicFields = () => {
                     onValueChange={(values) =>
                       field.onChange(values.floatValue ?? 0)
                     }
-                    suffix={` ${measureMap["ml"]}`}
+                    suffix={` ${measureMap["ML"]}`}
                     allowNegative={false}
                     decimalScale={0}
                     customInput={Input}
@@ -80,7 +80,7 @@ export const MaterialDinamicFields = () => {
                     onValueChange={(values) =>
                       field.onChange(values.floatValue ?? 0)
                     }
-                    suffix={` ${measureMap["m2"]}`}
+                    suffix={` ${measureMap["M2"]}`}
                     allowNegative={false}
                     decimalScale={3}
                     customInput={Input}
@@ -92,7 +92,7 @@ export const MaterialDinamicFields = () => {
           />
         </>
       )}
-      {measureType === "ml" && (
+      {measureType === "ML" && (
         <FormField
           control={form.control}
           name="measure.0"
@@ -105,7 +105,7 @@ export const MaterialDinamicFields = () => {
                   onValueChange={(values) =>
                     field.onChange(values.floatValue ?? 10)
                   }
-                  suffix={` ${measureMap["ml"]}`}
+                  suffix={` ${measureMap["ML"]}`}
                   allowNegative={false}
                   decimalScale={0}
                   customInput={Input}

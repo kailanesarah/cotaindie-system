@@ -91,9 +91,9 @@ export const MaterialBasicFields = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="m2">Metro quadrado (m²)</SelectItem>
-                  <SelectItem value="ml">Metro linear (ml)</SelectItem>
-                  <SelectItem value="un">Unidade (un)</SelectItem>
+                  <SelectItem value="M2">Metro quadrado (m²)</SelectItem>
+                  <SelectItem value="ML">Metro linear (ml)</SelectItem>
+                  <SelectItem value="UN">Unidade (un)</SelectItem>
                 </SelectContent>
               </Select>
             </FormControl>

@@ -4,10 +4,10 @@ interface Material {
   category: Category;
   name: string;
   description: string;
-  measureType: "m2" | "ml" | "un";
-  unit: "cm" | "un";
+  measureType: "M2" | "ML" | "UN";
+  unit: "CM" | "UN";
   wasteTax: number;
   baseValue: number;
   measure: [number] | [number, number];
-  cutDirection?: "v" | "vh";
+  cutDirection?: "V" | "VH";
 }
