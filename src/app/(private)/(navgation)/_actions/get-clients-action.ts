@@ -1,10 +1,14 @@
 "use server";
 
-import { clients } from "../clients/_constants/clients";
+import { supabaseServer } from "@/lib/supabase/server";
+import { ClientsService } from "@/services/clients-services";
 
 export async function getClientsAction(): Promise<Client[]> {
   try {
-    return clients;
+    const supabase = await supabaseServer();
+    const clientsService = new ClientsService(supabase);
+
+    return (await clientsService.getClients()).items;
   } catch (err) {
     console.error(err);
 
