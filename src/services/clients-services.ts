@@ -50,9 +50,9 @@ export class ClientsService extends BaseService {
       }
 
       if (params?.extras && params.extras.length > 0) {
-        params.extras.forEach((extra) => {
+        for (const extra of params.extras) {
           query = query.eq(extra.key, extra.value);
-        });
+        }
       }
 
       if (params?.sort) {
