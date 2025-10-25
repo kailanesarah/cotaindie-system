@@ -9,9 +9,9 @@ interface ErrorDataBoxProps {
 }
 
 export const ErrorDataBox = ({ className }: ErrorDataBoxProps) => {
-  const { error, loading } = useSearchContext();
+  const { error, loading, data } = useSearchContext();
 
-  if (!error || loading) return null;
+  if (!error || loading || data) return null;
 
   return (
     <div
