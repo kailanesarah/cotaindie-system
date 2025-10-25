@@ -1,5 +1,7 @@
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 
-export async function generateId(prefix: string): Promise<string> {
-  return `${prefix}-${nanoid(8)}`;
+const numericNanoid = customAlphabet("0123456789", 9);
+
+export async function generateId(): Promise<string> {
+  return numericNanoid();
 }

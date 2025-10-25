@@ -1,5 +1,6 @@
 import type { SearchState } from "@/app/(private)/(navgation)/_context/search-provider";
 import type { SearchResult } from "@/app/(private)/_types/search-result";
+import { generateId } from "@/utils/generate-nano-id";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { BaseService } from "./base-service";
 
@@ -8,19 +9,55 @@ export class ClientsService extends BaseService {
     super(supabase);
   }
 
-  async createClient(client: Client) {
+  async upsertClient(client: Partial<Client>) {
     try {
-      const { data, error } = await this.supabase
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser();
+
+      if (authError) throw new Error(`Auth error: ${authError.message}`);
+      if (!user) throw new Error("Auth error: User not authenticated");
+
+      const clientToUpsert: Partial<Client> = { ...client };
+
+      if (!client.id) {
+        clientToUpsert.code = await generateId();
+
+        delete clientToUpsert.id;
+      } else {
+        const { data: clientCode, error: clientCodeError } = await this.supabase
+          .from("clients")
+          .select("code")
+          .eq("id", client.id)
+          .single();
+
+        if (clientCodeError)
+          throw new Error(
+            `Fetch client code error: ${clientCodeError.message}`,
+          );
+
+        clientToUpsert.code = clientCode.code;
+      }
+
+      const { data, error: upsertError } = await this.supabase
         .from("clients")
-        .insert(client)
+        .upsert(
+          { ...clientToUpsert, user_id: user.id },
+          {
+            onConflict: "id",
+            ignoreDuplicates: false,
+          },
+        )
         .select()
         .single();
 
-      if (error) throw error;
+      if (upsertError)
+        throw new Error(`Upsert client error: ${upsertError.message}`);
 
       return data as Client;
     } catch (err) {
-      this.handleError(err, "ClientsService.createClient");
+      this.handleError(err, "ClientsService.upsertClient");
     }
   }
 
@@ -63,6 +100,7 @@ export class ClientsService extends BaseService {
       const perPage = params?.pagination?.perPage ?? 10;
       const from = (page - 1) * perPage;
       const to = from + perPage - 1;
+
       query = query.range(from, to);
 
       const { data, error, count } = await query;
@@ -93,25 +131,6 @@ export class ClientsService extends BaseService {
       return data as Client;
     } catch (err) {
       this.handleError(err, "ClientsService.getClientById");
-    }
-  }
-
-  async updateClient(id: string, client: Client) {
-    const { code, ...partialClient } = client;
-
-    try {
-      const { data, error } = await this.supabase
-        .from("clients")
-        .update(partialClient)
-        .eq("id", id)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      return data as Client;
-    } catch (err) {
-      this.handleError(err, "ClientsService.updateClient");
     }
   }
 
