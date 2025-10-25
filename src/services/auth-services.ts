@@ -1,4 +1,4 @@
-import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { BaseService } from "./base-service";
 
 export class AuthService extends BaseService {
@@ -34,11 +34,11 @@ export class AuthService extends BaseService {
 
   async getUser(): Promise<User | null> {
     try {
-      const { data, error } = await this.supabase.auth.getUser();
+      const { data, error } = await this.supabase.rpc("getUser");
 
       if (error) throw error;
 
-      return data.user;
+      return data as User;
     } catch (err) {
       this.handleError(err, "AuthService.getUser");
     }

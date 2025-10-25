@@ -7,7 +7,7 @@ import { NavbarProfile } from "./navbar-profile";
 import { QuestionsDialog } from "./questions-dialog";
 
 interface INavbarProps {
-  profile: { name: string; role: string; imageUrl?: string };
+  profile: { name: string; role: string; avatar?: string };
 }
 
 export const Navbar = ({ profile }: INavbarProps) => {

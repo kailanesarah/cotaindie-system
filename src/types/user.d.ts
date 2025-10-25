@@ -1,6 +1,9 @@
+type Role = "ADMIN";
+
 interface User {
   id: string;
   name: string;
   email: string;
-  role: "Admin";
+  role: Role;
+  avatar?: string;
 }
