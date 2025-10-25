@@ -2,7 +2,7 @@
 
 import { deleteSchema } from "@/app/(private)/_schema/delete-schema";
 import { actionClient } from "@/lib/safe-action";
-import { clients } from "../_constants/clients-list";
+import { clients } from "../_constants/clients";
 
 export const deleteClientAction = actionClient
   .schema(deleteSchema)

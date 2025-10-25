@@ -1,6 +1,6 @@
 "use server";
 
-import { clients } from "../clients/_constants/clients-list";
+import { clients } from "../clients/_constants/clients";
 
 export async function getClientsAction(): Promise<Client[]> {
   try {
