@@ -23,17 +23,17 @@ export const pieceSchema = z
         ]),
       ]),
       baseValue: z.number().min(0, "Insira um valor a partir de zero"),
-      measureType: z.enum(["m2", "ml", "un"], {
+      measureType: z.enum(["M2", "ML", "UN"], {
         message: "Tipo de medida inválido",
       }),
-      unit: z.enum(["cm", "un"], {
+      unit: z.enum(["CM", "UN"], {
         message: "Unidade inválida",
       }),
       wasteTax: z.number(),
     }),
   })
   .superRefine((data, ctx) => {
-    if (data.material.measureType !== "un" && !data.name) {
+    if (data.material.measureType !== "UN" && !data.name) {
       ctx.addIssue({
         path: ["name"],
         code: "custom",

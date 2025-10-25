@@ -64,9 +64,9 @@ export const PieceForm = ({
 
   useEffect(() => {
     if (!isFirstRender.current && previousMeasureType.current !== measureType) {
-      if (measureType === "m2") setValue("measure", [0, 0]);
-      if (measureType === "ml") setValue("measure", [0]);
-      if (measureType === "un") setValue("measure", [1]);
+      if (measureType === "M2") setValue("measure", [0, 0]);
+      if (measureType === "ML") setValue("measure", [0]);
+      if (measureType === "UN") setValue("measure", [1]);
     }
 
     if (isFirstRender.current) {
@@ -185,7 +185,7 @@ export const PieceForm = ({
               </FormItem>
             )}
           />
-          {material && measureType !== "un" && (
+          {material && measureType !== "UN" && (
             <FormField
               control={form.control}
               name="name"
@@ -233,7 +233,7 @@ export const PieceForm = ({
                 className={cn(
                   "order-4 col-span-1 lg:order-4 lg:col-span-6",
                   material &&
-                    measureType !== "un" &&
+                    measureType !== "UN" &&
                     "col-span-1 lg:col-span-2",
                 )}
               >
@@ -270,7 +270,7 @@ export const PieceForm = ({
 
         {measureType && (
           <DialogBody className="flex flex-col items-start gap-3 lg:flex-row">
-            {measureType === "m2" && (
+            {measureType === "M2" && (
               <>
                 <FormField
                   control={form.control}
@@ -284,7 +284,7 @@ export const PieceForm = ({
                           onValueChange={(values) =>
                             field.onChange(values.floatValue ?? 0)
                           }
-                          suffix={` ${measureMap["ml"]}`}
+                          suffix={` ${measureMap["ML"]}`}
                           allowNegative={false}
                           decimalScale={0}
                           customInput={Input}
@@ -309,7 +309,7 @@ export const PieceForm = ({
                           onValueChange={(values) =>
                             field.onChange(values.floatValue ?? 0)
                           }
-                          suffix={` ${measureMap["m2"]}`}
+                          suffix={` ${measureMap["M2"]}`}
                           allowNegative={false}
                           decimalScale={3}
                           customInput={Input}
@@ -321,7 +321,7 @@ export const PieceForm = ({
                 />
               </>
             )}
-            {measureType === "ml" && (
+            {measureType === "ML" && (
               <FormField
                 control={form.control}
                 name="measure.0"
@@ -334,7 +334,7 @@ export const PieceForm = ({
                         onValueChange={(values) =>
                           field.onChange(values.floatValue ?? 10)
                         }
-                        suffix={` ${measureMap["ml"]}`}
+                        suffix={` ${measureMap["ML"]}`}
                         allowNegative={false}
                         decimalScale={0}
                         customInput={Input}
@@ -346,7 +346,7 @@ export const PieceForm = ({
               />
             )}
             <InputDisabled
-              className={cn("w-full", measureType !== "un" && "mt-[1.375rem]")}
+              className={cn("w-full", measureType !== "UN" && "mt-[1.375rem]")}
             >
               Unidade: {measureType}
             </InputDisabled>
