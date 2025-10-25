@@ -27,7 +27,7 @@ export const ClientDialog = ({ client }: { client?: Client }) => {
           {code && (
             <DialogDescription className="flex gap-3">
               <Badge className="hidden h-5 text-[0.6875rem] lg:block">
-                {code}
+                C - {code}
               </Badge>
               Alterações serão aplicadas parcialmente em cotações atigas.
             </DialogDescription>
