@@ -1,5 +1,5 @@
 import { onlyGuestAction } from "@/app/_actions/only-guest-action";
-import { SignInBox } from "./_components/sign-in-box";
+import { SignInBox } from "./_components/login-box";
 import { SupportBox } from "./_components/support-box";
 
 export default async function SignInPage() {

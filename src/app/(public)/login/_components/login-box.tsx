@@ -1,6 +1,6 @@
 import Logo from "@/assets/imgs/logo.svg";
 import Image from "next/image";
-import { SignInForm } from "./sign-in-form";
+import { SignInForm } from "./login-form";
 
 export const SignInBox = () => {
   return (

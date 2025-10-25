@@ -1,6 +1,6 @@
 "use client";
 
-import { useSignOut } from "@/app/(private)/_hooks/use-sign-out";
+import { useLogout } from "@/app/(private)/_hooks/use-logout";
 import LogoSymbol from "@/assets/imgs/logo-symbol.svg";
 import LogoTitle from "@/assets/imgs/logo-title.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,7 +40,7 @@ interface IAppSidebarMobile {
 
 export const SidebarMobile = ({ links, profile }: IAppSidebarMobile) => {
   const pathname = usePathname();
-  const { execute } = useSignOut();
+  const { execute } = useLogout();
 
   const initials = getInitialLetters(profile.name || "");
 

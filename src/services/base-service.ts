@@ -1,20 +1,13 @@
 import * as Sentry from "@sentry/nextjs";
-import { supabaseServer } from "../lib/supabase/server";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export abstract class BaseService {
-  private static readonly supabasePromise = supabaseServer();
-
-  protected supabase(): Promise<Awaited<ReturnType<typeof supabaseServer>>> {
-    return BaseService.supabasePromise;
-  }
+  constructor(protected supabase: SupabaseClient) {}
 
   protected handleError(error: unknown, context?: string): never {
     const message = error instanceof Error ? error.message : String(error);
 
-    Sentry.logger.error(`[Service Error${context ? ` - ${context}` : ""}]`, {
-      message,
-      error,
-    });
+    console.error(`[Service Error${context ? ` - ${context}` : ""}]`, message);
 
     Sentry.captureException(
       error instanceof Error ? error : new Error(message),

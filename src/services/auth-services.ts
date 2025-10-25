@@ -1,10 +1,14 @@
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { BaseService } from "./base-service";
 
-class ClassAuthService extends BaseService {
-  async signIn(email: string, password: string) {
+export class AuthService extends BaseService {
+  constructor(supabase: SupabaseClient) {
+    super(supabase);
+  }
+
+  async login(email: string, password: string) {
     try {
-      const supabase = await this.supabase();
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await this.supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -13,27 +17,24 @@ class ClassAuthService extends BaseService {
 
       return data;
     } catch (err) {
-      this.handleError(err, "AuthService.signIn");
+      this.handleError(err, "AuthService.login");
     }
   }
 
-  async signOut() {
+  async logout() {
     try {
-      const supabase = await this.supabase();
-      const { error } = await supabase.auth.signOut();
-
+      const { error } = await this.supabase.auth.signOut();
       if (error) throw error;
 
       return true;
     } catch (err) {
-      this.handleError(err, "AuthService.signOut");
+      this.handleError(err, "AuthService.logout");
     }
   }
 
-  async getUser() {
+  async getUser(): Promise<User | null> {
     try {
-      const supabase = await this.supabase();
-      const { data, error } = await supabase.auth.getUser();
+      const { data, error } = await this.supabase.auth.getUser();
 
       if (error) throw error;
 
@@ -43,5 +44,3 @@ class ClassAuthService extends BaseService {
     }
   }
 }
-
-export const AuthService = new ClassAuthService();

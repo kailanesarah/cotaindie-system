@@ -5,12 +5,12 @@ import { ROUTES } from "@/constants/urls";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { signInAction } from "../_actions/sign-in-action";
+import { loginAction } from "../_actions/login-action";
 
 export function useSignIn() {
   const router = useRouter();
 
-  const { execute, isPending } = useAction(signInAction, {
+  const { execute, isPending } = useAction(loginAction, {
     onSuccess: () => {
       toast((t) => (
         <ToastCard

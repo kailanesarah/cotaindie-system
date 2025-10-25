@@ -5,12 +5,12 @@ import { ROUTES } from "@/constants/urls";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { signOutAction } from "../_actions/sign-out-action";
+import { logoutAction } from "../_actions/logout-action";
 
-export function useSignOut() {
+export function useLogout() {
   const router = useRouter();
 
-  const { execute, isPending } = useAction(signOutAction, {
+  const { execute, isPending } = useAction(logoutAction, {
     onSuccess: () => {
       toast((t) => (
         <ToastCard
@@ -21,8 +21,7 @@ export function useSignOut() {
         />
       ));
 
-      router.refresh();
-      router.push(ROUTES.PUBLIC.SIGNIN);
+      router.push(ROUTES.PUBLIC.LOGIN);
     },
     onError: () => {
       toast((t) => (

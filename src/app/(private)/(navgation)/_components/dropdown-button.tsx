@@ -2,10 +2,10 @@
 
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
-import { useSignOut } from "../../_hooks/use-sign-out";
+import { useLogout } from "../../_hooks/use-logout";
 
 export const DropdownLogout = () => {
-  const { execute } = useSignOut();
+  const { execute } = useLogout();
   const handleClick = () => execute();
 
   return (

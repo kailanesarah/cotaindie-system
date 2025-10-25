@@ -1,5 +1,4 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { requireUserServer } from "@/services/auth/supabase-auth-service";
 import type { ReactNode } from "react";
 import { AppSidebar } from "./_components/app-sidebar";
 import { Navbar } from "./_components/navbar";
@@ -11,11 +10,8 @@ export default async function NavigationLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const session = await requireUserServer();
-  const user = session?.user_metadata ?? { name: "", imageUrl: "", url: "" };
-
   const profile = {
-    name: user.name ?? "",
+    name: "",
     role: "Administrador",
     imageUrl: "",
   };
