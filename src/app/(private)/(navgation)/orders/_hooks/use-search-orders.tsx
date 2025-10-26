@@ -24,6 +24,7 @@ export function useOrdersSearch() {
       },
     },
   });
+  console.log(data);
 
   return {
     data,
