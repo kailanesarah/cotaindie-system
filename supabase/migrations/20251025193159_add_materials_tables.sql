@@ -232,5 +232,17 @@ with check ((EXISTS ( SELECT 1
      JOIN materials_categories mc ON ((mc.id = materials_categories_relation.category_id)))
   WHERE ((materials_categories_relation.material_id = m.id) AND (m.user_id = auth.uid()) AND (mc.user_id = auth.uid())))));
 
+alter table "public"."materials_categories_relation" drop constraint "materials_categories_relation_category_id_fkey";
+
+alter table "public"."materials_categories_relation" drop constraint "materials_categories_relation_material_id_fkey";
+
+alter table "public"."materials_categories_relation" add constraint "materials_categories_relation_category_id_fkey" FOREIGN KEY (category_id) REFERENCES materials_categories(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+
+alter table "public"."materials_categories_relation" validate constraint "materials_categories_relation_category_id_fkey";
+
+alter table "public"."materials_categories_relation" add constraint "materials_categories_relation_material_id_fkey" FOREIGN KEY (material_id) REFERENCES materials(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+
+alter table "public"."materials_categories_relation" validate constraint "materials_categories_relation_material_id_fkey";
+
 
 

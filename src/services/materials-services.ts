@@ -191,6 +191,23 @@ export class MaterialsService extends BaseService {
     };
   }
 
+  async deleteMaterial(id: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabase
+        .from("materials")
+        .delete()
+        .eq("id", id);
+
+      console.log(error);
+
+      if (error) throw error;
+
+      return true;
+    } catch (err) {
+      this.handleError(err, "MaterialsService.deleteMaterial");
+    }
+  }
+
   transformMaterials(dbMaterials: any[]): Material[] {
     return dbMaterials.map(this.formatMaterial);
   }
