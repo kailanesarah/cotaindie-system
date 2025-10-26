@@ -44,13 +44,28 @@ interface OrderStore {
 export const useOrderStore = create<OrderStore>()(
   subscribeWithSelector((set) => ({
     order: {
-      status: "OPEN" as Status,
+      status: "OPEN",
+
       rawAmount: 0,
-      installmentCount: 1,
-      discountPercent: 0,
-      advanceAmount: 0,
+      deliveryDays: undefined,
+
+      paymentMethod: undefined,
+      advancePaymentMethod: undefined,
+
+      discountPercent: undefined,
+      advanceAmount: undefined,
+
+      installmentCount: undefined,
+
+      name: "",
+      notes: "",
+
       initialDate: new Date().toISOString(),
-      projects: [],
+      projects: undefined,
+
+      included: "",
+      excluded: "",
+      teamNotes: "",
     },
 
     setStatusInfo: (data) =>

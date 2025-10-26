@@ -57,7 +57,7 @@ export const SummaryBar = () => {
                   </span>
                 </>
               )}
-              {installmentCount > 0 && (
+              {installmentCount > 0 && installmentValue > 0 && (
                 <>
                   <span>|</span>
                   <span>

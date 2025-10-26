@@ -22,14 +22,15 @@ import {
 export const OrderIncludedForm = () => {
   const setExcluded = useOrderStore((state) => state.setExcluded);
   const setTrigger = useOrderStore((state) => state.setTrigger);
+  const order = useOrderStore((state) => state.order);
 
   const form = useForm<orderIncludedType>({
     resolver: zodResolver(orderIncludedSchema),
     mode: "onBlur",
     defaultValues: {
-      included: "",
-      excluded: "",
-      teamNotes: "",
+      included: order.included,
+      excluded: order.excluded,
+      teamNotes: order.teamNotes,
     },
   });
 

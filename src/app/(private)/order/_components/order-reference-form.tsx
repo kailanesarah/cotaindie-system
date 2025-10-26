@@ -29,12 +29,19 @@ import {
 
 export const OrderReferenceForm = () => {
   const { data: clients } = useGetClients();
+
   const setReference = useOrderStore((state) => state.setReference);
   const setTrigger = useOrderStore((state) => state.setTrigger);
+  const order = useOrderStore((state) => state.order);
 
   const form = useForm<orderReferenceType>({
     resolver: zodResolver(orderReferenceSchema),
-    defaultValues: { startsAt: new Date(), endsAt: "" },
+    defaultValues: {
+      title: order.name,
+      client: order.client?.id,
+      startsAt: order.initialDate ? new Date(order.initialDate) : new Date(),
+      endsAt: order.expirationDays?.toString(),
+    },
   });
 
   useEffect(() => {
