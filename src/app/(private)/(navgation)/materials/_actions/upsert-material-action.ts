@@ -1,20 +1,20 @@
 "use server";
 
 import { actionClient } from "@/lib/safe-action";
-import { materials } from "../_constants/material-list";
+import { supabaseServer } from "@/lib/supabase/server";
+import { MaterialsService } from "@/services/materials-services";
 import { materialSchema } from "../_schema/material-schema";
 
 export const usertMaterialAction = actionClient
   .schema(materialSchema)
   .action(async ({ parsedInput }): Promise<Material> => {
-    const { id } = parsedInput;
-
     try {
-      if (id) {
-        return materials[0];
-      }
+      const supabase = await supabaseServer();
+      const materialsService = new MaterialsService(supabase);
 
-      return materials[0];
+      const material = await materialsService.upsertMaterial(parsedInput);
+
+      return material;
     } catch (err) {
       console.error(err);
 

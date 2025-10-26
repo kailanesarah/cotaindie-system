@@ -66,7 +66,7 @@ export const OptionsButton = () => {
           >
             <Icon
               name="keyboard_arrow_down"
-              className="group-data-[state=open]:rotate-180"
+              className="group-data-[state=OPEN]:rotate-180"
             />
           </Button>
         </DropdownMenuTrigger>

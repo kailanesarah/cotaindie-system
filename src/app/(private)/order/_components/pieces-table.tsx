@@ -252,7 +252,7 @@ export const PiecesTable = ({ pieces }: PiecesTableProps) => {
       </TableHeader>
       <TableBody className="text-title-light">
         {materialGroups.map((group, gIndex) =>
-          group.material.measureType === "un" ? (
+          group.material.measureType === "UN" ? (
             <PiecesTableRowSingle
               key={gIndex}
               pieces={group.pieces}

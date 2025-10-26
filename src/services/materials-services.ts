@@ -9,62 +9,80 @@ export class MaterialsService extends BaseService {
     super(supabase);
   }
 
-  async upsertMaterial(material: Partial<Material>) {
+  async upsertMaterial(
+    material: Omit<Partial<Material>, "category"> & { category: string },
+  ): Promise<Material> {
     try {
       const {
         data: { user },
         error: authError,
       } = await this.supabase.auth.getUser();
+
       if (authError) throw new Error(`Auth error: ${authError.message}`);
       if (!user) throw new Error("Auth error: User not authenticated");
 
-      const materialToUpsert: any = {
-        ...material,
-        measure_type: material.measureType,
-        waste_tax: material.wasteTax,
-        base_value: material.baseValue,
-        cut_direction: material.cutDirection,
-      };
-
-      delete materialToUpsert.measureType;
-      delete materialToUpsert.wasteTax;
-      delete materialToUpsert.baseValue;
-      delete materialToUpsert.cutDirection;
-      delete materialToUpsert.category;
+      const materialToUpsert = { ...material };
 
       if (!material.id) {
         materialToUpsert.code = await generateId();
 
         delete materialToUpsert.id;
       } else {
-        const { data: existing, error: fetchError } = await this.supabase
-          .from("materials")
-          .select("code")
-          .eq("id", material.id)
-          .single();
+        const { data: materialCode, error: materialCodeError } =
+          await this.supabase
+            .from("materials")
+            .select("code")
+            .eq("id", material.id)
+            .single();
 
-        if (fetchError) {
-          throw new Error(`Fetch material code error: ${fetchError.message}`);
-        }
+        if (materialCodeError)
+          throw new Error(
+            `Fetch material code error: ${materialCodeError.message}`,
+          );
 
-        materialToUpsert.code = existing.code;
+        materialToUpsert.code = materialCode.code;
       }
+
+      const { category, ...rest } = materialToUpsert;
+
+      const materialDB = {
+        id: rest.id,
+        code: rest.code,
+        name: rest.name,
+        description: rest.description,
+        measure_type: rest.measureType,
+        unit: rest.unit,
+        waste_tax: rest.wasteTax,
+        base_value: rest.baseValue,
+        measure: rest.measure,
+        cut_direction: rest.cutDirection,
+        user_id: user.id,
+      };
 
       const { data, error: upsertError } = await this.supabase
         .from("materials")
-        .upsert(
-          { ...materialToUpsert, user_id: user.id },
-          { onConflict: "id", ignoreDuplicates: false },
-        )
-        .select(
-          "*, materials_categories_relation(category:materials_categories(id, name))",
-        )
+        .upsert(materialDB, { onConflict: "id", ignoreDuplicates: false })
+        .select()
         .single();
 
       if (upsertError)
         throw new Error(`Upsert material error: ${upsertError.message}`);
 
-      return this.formatMaterial(data);
+      if (category) {
+        const { error: relError } = await this.supabase
+          .from("materials_categories_relation")
+          .upsert({
+            material_id: data.id,
+            category_id: category,
+          });
+
+        if (relError)
+          throw new Error(
+            `Upsert material-category relation error: ${relError.message}`,
+          );
+      }
+
+      return data as Material;
     } catch (err) {
       this.handleError(err, "MaterialsService.upsertMaterial");
     }
@@ -172,6 +190,23 @@ export class MaterialsService extends BaseService {
     }
   }
 
+  async deleteMaterial(id: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabase
+        .from("materials")
+        .delete()
+        .eq("id", id);
+
+      console.log(error);
+
+      if (error) throw error;
+
+      return true;
+    } catch (err) {
+      this.handleError(err, "MaterialsService.deleteMaterial");
+    }
+  }
+
   private formatMaterial(dbMaterial: any): Material {
     return {
       id: dbMaterial.id,
@@ -189,23 +224,6 @@ export class MaterialsService extends BaseService {
       measure: dbMaterial.measure,
       cutDirection: dbMaterial.cut_direction,
     };
-  }
-
-  async deleteMaterial(id: string): Promise<boolean> {
-    try {
-      const { error } = await this.supabase
-        .from("materials")
-        .delete()
-        .eq("id", id);
-
-      console.log(error);
-
-      if (error) throw error;
-
-      return true;
-    } catch (err) {
-      this.handleError(err, "MaterialsService.deleteMaterial");
-    }
   }
 
   transformMaterials(dbMaterials: any[]): Material[] {

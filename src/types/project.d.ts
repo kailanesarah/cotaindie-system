@@ -10,7 +10,7 @@ type Project = {
 
   pieces: Piece[];
 
-  costs: Cost[];
+  costs?: Cost[];
 
   profitRate: number;
   monthlyExpense: number;

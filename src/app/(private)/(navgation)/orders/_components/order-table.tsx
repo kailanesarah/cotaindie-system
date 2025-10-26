@@ -36,7 +36,7 @@ export const OrderTable = () => {
         {data.items.map((order) => (
           <TableRow key={order.code}>
             <TableCell>
-              <Badge className="text-xs">{order.code}</Badge>
+              <Badge className="text-xs">Q - {order.code}</Badge>
             </TableCell>
             <TableCell className="text-title-light font-semibold whitespace-nowrap">
               <span className="line-clamp-1" title={order.name}>
@@ -45,12 +45,7 @@ export const OrderTable = () => {
             </TableCell>
             <TableCell>
               <Badge variant="secondary">
-                <div>
-                  {order.client.name}{" "}
-                  <span className="hidden lg:inline">
-                    | {order.client.code}
-                  </span>
-                </div>
+                <div>{order.client.name}</div>
               </Badge>
             </TableCell>
             <TableCell>

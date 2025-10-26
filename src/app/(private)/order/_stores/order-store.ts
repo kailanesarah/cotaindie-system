@@ -44,7 +44,7 @@ interface OrderStore {
 export const useOrderStore = create<OrderStore>()(
   subscribeWithSelector((set) => ({
     order: {
-      status: "open" as Status,
+      status: "OPEN" as Status,
       rawAmount: 0,
       installmentCount: 1,
       discountPercent: 0,

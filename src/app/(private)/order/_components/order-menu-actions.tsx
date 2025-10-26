@@ -62,14 +62,14 @@ export const OrderMenuActions = () => {
           classNameViewport="px-0"
         >
           <SelectItem
-            value="open"
+            value="OPEN"
             className="text-yellow-darker font-semibold outline-0"
           >
             Apenas cotado
           </SelectItem>
           <Separator />
           <SelectItem
-            value="approved"
+            value="APPROVED"
             className="text-green-default font-semibold outline-0"
           >
             Pedido finalizado
@@ -89,7 +89,7 @@ export const OrderMenuActions = () => {
             <Button className="group w-8 rounded-l-none border-0 focus:z-10">
               <Icon
                 name="keyboard_arrow_down"
-                className="group-data-[state=open]:rotate-180"
+                className="group-data-[state=OPEN]:rotate-180"
               />
             </Button>
           </DropdownMenuTrigger>
