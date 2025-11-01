@@ -9,9 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
+import { useDeleteOrder } from "../../(navgation)/orders/_hooks/use-delete-order";
 import { useUpsertOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
@@ -42,17 +44,25 @@ export const SaveButton = () => {
 export const OptionsButton = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const { order } = useOrderStore();
+  const router = useRouter();
 
-  const handleDelete = () => {
-    console.log("Deleted!");
+  const { execute: executeDelete, isPending: isPendingDelete } =
+    useDeleteOrder();
+  const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
+
+  const handleDelete = async () => {
+    if (order.id) {
+      executeDelete(order.id);
+    }
+
     setIsDeleteOpen(false);
+
+    window.close();
+    router.push("/orders");
   };
 
-  const id = order.id;
-
-  const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
   const handleCopy = () => {
-    if (id) executeCopy(id);
+    if (order.id) executeCopy(order.id);
   };
 
   return (
@@ -70,12 +80,13 @@ export const OptionsButton = () => {
             />
           </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent
           sideOffset={8}
           align="end"
           className="min-w-[12.5rem]"
         >
-          {id && (
+          {order.id && (
             <DropdownMenuItem onClick={handleCopy} disabled={isPendingCopy}>
               <Icon name="file_copy" /> Fazer cópia
             </DropdownMenuItem>
@@ -105,7 +116,7 @@ export const OptionsButton = () => {
       </DropdownMenu>
 
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DeleteDialog handleDelete={handleDelete} />
+        <DeleteDialog handleDelete={handleDelete} isPending={isPendingDelete} />
       </Dialog>
     </>
   );
