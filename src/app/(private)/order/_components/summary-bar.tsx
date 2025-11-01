@@ -43,9 +43,9 @@ export const SummaryBar = () => {
                 {statusMap[status || "OPEN"].text}
               </SummaryTag>
             </div>
-            <div className="flex flex-wrap gap-2.5 text-[0.8125rem]">
+            <div className="flex flex-wrap gap-2.5 text-xs lg:text-[0.8125rem]">
               <span>
-                Desconto <span className="hidden lg:inline">aplicado de</span>{" "}
+                Desc. <span className="hidden lg:inline">aplicado de</span>{" "}
                 {((order.discountPercent || 0) * 100).toFixed(2)}% -{" "}
                 {currencyFormatter.format(discountValue)}
               </span>
@@ -59,8 +59,8 @@ export const SummaryBar = () => {
               )}
               {installmentCount > 0 && installmentValue > 0 && (
                 <>
-                  <span>|</span>
-                  <span>
+                  <span className="hidden lg:block">|</span>
+                  <span className="hidden lg:block">
                     {installmentCount} parcelas de{" "}
                     {currencyFormatter.format(installmentValue)}
                   </span>
