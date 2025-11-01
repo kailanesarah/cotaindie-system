@@ -74,6 +74,16 @@ export const OrderPaymentForm = () => {
     setTrigger("paymentForm", form.trigger);
   }, [form.trigger, setTrigger]);
 
+  useEffect(() => {
+    const initialPercent = form.getValues("discountPercent");
+    const initialDiscount = initialPercent * rawAmount;
+
+    form.setValue("discount", initialDiscount, {
+      shouldValidate: true,
+      shouldDirty: false,
+    });
+  }, []);
+
   return (
     <Form {...form}>
       <form className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:items-start">
