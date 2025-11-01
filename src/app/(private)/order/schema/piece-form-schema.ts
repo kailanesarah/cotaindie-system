@@ -30,6 +30,7 @@ export const pieceSchema = z
         message: "Unidade inválida",
       }),
       wasteTax: z.number(),
+      cutDirection: z.enum(["V", "VH"]).optional(),
     }),
   })
   .superRefine((data, ctx) => {

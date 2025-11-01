@@ -21,14 +21,14 @@ import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
 
-import { upseUpsertOrder } from "../_hooks/use-order-save";
+import { useUpsertOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
 export const OrderMenuActions = () => {
   const { order, setStatusInfo } = useOrderStore();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const { execute: handleSave } = upseUpsertOrder();
+  const { execute: handleSave } = useUpsertOrder();
 
   const handleDelete = () => {
     console.log("Deleted!");

@@ -4,7 +4,7 @@ export const orders: Order[] = [
     code: "000000001",
     name: "Armário Planejado Quarto Casal",
     client: {
-      id: "00000000-0000-0000-0000-000000100001",
+      id: "00000000-0000-1000-0000-000000000001",
       code: "000000001",
       name: "Carla Ferreira",
       notes: "Cliente antiga, prefere contato por email",
@@ -19,10 +19,11 @@ export const orders: Order[] = [
       cep: "01234-567",
     },
     status: "OPEN",
-    expirationDays: 30,
+    expirationDays: 10,
     initialDate: "2025-10-01",
     projects: [
       {
+        id: "00000000-0000-0000-0000-000000100001",
         name: "Projeto Principal",
         qtde: 1,
         pieces: [
@@ -74,7 +75,7 @@ export const orders: Order[] = [
     rawAmount: 1000,
     deliveryDays: 15,
     paymentMethod: "CREDIT",
-    discountPercent: 0,
+    discountPercent: 0.1,
     installmentCount: 1,
     advanceAmount: 0,
     advancePaymentMethod: "TO_AGREE",
@@ -104,6 +105,7 @@ export const orders: Order[] = [
     initialDate: "2025-09-20",
     projects: [
       {
+        id: "00000000-0000-0000-0000-000000100002",
         name: "Projeto Cozinha",
         qtde: 1,
         pieces: [
@@ -202,6 +204,7 @@ export const orders: Order[] = [
     initialDate: "2025-10-05",
     projects: [
       {
+        id: "00000000-0000-0000-0000-000000100003",
         name: "Projeto Estante",
         qtde: 1,
         pieces: [

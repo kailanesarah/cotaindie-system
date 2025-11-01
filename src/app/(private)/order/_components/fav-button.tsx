@@ -12,7 +12,7 @@ import { Icon } from "@/components/ui/icon";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
-import { upseUpsertOrder } from "../_hooks/use-order-save";
+import { useUpsertOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
 interface FavButtonWrapperProps {
@@ -26,7 +26,7 @@ export const FavButtonWrapper = ({ children }: FavButtonWrapperProps) => (
 );
 
 export const SaveButton = () => {
-  const { execute: handleSave } = upseUpsertOrder();
+  const { execute: handleSave } = useUpsertOrder();
 
   return (
     <Button
