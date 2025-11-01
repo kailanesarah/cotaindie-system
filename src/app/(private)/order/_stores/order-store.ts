@@ -116,8 +116,10 @@ export const useOrderStore = create<OrderStore>()(
         const projectToCopy = projects[index];
         if (!projectToCopy) return state;
 
+        const { id, ...rest } = structuredClone(projectToCopy);
+
         const duplicated = {
-          ...structuredClone(projectToCopy),
+          ...rest,
           name: `${projectToCopy.name || "Projeto"} (cópia)`,
         };
 

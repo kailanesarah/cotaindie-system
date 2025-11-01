@@ -5,7 +5,7 @@ type Cost = {
 };
 
 type Project = {
-  id: string;
+  id?: string;
 
   name: string;
   qtde: number;
