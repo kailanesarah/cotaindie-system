@@ -7,11 +7,13 @@ import {
 import { OrderMenu } from "./_components/order-menu";
 import { SummaryBar } from "./_components/summary-bar";
 
-export default function OrderLayout({
-  children,
-}: Readonly<{
+interface OrderLayoutProps {
   children: ReactNode;
-}>) {
+}
+
+export default async function OrderLayout({
+  children,
+}: Readonly<OrderLayoutProps>) {
   return (
     <div className="grow">
       <OrderMenu />

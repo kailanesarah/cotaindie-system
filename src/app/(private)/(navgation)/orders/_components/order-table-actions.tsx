@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
+import Link from "next/link";
 import { DeleteDialog } from "../../_components/delete-dialog";
 import { useDialog } from "../../_hooks/use-dialog";
 import { useCopyOrder } from "../_hooks/use-copy-order";
@@ -33,9 +34,11 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent sideOffset={12} align="end" alignOffset={16}>
-          <DropdownMenuItem>
-            <Icon name="edit_square" /> Editar
-          </DropdownMenuItem>
+          <Link href={`/order/${order.id}`} target="_blank">
+            <DropdownMenuItem>
+              <Icon name="edit_square" /> Editar
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem onClick={handleCopy} disabled={isPendingCopy}>
             <Icon name="file_copy" /> Fazer cópia
           </DropdownMenuItem>
