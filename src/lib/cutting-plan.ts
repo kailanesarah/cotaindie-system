@@ -46,7 +46,7 @@ interface ResultsFull extends ResultsLite {
   base64Images: string[];
 }
 
-class CuttingPlan {
+export class CuttingPlan {
   private readonly sheets: Sheet[] = [];
   private readonly config: OptimizerConfig;
 

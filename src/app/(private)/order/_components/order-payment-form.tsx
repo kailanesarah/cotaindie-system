@@ -184,9 +184,8 @@ export const OrderPaymentForm = () => {
                       shouldDirty: true,
                     });
                   }}
-                  onBlur={(e) => {
+                  onBlur={() => {
                     field.onBlur();
-                    console.log(e.target.value);
                     setPayment({ discountPercent: field.value });
                   }}
                   allowNegative={false}

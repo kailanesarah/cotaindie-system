@@ -78,7 +78,6 @@ const PiecesTableRowSingle = ({
       {pieces.map((piece) => {
         const calc = calculatePieceMaterial(piece);
         const globalIndex = allPieces.indexOf(piece);
-
         return (
           <TableRow
             key={`un-${gIndex}-${globalIndex}`}

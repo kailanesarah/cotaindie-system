@@ -30,8 +30,9 @@ export function mapOrderFromSupabase(rawOrder: any): Order {
       monthlyExpense: project.monthly_expense ?? 0,
       comission: project.comission ?? 0,
       pieces: (project.pieces ?? []).map((piece: any) => {
-        const snapshot = piece.material_snapshot?.[0] ?? {};
+        const snapshot = piece.material_snapshot ?? {};
         const materialBase = piece.material ?? {};
+
         return {
           id: piece.id,
           name: piece.name ?? "",
@@ -41,14 +42,12 @@ export function mapOrderFromSupabase(rawOrder: any): Order {
           material: {
             id: materialBase.id ?? "",
             name: materialBase.name ?? "",
-            measure: snapshot.measure ?? materialBase.measure ?? [0],
-            measureType:
-              snapshot.measure_type ?? materialBase.measureType ?? "",
-            baseValue: snapshot.base_value ?? materialBase.baseValue ?? 0,
-            unit: snapshot.unit ?? materialBase.unit ?? "",
-            wasteTax: snapshot.waste_tax ?? materialBase.wasteTax ?? 0,
-            cutDirection:
-              snapshot.cut_direction ?? materialBase.cutDirection ?? null,
+            measure: snapshot.measure ?? [0],
+            measureType: snapshot.measure_type ?? "",
+            baseValue: snapshot.base_value ?? 0,
+            unit: snapshot.unit ?? "",
+            wasteTax: snapshot.waste_tax ?? 0,
+            cutDirection: snapshot.cut_direction ?? null,
           },
         };
       }),

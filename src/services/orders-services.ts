@@ -167,7 +167,7 @@ export class OrdersService extends BaseService {
 
             const { error: snapshotError } = await this.supabase
               .from("orders_pieces_materials_snapshot")
-              .insert(snapshot);
+              .upsert(snapshot, { onConflict: "piece_id" });
             if (snapshotError)
               throw new Error(
                 `Snapshot insert error: ${snapshotError.message}`,
