@@ -12,6 +12,8 @@ import { Icon } from "@/components/ui/icon";
 import Link from "next/link";
 import { DeleteDialog } from "../../_components/delete-dialog";
 import { useDialog } from "../../_hooks/use-dialog";
+import { useGenerateQuoteDocument } from "../../_hooks/use-generate-quote-document";
+import { mapOrderToQuoteDoc } from "../../_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../_hooks/use-copy-order";
 import { useDeleteOrder } from "../_hooks/use-delete-order";
 
@@ -25,6 +27,15 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
   const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
   const handleCopy = () => executeCopy(order.id);
 
+  const { generateQuoteDocument } = useGenerateQuoteDocument();
+  const handleGenerateQuote = () => {
+    const quoteDoc = mapOrderToQuoteDoc(order);
+    if (!quoteDoc) {
+      return;
+    }
+
+    generateQuoteDocument(quoteDoc);
+  };
   return (
     <>
       <DropdownMenu>
@@ -39,6 +50,12 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
               <Icon name="edit_square" /> Editar
             </DropdownMenuItem>
           </Link>
+          <DropdownMenuItem
+            onClick={handleGenerateQuote}
+            disabled={isPendingCopy}
+          >
+            <Icon name="download" /> Baixar orçamento
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={handleCopy} disabled={isPendingCopy}>
             <Icon name="file_copy" /> Fazer cópia
           </DropdownMenuItem>

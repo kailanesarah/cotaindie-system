@@ -294,7 +294,7 @@ export const ContractDocument = ({
         <DataGridRow>
           <DataGridCell width="60%">
             <Text>
-              <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>
+              <Text style={{ fontWeight: 700 }}>Pagamento inicial: </Text>
               {payment.paymentMethod}
             </Text>
           </DataGridCell>

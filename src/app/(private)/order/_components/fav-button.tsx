@@ -12,6 +12,8 @@ import { Icon } from "@/components/ui/icon";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useGenerateQuoteDocument } from "../../(navgation)/_hooks/use-generate-quote-document";
+import { mapOrderToQuoteDoc } from "../../(navgation)/_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
 import { useDeleteOrder } from "../../(navgation)/orders/_hooks/use-delete-order";
 import { useUpsertOrder } from "../_hooks/use-order-save";
@@ -65,6 +67,16 @@ export const OptionsButton = () => {
     if (order.id) executeCopy(order.id);
   };
 
+  const { generateQuoteDocument } = useGenerateQuoteDocument();
+  const handleGenerateQuote = () => {
+    const quoteDoc = mapOrderToQuoteDoc(order);
+    if (!quoteDoc) {
+      return;
+    }
+
+    generateQuoteDocument(quoteDoc);
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -91,7 +103,7 @@ export const OptionsButton = () => {
               <Icon name="file_copy" /> Fazer cópia
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleGenerateQuote}>
             <Icon name="picture_as_pdf" /> Exportar PDF
           </DropdownMenuItem>
           <DropdownMenuItem>
