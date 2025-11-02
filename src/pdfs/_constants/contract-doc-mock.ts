@@ -1,4 +1,4 @@
-const mockCompany = {
+export const mockCompany = {
   name: "Paulo César Arruda Aragão",
   document: "23.933.978/0001-07",
   phone: "(88) 9 781 - 5906",

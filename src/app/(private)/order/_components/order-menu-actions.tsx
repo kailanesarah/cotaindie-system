@@ -20,7 +20,9 @@ import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useGenerateContractDocument } from "../../(navgation)/_hooks/use-generate-contract-document";
 import { useGenerateQuoteDocument } from "../../(navgation)/_hooks/use-generate-quote-document";
+import { mapOrderToContractDoc } from "../../(navgation)/_utils/map-order-to-contract-doc";
 import { mapOrderToQuoteDoc } from "../../(navgation)/_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
 import { useDeleteOrder } from "../../(navgation)/orders/_hooks/use-delete-order";
@@ -61,6 +63,16 @@ export const OrderMenuActions = () => {
     }
 
     generateQuoteDocument(quoteDoc);
+  };
+
+  const { generateContractDocument } = useGenerateContractDocument();
+  const handleGenerateContract = () => {
+    const contractDoc = mapOrderToContractDoc(order);
+    if (!contractDoc) {
+      return;
+    }
+
+    generateContractDocument(contractDoc);
   };
 
   return (
@@ -129,7 +141,7 @@ export const OrderMenuActions = () => {
             <DropdownMenuItem>
               <Icon name="download" /> Espelho de materiais
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleGenerateContract}>
               <Icon name="contract" /> Baixar contrato
             </DropdownMenuItem>
             <DropdownMenuItem>

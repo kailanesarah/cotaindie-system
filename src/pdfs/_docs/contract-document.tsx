@@ -11,7 +11,7 @@ import { SignatureBlock } from "../_components/signature-block";
 import { SummaryBlock } from "../_components/summary-block";
 import { TitledTextSection } from "../_components/title-text-section";
 
-interface ClientProps {
+export interface ClientProps {
   name: string;
   code?: string;
   document?: string;
@@ -26,14 +26,14 @@ interface ClientProps {
   };
 }
 
-interface ContractProjectProps {
+export interface ContractProjectProps {
   name: string;
   qtde: number;
   unitPrice: string;
   totalPrice: string;
 }
 
-interface PaymentProps {
+export interface PaymentProps {
   initialDate: string;
   paymentMethod: string;
   advanceAmount: string;
@@ -42,12 +42,12 @@ interface PaymentProps {
   installmentsInfo: string;
 }
 
-interface ClauseItem {
+export interface ClauseItem {
   id: string;
   text: string;
 }
 
-interface ContractDataProps {
+export interface ContractDataProps {
   quoteCode: string;
   saleCode: string;
   name: string;
@@ -67,7 +67,7 @@ interface ContractDataProps {
   signatureDateLocation: string;
 }
 
-interface ContractDocumentProps {
+export interface ContractDocumentProps {
   company: Company;
   client: ClientProps;
   contract: ContractDataProps;
