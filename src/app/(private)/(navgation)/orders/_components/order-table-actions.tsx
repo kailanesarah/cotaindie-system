@@ -12,7 +12,9 @@ import { Icon } from "@/components/ui/icon";
 import Link from "next/link";
 import { DeleteDialog } from "../../_components/delete-dialog";
 import { useDialog } from "../../_hooks/use-dialog";
+import { useGenerateContractDocument } from "../../_hooks/use-generate-contract-document";
 import { useGenerateQuoteDocument } from "../../_hooks/use-generate-quote-document";
+import { mapOrderToContractDoc } from "../../_utils/map-order-to-contract-doc";
 import { mapOrderToQuoteDoc } from "../../_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../_hooks/use-copy-order";
 import { useDeleteOrder } from "../_hooks/use-delete-order";
@@ -35,6 +37,16 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
     }
 
     generateQuoteDocument(quoteDoc);
+  };
+
+  const { generateContractDocument } = useGenerateContractDocument();
+  const handleGenerateContract = () => {
+    const contractDoc = mapOrderToContractDoc(order);
+    if (!contractDoc) {
+      return;
+    }
+
+    generateContractDocument(contractDoc);
   };
   return (
     <>
@@ -65,7 +77,7 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
           <DropdownMenuItem>
             <Icon name="download" /> Espelho de materiais
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleGenerateContract}>
             <Icon name="contract" /> Baixar contrato
           </DropdownMenuItem>
           <DropdownMenuItem className="text-red-default" onClick={handleDelete}>
