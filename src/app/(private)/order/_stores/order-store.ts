@@ -37,6 +37,8 @@ interface OrderStore {
 
   setOrderId: (id: string) => void;
 
+  setOrderFull: (order: Partial<Order>) => void;
+
   reset: () => void;
 
   triggers: Record<string, () => Promise<boolean>>;
@@ -46,21 +48,20 @@ interface OrderStore {
 export const useOrderStore = create<OrderStore>()(
   subscribeWithSelector((set) => ({
     order: {
-      // status: "OPEN" as Status,
-      // rawAmount: 0,
+      status: "OPEN" as Status,
+      initialDate: new Date().toISOString(),
+      rawAmount: 0,
       // deliveryDays: undefined,
       // paymentMethod: undefined,
       // advancePaymentMethod: undefined,
-      // discountPercent: undefined,
-      // advanceAmount: undefined,
-      // installmentCount: 1,
-      // name: "",
-      // notes: "",
-      // initialDate: new Date().toISOString(),
+      discountPercent: 0,
+      installmentCount: 1,
+      name: "",
+      notes: "",
       // projects: undefined,
-      // included: "",
-      // excluded: "",
-      // teamNotes: "",
+      included: "",
+      excluded: "",
+      teamNotes: "",
     },
 
     setStatusInfo: (data) =>
@@ -114,8 +115,10 @@ export const useOrderStore = create<OrderStore>()(
         const projectToCopy = projects[index];
         if (!projectToCopy) return state;
 
+        const { id, ...rest } = structuredClone(projectToCopy);
+
         const duplicated = {
-          ...structuredClone(projectToCopy),
+          ...rest,
           name: `${projectToCopy.name || "Projeto"} (cópia)`,
         };
 
@@ -134,6 +137,14 @@ export const useOrderStore = create<OrderStore>()(
 
     setOrderId: (id: string) =>
       set((state) => ({ order: { ...state.order, id } })),
+
+    setOrderFull: (order: Partial<Order>) =>
+      set((state) => ({
+        order: {
+          ...state.order,
+          ...order,
+        },
+      })),
 
     reset: () => set({ order: {} }),
 

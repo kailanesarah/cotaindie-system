@@ -16,7 +16,7 @@ interface CompanyProps {
   phone: string;
 }
 
-interface ClientProps {
+export interface ClientProps {
   name: string;
   code?: string;
   document?: string;
@@ -31,7 +31,7 @@ interface ClientProps {
   };
 }
 
-interface QuoteProjectProps {
+export interface QuoteProjectProps {
   name: string;
   qtde: number;
   unitPrice: string;
@@ -42,7 +42,7 @@ interface PaymentProps {
   initialDate: string;
   paymentMethod: string;
   advanceAmount: string;
-  deliveryDays: number;
+  deliveryDays?: number;
   remainingPaymentInfo: string;
   installmentsInfo: string;
 }
@@ -66,7 +66,7 @@ interface QuoteDataProps {
   notes?: string;
 }
 
-interface QuoteDocumentProps {
+export interface QuoteDocumentProps {
   company: CompanyProps;
   client: ClientProps;
   order: QuoteDataProps;
@@ -230,7 +230,7 @@ export const QuoteDocument = ({
         <DataGridRow>
           <DataGridCell width="50%">
             <Text>
-              <Text style={{ fontWeight: 700 }}>Plano de pagamento: </Text>
+              <Text style={{ fontWeight: 700 }}>Pagamento inicial: </Text>
               {payment.paymentMethod}
             </Text>
           </DataGridCell>

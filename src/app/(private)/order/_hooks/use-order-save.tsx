@@ -10,14 +10,15 @@ import { orderSchema, type OrderType } from "../schema/order-schema";
 
 export const useUpsertOrder = () => {
   const queryClient = useQueryClient();
-  const { order, triggers, setOrderId } = useOrderStore();
+  const { order, triggers, setOrderFull } = useOrderStore();
 
   const { execute: executeAction, isPending } = useAction(upsertOrderAction, {
     onSuccess: async (res) => {
       await queryClient.invalidateQueries({ queryKey: ["orders"] });
 
-      const id = res.data.id;
-      setOrderId(id);
+      console.log(res);
+
+      setOrderFull(res.data);
 
       toast((t) => (
         <ToastCard

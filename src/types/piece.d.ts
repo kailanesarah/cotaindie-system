@@ -1,5 +1,5 @@
 interface Piece {
-  id: string;
+  id?: string;
   name?: string;
   qtde: number;
   measure: [number] | [number, number];

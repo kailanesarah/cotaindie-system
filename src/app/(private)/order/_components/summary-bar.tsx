@@ -13,6 +13,8 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { Separator } from "@radix-ui/react-separator";
 import { statusMap } from "../../(navgation)/_constants/status-map";
+import { useGenerateQuoteDocument } from "../../(navgation)/_hooks/use-generate-quote-document";
+import { mapOrderToQuoteDoc } from "../../(navgation)/_utils/map-order-to-quote-doc";
 import { useOrderStore } from "../_stores/order-store";
 import { currencyFormatter } from "../_utils/currency-formatter";
 import { calculateOrderSummary } from "../functions/order-summary";
@@ -28,6 +30,15 @@ export const SummaryBar = () => {
 
   const isSmallScreen = useMediaQuery("(max-width: 1023px)");
 
+  const { generateQuoteDocument } = useGenerateQuoteDocument();
+  const handleGenerateQuote = () => {
+    const quoteDoc = mapOrderToQuoteDoc(order);
+    if (!quoteDoc) {
+      return;
+    }
+
+    generateQuoteDocument(quoteDoc);
+  };
   return (
     <div className="pointer-events-none fixed top-0 right-0 bottom-0 left-0 flex h-full w-full items-end">
       <div className="border-b-light pointer-events-auto flex min-h-[5rem] grow items-center border-t bg-white px-4 pt-4 pb-4 shadow-[0_0_32px_0_rgba(0,0,0,0.08)] lg:min-h-[6.25rem] lg:px-6 lg:pt-5 lg:pb-6">
@@ -107,6 +118,7 @@ export const SummaryBar = () => {
             <Button
               square={isSmallScreen}
               className={cn(isSmallScreen && "px-0")}
+              onClick={handleGenerateQuote}
             >
               <Icon name="download" />
               <span className="hidden lg:inline">Exportar orçamento</span>

@@ -2,6 +2,7 @@ import type { SearchState } from "@/app/(private)/(navgation)/_context/search-pr
 import type { SearchResult } from "@/app/(private)/_types/search-result";
 import type { OrderType } from "@/app/(private)/order/schema/order-schema";
 import { generateId } from "@/utils/generate-nano-id";
+import { mapOrderFromSupabase } from "@/utils/order-mapper";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { BaseService } from "./base-service";
 
@@ -15,12 +16,10 @@ export class OrdersService extends BaseService {
         data: { user },
         error: authError,
       } = await this.supabase.auth.getUser();
-
       if (authError) throw new Error(`Auth error: ${authError.message}`);
       if (!user) throw new Error("Auth error: User not authenticated");
 
       let orderCode: string;
-
       if (!order.id) {
         orderCode = await generateId();
       } else {
@@ -30,7 +29,6 @@ export class OrdersService extends BaseService {
             .select("code")
             .eq("id", order.id)
             .single();
-
         if (fetchCodeError)
           throw new Error(`Fetch order code error: ${fetchCodeError.message}`);
         orderCode = existingOrder.code;
@@ -76,9 +74,28 @@ export class OrdersService extends BaseService {
         .upsert({ ...orderToUpsert, code: orderCode })
         .select()
         .single();
-
       if (orderError)
         throw new Error(`Order upsert error: ${orderError.message}`);
+
+      const { data: existingProjects } = await this.supabase
+        .from("orders_projects")
+        .select("id")
+        .eq("order_id", orderData.id);
+
+      const existingProjectIds = existingProjects?.map((p) => p.id) ?? [];
+      const newProjectIdsSet = new Set(
+        projects.map((p) => p.id).filter(Boolean),
+      );
+
+      const projectsToDelete = existingProjectIds.filter(
+        (id) => !newProjectIdsSet.has(id),
+      );
+      if (projectsToDelete.length) {
+        await this.supabase
+          .from("orders_projects")
+          .delete()
+          .in("id", projectsToDelete);
+      }
 
       for (const project of projects) {
         const projectToUpsert = {
@@ -96,7 +113,6 @@ export class OrdersService extends BaseService {
           .upsert(projectToUpsert)
           .select()
           .single();
-
         if (projectError)
           throw new Error(`Project upsert error: ${projectError.message}`);
 
@@ -105,30 +121,38 @@ export class OrdersService extends BaseService {
           .select("id")
           .eq("project_id", projectData.id);
 
-        const pieceIds = existingPieces?.map((p) => p.id) ?? [];
-        if (pieceIds.length) {
+        const existingPieceIds = existingPieces?.map((p) => p.id) ?? [];
+        const newPieceIdsSet = new Set(
+          (project.pieces ?? []).map((p) => p.id).filter(Boolean),
+        );
+
+        const piecesToDelete = existingPieceIds.filter(
+          (id) => !newPieceIdsSet.has(id),
+        );
+        if (piecesToDelete.length) {
           await this.supabase
-            .from("orders_pieces_materials_snapshot")
+            .from("orders_pieces")
             .delete()
-            .in("piece_id", pieceIds);
-          await this.supabase.from("orders_pieces").delete().in("id", pieceIds);
+            .in("id", piecesToDelete);
         }
 
         for (const piece of project.pieces ?? []) {
+          const pieceToUpsert = {
+            id: piece.id,
+            name: piece.name,
+            qtde: piece.qtde,
+            measure: piece.measure,
+            project_id: projectData.id,
+            material_id: piece.material?.id ?? null,
+          };
+
           const { data: pieceData, error: pieceError } = await this.supabase
             .from("orders_pieces")
-            .insert({
-              name: piece.name,
-              qtde: piece.qtde,
-              measure: piece.measure,
-              project_id: projectData.id,
-              material_id: piece.material?.id ?? null,
-            })
+            .upsert(pieceToUpsert)
             .select()
             .single();
-
           if (pieceError)
-            throw new Error(`Piece insert error: ${pieceError.message}`);
+            throw new Error(`Piece upsert error: ${pieceError.message}`);
 
           if (piece.material) {
             const snapshot = {
@@ -143,8 +167,7 @@ export class OrdersService extends BaseService {
 
             const { error: snapshotError } = await this.supabase
               .from("orders_pieces_materials_snapshot")
-              .insert(snapshot);
-
+              .upsert(snapshot, { onConflict: "piece_id" });
             if (snapshotError)
               throw new Error(
                 `Snapshot insert error: ${snapshotError.message}`,
@@ -157,47 +180,24 @@ export class OrdersService extends BaseService {
         .from("orders")
         .select(
           `
-      *,
-      client:clients(id, code, name, notes, type),
-      projects:orders_projects(
         *,
-        pieces:orders_pieces(
+        client:clients(*),
+        projects:orders_projects(
           *,
-          material:materials(id, name, description),
-          material_snapshot:orders_pieces_materials_snapshot(*)
+          pieces:orders_pieces(
+            *,
+            material:materials(id, name, description),
+            material_snapshot:orders_pieces_materials_snapshot(*)
+          )
         )
-      )
-    `,
+      `,
         )
         .eq("id", orderData.id)
         .single();
-
       if (fetchError)
         throw new Error(`Fetch order error: ${fetchError.message}`);
 
-      const mappedOrder: Order = {
-        ...fullOrder,
-        projects: (fullOrder.projects ?? []).map((project: any) => ({
-          ...project,
-          pieces: (project.pieces ?? []).map((piece: any) => {
-            const snapshot = piece.material_snapshot?.[0] ?? {};
-            const materialBase = piece.material ?? {};
-            return {
-              id: piece.id,
-              name: piece.name,
-              qtde: piece.qtde,
-              measure: piece.measure,
-              project_id: piece.project_id,
-              material: {
-                ...materialBase,
-                ...snapshot,
-              },
-            };
-          }),
-        })),
-      };
-
-      return mappedOrder;
+      return mapOrderFromSupabase(fullOrder);
     } catch (err) {
       this.handleError(err, "OrdersService.upsertOrder");
     }
@@ -208,7 +208,7 @@ export class OrdersService extends BaseService {
       let query = this.supabase.from("orders").select(
         `
       *,
-      client:clients(id, code, name, notes, type),
+      client:clients(*),
       projects:orders_projects(
         *,
         pieces:orders_pieces(
@@ -244,7 +244,6 @@ export class OrdersService extends BaseService {
               .select("id")
               .eq("client_id", extra.value);
             if (relError) throw relError;
-
             const ids = (orderIds ?? []).map((r) => r.id);
             if (ids.length) query = query.in("id", ids);
           } else {
@@ -266,34 +265,43 @@ export class OrdersService extends BaseService {
       const { data, error, count } = await query;
       if (error) throw error;
 
-      const items = (data ?? []).map((order) => ({
-        ...order,
-        projects: (order.projects ?? []).map((project: any) => ({
-          ...project,
-          pieces: (project.pieces ?? []).map((piece: any) => {
-            const snapshot = piece.material_snapshot?.[0] ?? {};
-            const materialBase = piece.material ?? {};
-
-            return {
-              id: piece.id,
-              name: piece.name,
-              qtde: piece.qtde,
-              measure: piece.measure,
-              project_id: piece.project_id,
-              material: {
-                ...materialBase,
-                ...snapshot,
-              },
-            };
-          }),
-        })),
-      }));
-
+      const items = (data ?? []).map(mapOrderFromSupabase);
       const totalPages = Math.ceil((count ?? 0) / perPage);
 
-      return { items: items as Order[], page, totalPages };
+      return { items, page, totalPages };
     } catch (err) {
       this.handleError(err, "OrdersService.getOrders");
+    }
+  }
+
+  async getOrderById(id: string): Promise<Order | null> {
+    try {
+      const { data: order, error } = await this.supabase
+        .from("orders")
+        .select(
+          `
+        *,
+        client:clients(*),
+        projects:orders_projects(
+          *,
+          pieces:orders_pieces(
+            *,
+            material:materials(id, name, description),
+            material_snapshot:orders_pieces_materials_snapshot(*)
+          )
+        )
+      `,
+        )
+        .eq("id", id)
+        .single();
+
+      if (error) throw error;
+
+      if (!order) return null;
+
+      return mapOrderFromSupabase(order);
+    } catch (err) {
+      this.handleError(err, "OrdersService.getOrderById");
     }
   }
 
