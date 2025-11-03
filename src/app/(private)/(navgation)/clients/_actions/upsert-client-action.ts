@@ -1,7 +1,7 @@
 "use server";
 
 import { actionClient } from "@/lib/safe-action";
-import { clients } from "../_constants/clients-list";
+import { clients } from "../_constants/clients";
 import { clientSchema } from "../_schema/client-schema";
 
 export const upsertClientAction = actionClient

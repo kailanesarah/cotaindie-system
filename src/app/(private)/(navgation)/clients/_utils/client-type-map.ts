@@ -1,4 +1,4 @@
 export const clientTypeMap = {
-  pf: "Pessoa Física",
-  pj: "Pessoa Jurídica",
+  CPF: "Pessoa Física",
+  CNPJ: "Pessoa Jurídica",
 } as const;

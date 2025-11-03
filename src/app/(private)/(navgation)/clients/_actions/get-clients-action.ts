@@ -2,7 +2,7 @@
 
 import type { SearchResult } from "@/app/(private)/_types/search-result";
 import type { SearchState } from "../../_context/search-provider";
-import { clients } from "../_constants/clients-list";
+import { clients } from "../_constants/clients";
 
 export async function getClientsAction(
   params: SearchState,
