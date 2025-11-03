@@ -30,16 +30,20 @@ export function DatePicker({
   allowFutureDates = false,
 }: Readonly<DatePickerProps>) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
+  const [open, setOpen] = useState(false);
 
   const handleSelect = (date: Date | undefined) => {
     setSelectedDate(date);
     onChange?.(date);
+    setOpen(false);
   };
 
   return (
     <Popover
-      onOpenChange={(open) => {
-        if (!open) {
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) {
           onBlur?.();
         }
       }}
@@ -58,7 +62,7 @@ export function DatePicker({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="6 mt-2 w-[17.5rem] p-0"
+        className="mt-2 w-[17.5rem] p-0"
         align="end"
         sideOffset={0}
       >

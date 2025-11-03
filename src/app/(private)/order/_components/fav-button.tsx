@@ -58,15 +58,15 @@ export const OptionsButton = () => {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger asChild className="group">
           <Button
-            className="group h-[2.5rem] w-[2.5rem] min-w-[2.5rem] !rounded-[0.5rem] shadow-[0_0_32px_0_rgba(0,0,0,0.16)]"
+            className="h-[2.5rem] w-[2.5rem] min-w-[2.5rem] !rounded-[0.5rem] shadow-[0_0_32px_0_rgba(0,0,0,0.16)]"
             variant="secondary"
             square
           >
             <Icon
               name="keyboard_arrow_down"
-              className="group-data-[state=OPEN]:rotate-180"
+              className="group-data-[state=open]:rotate-180"
             />
           </Button>
         </DropdownMenuTrigger>
