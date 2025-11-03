@@ -10,7 +10,7 @@ import {
 import { MateriaForm } from "./material-form";
 
 export const MaterialDialog = ({ material }: { material?: Material }) => {
-  const id = material?.id;
+  const code = material?.code;
   const name = material?.name;
 
   return (
@@ -18,18 +18,18 @@ export const MaterialDialog = ({ material }: { material?: Material }) => {
       <DialogHeader>
         <div className="flex items-center gap-3">
           <DialogIcon name="inventory_2" className="hidden lg:block" />
-          {material?.id && (
-            <Badge className="h-5 text-[0.6875rem] lg:hidden">{id}</Badge>
+          {code && (
+            <Badge className="h-5 text-[0.6875rem] lg:hidden">M - {code}</Badge>
           )}
         </div>
         <DialogHeaderContent>
           <DialogTitle>
-            {id ? name : "Adicione um novo material ou item"}
+            {code ? name : "Adicione um novo material ou item"}
           </DialogTitle>
-          {material?.id && (
+          {code && (
             <DialogDescription className="flex gap-3">
               <Badge className="hidden h-5 text-[0.6875rem] lg:block">
-                {id}
+                M - {code}
               </Badge>
               Alterações só serão refletidas em cotações novas.
             </DialogDescription>

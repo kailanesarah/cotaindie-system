@@ -19,7 +19,7 @@ export const ClientDialog = ({ client }: { client?: Client }) => {
         <div className="flex items-center gap-3">
           <DialogIcon name="article_person" className="hidden lg:block" />
           {code && (
-            <Badge className="h-5 text-[0.6875rem] lg:hidden">{code}</Badge>
+            <Badge className="h-5 text-[0.6875rem] lg:hidden">C - {code}</Badge>
           )}
         </div>
         <DialogHeaderContent>
