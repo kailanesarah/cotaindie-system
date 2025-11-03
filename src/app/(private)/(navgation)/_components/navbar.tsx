@@ -15,7 +15,6 @@ export const Navbar = ({ profile }: INavbarProps) => {
     <nav className="border-b-light hidden h-[4.5625rem] items-center border-b bg-white px-4 py-4 lg:flex lg:px-6">
       <div className="flex grow items-center justify-between gap-6">
         <NavbarBreadcrumb />
-
         <div className="hidden items-center gap-6 lg:flex">
           <Dialog>
             <DialogTrigger asChild>
@@ -26,7 +25,6 @@ export const Navbar = ({ profile }: INavbarProps) => {
             </DialogTrigger>
             <QuestionsDialog />
           </Dialog>
-
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="link">
@@ -36,7 +34,6 @@ export const Navbar = ({ profile }: INavbarProps) => {
             </DialogTrigger>
             <SupportDialog />
           </Dialog>
-
           <NavbarProfile profile={profile} />
         </div>
       </div>

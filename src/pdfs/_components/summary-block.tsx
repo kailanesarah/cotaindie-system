@@ -1,0 +1,76 @@
+import { Text, View } from "@react-pdf/renderer";
+
+interface SummaryBlockProps {
+  discountLabel?: string;
+  orderValue: string;
+  discountValue: string;
+  totalValue: string;
+}
+
+export const SummaryBlock = ({
+  discountLabel,
+  orderValue,
+  discountValue,
+  totalValue,
+}: Readonly<SummaryBlockProps>) => (
+  <View
+    style={{
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      marginTop: 15,
+      fontSize: 9,
+      alignItems: "flex-end",
+    }}
+  >
+    <View style={{ marginRight: 24 }}>
+      {discountLabel && (
+        <Text
+          style={{
+            paddingBottom: 33,
+          }}
+        >
+          {discountLabel}
+        </Text>
+      )}
+    </View>
+    <View style={{ width: "50%" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingVertical: 4,
+        }}
+      >
+        <Text>Valor do pedido:</Text>
+        <Text>{orderValue}</Text>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingVertical: 4,
+        }}
+      >
+        <Text>Valor do desconto:</Text>
+        <Text>{discountValue}</Text>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingVertical: 6,
+          borderTopWidth: 0.5,
+          borderColor: "#000",
+          marginTop: 4,
+        }}
+      >
+        <Text style={{ fontFamily: "Helvetica-Bold", fontSize: 11 }}>
+          Valor a pagar:
+        </Text>
+        <Text style={{ fontFamily: "Helvetica-Bold", fontSize: 11 }}>
+          {totalValue}
+        </Text>
+      </View>
+    </View>
+  </View>
+);
