@@ -1,8 +1,7 @@
 export const ROUTES = {
   PUBLIC: {
-    SIGNIN: "/sign-in",
-    SIGNOUT: "/signout",
-    HOME: "/",
+    LOGIN: "/login",
+    LOGOUT: "/logout",
   },
   PRIVATE: {
     DASHBOARD: "/dashboard",

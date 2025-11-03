@@ -1,6 +1,6 @@
 "use client";
 
-import { useSignOut } from "@/app/(private)/_hooks/use-sign-out";
+import { useLogout } from "@/app/(private)/_hooks/use-logout";
 import LogoSymbol from "@/assets/imgs/logo-symbol.svg";
 import LogoTitle from "@/assets/imgs/logo-title.svg";
 import { Icon } from "@/components/ui/icon";
@@ -41,7 +41,7 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar> & { menuItems: TAppSidebarItem[] }) {
   const pathname = usePathname();
 
-  const { execute } = useSignOut();
+  const { execute } = useLogout();
   const handleClick = () => execute();
 
   return (

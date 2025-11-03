@@ -1,4 +1,4 @@
-interface Piece {
+interface PieceMeasures {
   name?: string;
   w: number;
   h: number;
@@ -7,7 +7,7 @@ interface Piece {
 interface OptimizerConfig {
   sheetW: number;
   sheetH: number;
-  items: Piece[];
+  items: PieceMeasures[];
   margin: number;
   pieceSpacing: number;
   allowRotate: boolean;
@@ -203,7 +203,7 @@ class CuttingPlan {
   readonly #packMaxRects = (
     sheetW: number,
     sheetH: number,
-    items: Piece[],
+    items: PieceMeasures[],
     allowRotate: boolean,
     margin: number,
     pieceSpacing: number,

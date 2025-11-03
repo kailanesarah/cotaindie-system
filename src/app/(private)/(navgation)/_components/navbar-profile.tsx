@@ -9,7 +9,7 @@ import { getInitialLetters } from "../_utils/get-initial-letters";
 import { DropdownLogout } from "./dropdown-button";
 
 interface INavbarProfile {
-  profile: { name: string; role: string; imageUrl?: string };
+  profile: { name: string; role: string; avatar?: string };
 }
 
 export const NavbarProfile = ({ profile }: INavbarProfile) => {
@@ -20,7 +20,7 @@ export const NavbarProfile = ({ profile }: INavbarProfile) => {
       <DropdownMenuTrigger asChild>
         <button className="group flex cursor-pointer items-center gap-3 focus:outline-none">
           <Avatar>
-            <AvatarImage src={profile.imageUrl} alt={profile.name} />
+            <AvatarImage src={profile.avatar} alt={profile.name} />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
           <div className="-mt-0.5 flex flex-col gap-0 text-left">

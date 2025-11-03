@@ -23,7 +23,7 @@ const PDFViewer = dynamic(
   { ssr: false },
 );
 
-export default function Home() {
+export default function DocsPage() {
   const [docIndex, setDocIndex] = useState(0);
 
   const documents = [
