@@ -37,7 +37,7 @@ export const ClientsTable = () => {
         {data.items.map((client) => (
           <TableRow key={client.code}>
             <TableCell>
-              <Badge className="text-xs">{client.code}</Badge>
+              <Badge className="text-xs">C - {client.code}</Badge>
             </TableCell>
             <TableCell className="text-title-light font-semibold whitespace-nowrap">
               <span className="line-clamp-1" title={client.name}>

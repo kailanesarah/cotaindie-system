@@ -17,7 +17,7 @@ INSERT INTO public.clients (
 ) VALUES
 (
     gen_random_uuid(),
-    '2394',
+    '223942394',
     'Maria do Carmo Almeida',
     'Cliente prefere entrega pela manhã, entre 8h e 10h',
     'CPF',
@@ -34,7 +34,7 @@ INSERT INTO public.clients (
 ),
 (
     gen_random_uuid(),
-    '6543',
+    '652436543',
     'José Roberto Madeiras Ltda',
     'Cliente prefere entrega pela manhã, entre 8h e 10h',
     'CNPJ',
@@ -51,7 +51,7 @@ INSERT INTO public.clients (
 ),
 (
     gen_random_uuid(),
-    '8943',
+    '089438943',
     'Eliane Souza Pereira',
     'Solicita que a entrega seja agendada sempre para às sextas-feiras',
     'CPF',
@@ -68,7 +68,7 @@ INSERT INTO public.clients (
 ),
 (
     gen_random_uuid(),
-    '1234',
+    '123431234',
     'Moveis Delmar ME',
     'Aceita entrega apenas com nota fiscal impressa',
     'CNPJ',
@@ -85,7 +85,7 @@ INSERT INTO public.clients (
 ),
 (
     gen_random_uuid(),
-    '7433',
+    '743374332',
     'André Luiz Tavares',
     'Cliente costuma viajar, recomenda confirmar por WhatsApp antes',
     'CPF',
@@ -102,7 +102,7 @@ INSERT INTO public.clients (
 ),
 (
     gen_random_uuid(),
-    '0632',
+    '063220632',
     'MDF Pro Suprimentos Ltda',
     'Entregas somente de segunda a quinta, no horário comercial',
     'CNPJ',
@@ -119,7 +119,7 @@ INSERT INTO public.clients (
 ),
 (
     gen_random_uuid(),
-    '2257',
+    '222257257',
     'Cláudia Ribeiro Fonseca',
     'Solicita que entregas sejam feitas na casa da mãe, endereço alternativo',
     'CPF',

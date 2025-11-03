@@ -19,9 +19,9 @@ export const QueryProvider = ({ children }: QueryProviderProps) => {
       new ReactQueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 1000 * 60 * 60 * 1,
+            staleTime: 1000 * 60 * 5,
             refetchOnWindowFocus: false,
-            refetchInterval: 1000 * 60 * 60 * 1,
+            refetchInterval: 1000 * 60 * 5,
             retry: 2,
           },
         },

@@ -52,7 +52,7 @@ export default async function ClientsPage() {
           <SearchBar>
             <SearchTextFilter />
             <SearchSortWrap>
-              <SelectFilter options={clientsCategories} />
+              <SelectFilter options={clientsCategories} filterKey="type" />
               <SearchSortPeriod />
             </SearchSortWrap>
           </SearchBar>
