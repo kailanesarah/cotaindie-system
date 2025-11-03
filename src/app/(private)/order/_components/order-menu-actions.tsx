@@ -21,8 +21,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { useGenerateContractDocument } from "../../(navgation)/_hooks/use-generate-contract-document";
+import { useGenerateMaterialsDocument } from "../../(navgation)/_hooks/use-generate-materials-document";
 import { useGenerateQuoteDocument } from "../../(navgation)/_hooks/use-generate-quote-document";
 import { mapOrderToContractDoc } from "../../(navgation)/_utils/map-order-to-contract-doc";
+import { mapOrderToMaterialsDoc } from "../../(navgation)/_utils/map-order-to-materials-doc";
 import { mapOrderToQuoteDoc } from "../../(navgation)/_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
 import { useDeleteOrder } from "../../(navgation)/orders/_hooks/use-delete-order";
@@ -73,6 +75,16 @@ export const OrderMenuActions = () => {
     }
 
     generateContractDocument(contractDoc);
+  };
+
+  const { generateMaterialsDocument } = useGenerateMaterialsDocument();
+  const handleGenerateMaterial = () => {
+    const materialDoc = mapOrderToMaterialsDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateMaterialsDocument(materialDoc);
   };
 
   return (
@@ -138,7 +150,7 @@ export const OrderMenuActions = () => {
             <DropdownMenuItem>
               <Icon name="crop" /> Plano de corte
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleGenerateMaterial}>
               <Icon name="download" /> Espelho de materiais
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleGenerateContract}>

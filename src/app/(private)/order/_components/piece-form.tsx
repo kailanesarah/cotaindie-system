@@ -121,6 +121,10 @@ export const PieceForm = ({
                           shouldValidate: true,
                           shouldDirty: true,
                         });
+                        form.setValue("material.code", selectedMaterial.code, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
                         form.setValue(
                           "material.measureType",
                           selectedMaterial.measureType,
@@ -152,6 +156,14 @@ export const PieceForm = ({
                         form.setValue(
                           "material.wasteTax",
                           selectedMaterial.wasteTax,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          },
+                        );
+                        form.setValue(
+                          "material.cutDirection",
+                          selectedMaterial.cutDirection,
                           {
                             shouldValidate: true,
                             shouldDirty: true,
