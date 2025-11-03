@@ -1,9 +1,15 @@
 "use server";
 
-import { categories } from "../_constants/categories";
+import { supabaseServer } from "@/lib/supabase/server";
+import { MaterialsService } from "@/services/materials-services";
 
 export async function getCategoriesAction(): Promise<Category[]> {
   try {
+    const supabase = await supabaseServer();
+    const materialsService = new MaterialsService(supabase);
+
+    const categories = await materialsService.getCategories();
+
     return categories;
   } catch (err) {
     console.error(err);

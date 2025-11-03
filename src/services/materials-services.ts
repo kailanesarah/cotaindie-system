@@ -9,7 +9,9 @@ export class MaterialsService extends BaseService {
     super(supabase);
   }
 
-  async upsertClient(client: Partial<Client>) {
+  async upsertMaterial(
+    material: Omit<Partial<Material>, "category"> & { category: string },
+  ): Promise<Material> {
     try {
       const {
         data: { user },
@@ -19,65 +21,87 @@ export class MaterialsService extends BaseService {
       if (authError) throw new Error(`Auth error: ${authError.message}`);
       if (!user) throw new Error("Auth error: User not authenticated");
 
-      const clientToUpsert: Partial<Client> = { ...client };
+      const materialToUpsert = { ...material };
 
-      if (!client.id) {
-        clientToUpsert.code = await generateId();
+      if (!material.id) {
+        materialToUpsert.code = await generateId();
 
-        delete clientToUpsert.id;
+        delete materialToUpsert.id;
       } else {
-        const { data: clientCode, error: clientCodeError } = await this.supabase
-          .from("clients")
-          .select("code")
-          .eq("id", client.id)
-          .single();
+        const { data: materialCode, error: materialCodeError } =
+          await this.supabase
+            .from("materials")
+            .select("code")
+            .eq("id", material.id)
+            .single();
 
-        if (clientCodeError)
+        if (materialCodeError)
           throw new Error(
-            `Fetch client code error: ${clientCodeError.message}`,
+            `Fetch material code error: ${materialCodeError.message}`,
           );
 
-        clientToUpsert.code = clientCode.code;
+        materialToUpsert.code = materialCode.code;
       }
 
+      const { category, ...rest } = materialToUpsert;
+
+      const materialDB = {
+        id: rest.id,
+        code: rest.code,
+        name: rest.name,
+        description: rest.description,
+        measure_type: rest.measureType,
+        unit: rest.unit,
+        waste_tax: rest.wasteTax,
+        base_value: rest.baseValue,
+        measure: rest.measure,
+        cut_direction: rest.cutDirection,
+        user_id: user.id,
+      };
+
       const { data, error: upsertError } = await this.supabase
-        .from("clients")
-        .upsert(
-          { ...clientToUpsert, user_id: user.id },
-          {
-            onConflict: "id",
-            ignoreDuplicates: false,
-          },
-        )
+        .from("materials")
+        .upsert(materialDB, { onConflict: "id", ignoreDuplicates: false })
         .select()
         .single();
 
       if (upsertError)
-        throw new Error(`Upsert client error: ${upsertError.message}`);
+        throw new Error(`Upsert material error: ${upsertError.message}`);
 
-      return data as Client;
+      if (category) {
+        const { error: relError } = await this.supabase
+          .from("materials_categories_relation")
+          .upsert({
+            material_id: data.id,
+            category_id: category,
+          });
+
+        if (relError)
+          throw new Error(
+            `Upsert material-category relation error: ${relError.message}`,
+          );
+      }
+
+      return data as Material;
     } catch (err) {
-      this.handleError(err, "ClientsService.upsertClient");
+      this.handleError(err, "MaterialsService.upsertMaterial");
     }
   }
 
-  async getClients(params?: SearchState): Promise<SearchResult<Client>> {
+  async getMaterials(params?: SearchState): Promise<SearchResult<Material>> {
     try {
-      let query = this.supabase.from("clients").select("*", { count: "exact" });
+      let query = this.supabase.from("materials").select(
+        `
+          *,
+          materials_categories_relation:materials_categories_relation(
+            category:materials_categories(id, name)
+          )
+        `,
+        { count: "exact" },
+      );
 
-      if (params?.text && params.text.length > 0) {
-        const searchableFields = [
-          "name",
-          "email",
-          "phone",
-          "code",
-          "notes",
-          "cep",
-          "city",
-          "neighborhood",
-          "street",
-          "complement",
-        ];
+      if (params?.text?.length) {
+        const searchableFields = ["name", "description", "code"];
 
         const orExpressions = params.text
           .flatMap((t) => searchableFields.map((f) => `${f}.ilike.%${t}%`))
@@ -88,7 +112,19 @@ export class MaterialsService extends BaseService {
 
       if (params?.extras && params.extras.length > 0) {
         for (const extra of params.extras) {
-          query = query.eq(extra.key, extra.value);
+          if (extra.key === "category") {
+            const { data: materialIds, error: relError } = await this.supabase
+              .from("materials_categories_relation")
+              .select("material_id")
+              .eq("category_id", extra.value);
+
+            if (relError) throw relError;
+
+            const ids = (materialIds ?? []).map((r) => r.material_id);
+            query = query.in("id", ids);
+          } else {
+            query = query.eq(extra.key, extra.value);
+          }
         }
       }
 
@@ -100,52 +136,97 @@ export class MaterialsService extends BaseService {
       const perPage = params?.pagination?.perPage ?? 10;
       const from = (page - 1) * perPage;
       const to = from + perPage - 1;
-
       query = query.range(from, to);
 
       const { data, error, count } = await query;
-      if (error) throw error;
 
-      const totalPages = Math.ceil((count ?? data?.length ?? 0) / perPage);
+      if (error) {
+        throw error;
+      }
 
-      return {
-        items: data ?? [],
-        page,
-        totalPages,
-      };
+      const items = (data ?? []).map(this.formatMaterial);
+      const totalPages = Math.ceil((count ?? items.length) / perPage);
+
+      return { items, page, totalPages };
     } catch (err) {
-      this.handleError(err, "ClientsService.getClients");
+      this.handleError(err, "MaterialsService.getMaterials");
     }
   }
 
-  async getClientById(id: string) {
+  async getMaterialById(id: string) {
     try {
       const { data, error } = await this.supabase
-        .from("clients")
-        .select("*")
+        .from("materials")
+        .select(
+          `
+          *,
+          materials_categories_relation:materials_categories_relation(
+            category:materials_categories(id, name)
+          )
+        `,
+        )
         .eq("id", id)
         .single();
 
       if (error) throw error;
 
-      return data as Client;
+      return this.formatMaterial(data);
     } catch (err) {
-      this.handleError(err, "ClientsService.getClientById");
+      this.handleError(err, "MaterialsService.getMaterialById");
     }
   }
 
-  async deleteClient(id: string): Promise<boolean> {
+  async getCategories(): Promise<Category[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from("materials_categories")
+        .select("id, name");
+
+      if (error) throw error;
+
+      return data ?? [];
+    } catch (err) {
+      this.handleError(err, "MaterialsService.getCategories");
+    }
+  }
+
+  async deleteMaterial(id: string): Promise<boolean> {
     try {
       const { error } = await this.supabase
-        .from("clients")
+        .from("materials")
         .delete()
         .eq("id", id);
+
+      console.log(error);
 
       if (error) throw error;
 
       return true;
     } catch (err) {
-      this.handleError(err, "ClientsService.deleteClient");
+      this.handleError(err, "MaterialsService.deleteMaterial");
     }
+  }
+
+  private formatMaterial(dbMaterial: any): Material {
+    return {
+      id: dbMaterial.id,
+      code: dbMaterial.code,
+      category: dbMaterial.materials_categories_relation?.[0]?.category || {
+        id: "",
+        name: "",
+      },
+      name: dbMaterial.name,
+      description: dbMaterial.description,
+      measureType: dbMaterial.measure_type,
+      unit: dbMaterial.unit,
+      wasteTax: dbMaterial.waste_tax,
+      baseValue: dbMaterial.base_value,
+      measure: dbMaterial.measure,
+      cutDirection: dbMaterial.cut_direction,
+    };
+  }
+
+  transformMaterials(dbMaterials: any[]): Material[] {
+    return dbMaterials.map(this.formatMaterial);
   }
 }

@@ -1,36 +1,27 @@
 "use server";
 
 import type { SearchResult } from "@/app/(private)/_types/search-result";
+import { supabaseServer } from "@/lib/supabase/server";
+import { MaterialsService } from "@/services/materials-services";
 import type { SearchState } from "../../_context/search-provider";
-import { materials } from "../_constants/material-list";
 
 export async function getMaterialsAction(
   params: SearchState,
 ): Promise<SearchResult<Material>> {
-  const { text, sort, pagination } = params;
+  const { text, sort, pagination, extras } = params;
 
   try {
-    const filtered = materials.filter((m) =>
-      text.length
-        ? text.some((t) => m.name.toLowerCase().includes(t.toLowerCase()))
-        : true,
-    );
+    const supabase = await supabaseServer();
+    const materialsService = new MaterialsService(supabase);
 
-    const sorted =
-      sort === "ASC"
-        ? filtered.toSorted((a, b) => a.name.localeCompare(b.name))
-        : filtered.toSorted((a, b) => b.name.localeCompare(a.name));
+    const materials = await materialsService.getMaterials({
+      text,
+      sort,
+      pagination,
+      extras,
+    });
 
-    const start = (pagination.page - 1) * pagination.perPage;
-    const paged = sorted.slice(start, start + pagination.perPage);
-
-    const totalPages = Math.ceil(filtered.length / pagination.perPage);
-
-    return {
-      items: paged,
-      totalPages,
-      page: pagination.page,
-    };
+    return materials;
   } catch (err) {
     console.error(err);
 
