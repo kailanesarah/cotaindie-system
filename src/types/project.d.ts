@@ -5,12 +5,14 @@ type Cost = {
 };
 
 type Project = {
+  id: string;
+
   name: string;
   qtde: number;
 
   pieces: Piece[];
 
-  costs: Cost[];
+  costs?: Cost[];
 
   profitRate: number;
   monthlyExpense: number;

@@ -32,7 +32,7 @@ import {
 import { NumericFormat } from "react-number-format";
 import type z from "zod";
 import { measureMap } from "../../(navgation)/_constants/mesure-map";
-import { materials } from "../../(navgation)/materials/_constants/material-list";
+import { useGetMaterials } from "../../(navgation)/_hooks/use-ger-materials";
 import { formatMeasure } from "../_utils/format-measure";
 import {
   getPiecetDefaultValues,
@@ -46,6 +46,8 @@ export const PieceForm = ({
   formParent: UseFormReturn<FieldValues, any, FieldValues>;
 }) => {
   const id = useId();
+
+  const { data: materials } = useGetMaterials();
 
   const form = useForm<z.infer<typeof pieceSchema>>({
     resolver: zodResolver(pieceSchema),

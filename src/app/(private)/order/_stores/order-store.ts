@@ -35,6 +35,8 @@ interface OrderStore {
 
   setRawAmount: (rawAmount: number) => void;
 
+  setOrderId: (id: string) => void;
+
   reset: () => void;
 
   triggers: Record<string, () => Promise<boolean>>;
@@ -44,13 +46,21 @@ interface OrderStore {
 export const useOrderStore = create<OrderStore>()(
   subscribeWithSelector((set) => ({
     order: {
-      status: "open" as Status,
-      rawAmount: 0,
-      installmentCount: 1,
-      discountPercent: 0,
-      advanceAmount: 0,
-      initialDate: new Date().toISOString(),
-      projects: [],
+      // status: "OPEN" as Status,
+      // rawAmount: 0,
+      // deliveryDays: undefined,
+      // paymentMethod: undefined,
+      // advancePaymentMethod: undefined,
+      // discountPercent: undefined,
+      // advanceAmount: undefined,
+      // installmentCount: 1,
+      // name: "",
+      // notes: "",
+      // initialDate: new Date().toISOString(),
+      // projects: undefined,
+      // included: "",
+      // excluded: "",
+      // teamNotes: "",
     },
 
     setStatusInfo: (data) =>
@@ -121,6 +131,9 @@ export const useOrderStore = create<OrderStore>()(
 
     setRawAmount: (rawAmount: number) =>
       set((state) => ({ order: { ...state.order, rawAmount } })),
+
+    setOrderId: (id: string) =>
+      set((state) => ({ order: { ...state.order, id } })),
 
     reset: () => set({ order: {} }),
 

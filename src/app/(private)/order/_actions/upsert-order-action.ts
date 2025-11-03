@@ -1,22 +1,20 @@
 "use server";
 
 import { actionClient } from "@/lib/safe-action";
-import { orders } from "../../(navgation)/orders/_constants/orders-list";
+import { supabaseServer } from "@/lib/supabase/server";
+import { OrdersService } from "@/services/orders-services";
 import { orderSchema } from "../schema/order-schema";
 
 export const upsertOrderAction = actionClient
   .schema(orderSchema)
   .action(async ({ parsedInput }): Promise<Order> => {
-    const { id } = parsedInput;
-
-    console.log(parsedInput);
-
     try {
-      if (id) {
-        return orders[0];
-      }
+      const supabase = await supabaseServer();
+      const orderService = new OrdersService(supabase);
 
-      return orders[0];
+      const order = await orderService.upsertOrder(parsedInput);
+
+      return order;
     } catch (err) {
       console.error(err);
       throw new Error("Ocorreu um erro ao processar o pedido.");

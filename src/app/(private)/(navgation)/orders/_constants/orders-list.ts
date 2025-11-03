@@ -4,7 +4,7 @@ export const orders: Order[] = [
     code: "000000001",
     name: "Armário Planejado Quarto Casal",
     client: {
-      id: "00000000-0000-0000-0000-000000100001",
+      id: "00000000-0000-1000-0000-000000000001",
       code: "000000001",
       name: "Carla Ferreira",
       notes: "Cliente antiga, prefere contato por email",
@@ -18,11 +18,12 @@ export const orders: Order[] = [
       city: "São Paulo",
       cep: "01234-567",
     },
-    status: "open",
-    expirationDays: 30,
+    status: "OPEN",
+    expirationDays: 10,
     initialDate: "2025-10-01",
     projects: [
       {
+        id: "00000000-0000-0000-0000-000000100001",
         name: "Projeto Principal",
         qtde: 1,
         pieces: [
@@ -73,11 +74,11 @@ export const orders: Order[] = [
     teamNotes: "Agendar visita antes da entrega",
     rawAmount: 1000,
     deliveryDays: 15,
-    paymentMethod: "credit",
-    discountPercent: 0,
+    paymentMethod: "CREDIT",
+    discountPercent: 0.1,
     installmentCount: 1,
     advanceAmount: 0,
-    advancePaymentMethod: "to_agree",
+    advancePaymentMethod: "TO_AGREE",
     notes: "Entrega preferencialmente no período da manhã",
   },
   {
@@ -99,11 +100,12 @@ export const orders: Order[] = [
       city: "São Paulo",
       cep: "01310-100",
     },
-    status: "approved",
+    status: "APPROVED",
     expirationDays: 30,
     initialDate: "2025-09-20",
     projects: [
       {
+        id: "00000000-0000-0000-0000-000000100002",
         name: "Projeto Cozinha",
         qtde: 1,
         pieces: [
@@ -171,11 +173,11 @@ export const orders: Order[] = [
     teamNotes: "Confirmar medidas exatas da parede",
     rawAmount: 5000,
     deliveryDays: 20,
-    paymentMethod: "pix",
+    paymentMethod: "PIX",
     discountPercent: 5,
     installmentCount: 2,
     advanceAmount: 1000,
-    advancePaymentMethod: "bank_transfer",
+    advancePaymentMethod: "BANK_TRANSFER",
     notes: "Entrega em horário comercial",
   },
   {
@@ -197,11 +199,12 @@ export const orders: Order[] = [
       city: "Campinas",
       cep: "13010-020",
     },
-    status: "open",
+    status: "OPEN",
     expirationDays: 30,
     initialDate: "2025-10-05",
     projects: [
       {
+        id: "00000000-0000-0000-0000-000000100003",
         name: "Projeto Estante",
         qtde: 1,
         pieces: [
@@ -252,11 +255,11 @@ export const orders: Order[] = [
     teamNotes: "Confirmar cor do aço",
     rawAmount: 1500,
     deliveryDays: 10,
-    paymentMethod: "debit",
+    paymentMethod: "DEBIT",
     discountPercent: 0,
     installmentCount: 1,
     advanceAmount: 0,
-    advancePaymentMethod: "to_agree",
+    advancePaymentMethod: "TO_AGREE",
     notes: "Entrega em horário comercial",
   },
 ];

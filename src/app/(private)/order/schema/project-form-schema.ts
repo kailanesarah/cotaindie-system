@@ -10,6 +10,8 @@ export const costSchema = z.object({
 export type Cost = z.infer<typeof costSchema>;
 
 export const projectSchema = z.object({
+  id: z.string().optional(),
+
   name: z
     .string("Adicione um nome válido")
     .min(2, "Nome deve ter duas ou mais letras"),

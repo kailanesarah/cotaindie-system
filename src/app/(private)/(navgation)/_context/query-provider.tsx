@@ -22,7 +22,7 @@ export const QueryProvider = ({ children }: QueryProviderProps) => {
             staleTime: 0,
             refetchOnWindowFocus: false,
             refetchInterval: 0,
-            retry: 2,
+            retry: 1,
           },
         },
       }),

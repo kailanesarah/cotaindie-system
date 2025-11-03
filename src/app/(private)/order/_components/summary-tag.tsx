@@ -7,12 +7,12 @@ const summaryTagVariants = cva(
   {
     variants: {
       variant: {
-        approved: "bg-green-light text-green-default",
-        open: "bg-yellow-light text-yellow-darker",
+        APPROVED: "bg-green-light text-green-default",
+        OPEN: "bg-yellow-light text-yellow-darker",
       },
     },
     defaultVariants: {
-      variant: "open",
+      variant: "OPEN",
     },
   },
 );
@@ -25,7 +25,7 @@ interface ISummaryTag
 
 export const SummaryTag = ({
   children,
-  variant = "open",
+  variant = "OPEN",
   className,
   ...props
 }: ISummaryTag) => {

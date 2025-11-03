@@ -40,7 +40,7 @@ export const SummaryBar = () => {
                 {currencyFormatter.format(totalWithDiscount)}
               </h6>
               <SummaryTag variant={status} className="hidden lg:flex">
-                {statusMap[status || "open"].text}
+                {statusMap[status || "OPEN"].text}
               </SummaryTag>
             </div>
             <div className="flex flex-wrap gap-2.5 text-[0.8125rem]">
@@ -57,7 +57,7 @@ export const SummaryBar = () => {
                   </span>
                 </>
               )}
-              {installmentCount > 0 && (
+              {installmentCount > 0 && installmentValue > 0 && (
                 <>
                   <span>|</span>
                   <span>
@@ -90,14 +90,14 @@ export const SummaryBar = () => {
                 sideOffset={8}
               >
                 <SelectItem
-                  value="open"
+                  value="OPEN"
                   className="text-yellow-darker font-semibold outline-0"
                 >
                   Cotado
                 </SelectItem>
                 <Separator />
                 <SelectItem
-                  value="approved"
+                  value="APPROVED"
                   className="text-green-default font-semibold outline-0"
                 >
                   Finalizado

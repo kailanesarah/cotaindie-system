@@ -2,15 +2,21 @@
 
 import { deleteSchema } from "@/app/(private)/_schema/delete-schema";
 import { actionClient } from "@/lib/safe-action";
-import { orders } from "../_constants/orders-list";
+import { supabaseServer } from "@/lib/supabase/server";
+import { OrdersService } from "@/services/orders-services";
 
 export const deleteOrderAction = actionClient
   .schema(deleteSchema)
-  .action(async ({ parsedInput }): Promise<Order> => {
+  .action(async ({ parsedInput }): Promise<boolean> => {
     const id = parsedInput;
 
     try {
-      return orders[0];
+      const supabase = await supabaseServer();
+      const materialsService = new OrdersService(supabase);
+
+      const order = await materialsService.deleteOrder(id);
+
+      return order;
     } catch (err) {
       console.error(err);
 

@@ -31,11 +31,20 @@ import {
 } from "../schema/order-payment-schema";
 
 export const OrderPaymentForm = () => {
+  const setTrigger = useOrderStore((state) => state.setTrigger);
+  const setPayment = useOrderStore((state) => state.setPayment);
+  const order = useOrderStore((state) => state.order);
+
   const form = useForm<orderPaymentType>({
     resolver: zodResolver(orderPaymentSchema),
     defaultValues: {
-      installmentCount: 1,
-      advanceAmount: 0,
+      deliveryDays: order.deliveryDays,
+      paymentMethod: order.paymentMethod,
+      discountPercent: order.discountPercent,
+      advanceAmount: order.advanceAmount,
+      advancePaymentMethod: order.advancePaymentMethod,
+      installmentCount: order.installmentCount,
+      notes: order.notes,
     },
   });
 
@@ -60,9 +69,6 @@ export const OrderPaymentForm = () => {
   const remainingMessage = installmentCount
     ? `Restante: ${installmentCount} ${installmentsLabel} de ${currencyFormatter.format(remainingPerInstallment)}`
     : "Escolha o n° de parcelas";
-
-  const setTrigger = useOrderStore((state) => state.setTrigger);
-  const setPayment = useOrderStore((state) => state.setPayment);
 
   useEffect(() => {
     setTrigger("paymentForm", form.trigger);

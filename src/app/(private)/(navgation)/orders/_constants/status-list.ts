@@ -1,6 +1,6 @@
 import { statusMap } from "../../_constants/status-map";
 
 export const statusList: Category[] = [
-  { id: "open", name: statusMap["open"].text },
-  { id: "approved", name: statusMap["approved"].text },
+  { id: "OPEN", name: statusMap["OPEN"].text },
+  { id: "APPROVED", name: statusMap["APPROVED"].text },
 ];

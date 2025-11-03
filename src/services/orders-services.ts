@@ -1,0 +1,314 @@
+import type { SearchState } from "@/app/(private)/(navgation)/_context/search-provider";
+import type { SearchResult } from "@/app/(private)/_types/search-result";
+import type { OrderType } from "@/app/(private)/order/schema/order-schema";
+import { generateId } from "@/utils/generate-nano-id";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { BaseService } from "./base-service";
+
+export class OrdersService extends BaseService {
+  constructor(supabase: SupabaseClient) {
+    super(supabase);
+  }
+  async upsertOrder(order: OrderType): Promise<Order> {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser();
+
+      if (authError) throw new Error(`Auth error: ${authError.message}`);
+      if (!user) throw new Error("Auth error: User not authenticated");
+
+      let orderCode: string;
+
+      if (!order.id) {
+        orderCode = await generateId();
+      } else {
+        const { data: existingOrder, error: fetchCodeError } =
+          await this.supabase
+            .from("orders")
+            .select("code")
+            .eq("id", order.id)
+            .single();
+
+        if (fetchCodeError)
+          throw new Error(`Fetch order code error: ${fetchCodeError.message}`);
+        orderCode = existingOrder.code;
+      }
+
+      const {
+        id,
+        client,
+        advanceAmount,
+        advancePaymentMethod,
+        expirationDays,
+        initialDate,
+        rawAmount,
+        deliveryDays,
+        discountPercent,
+        installmentCount,
+        paymentMethod,
+        projects,
+        teamNotes,
+        ...rest
+      } = order;
+
+      const orderToUpsert = {
+        ...rest,
+        id,
+        user_id: user.id,
+        code: orderCode,
+        client_id: client,
+        expiration_days: expirationDays,
+        initial_date: initialDate,
+        raw_amount: rawAmount,
+        delivery_days: deliveryDays ?? 0,
+        discount_percent: discountPercent ?? 0,
+        payment_method: paymentMethod,
+        advance_amount: advanceAmount ?? 0,
+        advance_payment_method: advancePaymentMethod ?? null,
+        installment_count: installmentCount ?? 1,
+        team_notes: teamNotes,
+      };
+
+      const { data: orderData, error: orderError } = await this.supabase
+        .from("orders")
+        .upsert({ ...orderToUpsert, code: orderCode })
+        .select()
+        .single();
+
+      if (orderError)
+        throw new Error(`Order upsert error: ${orderError.message}`);
+
+      for (const project of projects) {
+        const projectToUpsert = {
+          id: project.id,
+          order_id: orderData.id,
+          name: project.name,
+          qtde: project.qtde,
+          monthly_expense: project.monthlyExpense ?? 0,
+          profit_rate: project.profitRate ?? 0,
+          comission: project.comission ?? 0,
+        };
+
+        const { data: projectData, error: projectError } = await this.supabase
+          .from("orders_projects")
+          .upsert(projectToUpsert)
+          .select()
+          .single();
+
+        if (projectError)
+          throw new Error(`Project upsert error: ${projectError.message}`);
+
+        const { data: existingPieces } = await this.supabase
+          .from("orders_pieces")
+          .select("id")
+          .eq("project_id", projectData.id);
+
+        const pieceIds = existingPieces?.map((p) => p.id) ?? [];
+        if (pieceIds.length) {
+          await this.supabase
+            .from("orders_pieces_materials_snapshot")
+            .delete()
+            .in("piece_id", pieceIds);
+          await this.supabase.from("orders_pieces").delete().in("id", pieceIds);
+        }
+
+        for (const piece of project.pieces ?? []) {
+          const { data: pieceData, error: pieceError } = await this.supabase
+            .from("orders_pieces")
+            .insert({
+              name: piece.name,
+              qtde: piece.qtde,
+              measure: piece.measure,
+              project_id: projectData.id,
+              material_id: piece.material?.id ?? null,
+            })
+            .select()
+            .single();
+
+          if (pieceError)
+            throw new Error(`Piece insert error: ${pieceError.message}`);
+
+          if (piece.material) {
+            const snapshot = {
+              piece_id: pieceData.id,
+              measure_type: piece.material.measureType,
+              unit: piece.material.unit,
+              waste_tax: piece.material.wasteTax,
+              base_value: piece.material.baseValue,
+              measure: piece.material.measure,
+              cut_direction: piece.material.cutDirection,
+            };
+
+            const { error: snapshotError } = await this.supabase
+              .from("orders_pieces_materials_snapshot")
+              .insert(snapshot);
+
+            if (snapshotError)
+              throw new Error(
+                `Snapshot insert error: ${snapshotError.message}`,
+              );
+          }
+        }
+      }
+
+      const { data: fullOrder, error: fetchError } = await this.supabase
+        .from("orders")
+        .select(
+          `
+      *,
+      client:clients(id, code, name, notes, type),
+      projects:orders_projects(
+        *,
+        pieces:orders_pieces(
+          *,
+          material:materials(id, name, description),
+          material_snapshot:orders_pieces_materials_snapshot(*)
+        )
+      )
+    `,
+        )
+        .eq("id", orderData.id)
+        .single();
+
+      if (fetchError)
+        throw new Error(`Fetch order error: ${fetchError.message}`);
+
+      const mappedOrder: Order = {
+        ...fullOrder,
+        projects: (fullOrder.projects ?? []).map((project: any) => ({
+          ...project,
+          pieces: (project.pieces ?? []).map((piece: any) => {
+            const snapshot = piece.material_snapshot?.[0] ?? {};
+            const materialBase = piece.material ?? {};
+            return {
+              id: piece.id,
+              name: piece.name,
+              qtde: piece.qtde,
+              measure: piece.measure,
+              project_id: piece.project_id,
+              material: {
+                ...materialBase,
+                ...snapshot,
+              },
+            };
+          }),
+        })),
+      };
+
+      return mappedOrder;
+    } catch (err) {
+      this.handleError(err, "OrdersService.upsertOrder");
+    }
+  }
+
+  async getOrders(params?: SearchState): Promise<SearchResult<Order>> {
+    try {
+      let query = this.supabase.from("orders").select(
+        `
+      *,
+      client:clients(id, code, name, notes, type),
+      projects:orders_projects(
+        *,
+        pieces:orders_pieces(
+          *,
+          material:materials(id, name, description),
+          material_snapshot:orders_pieces_materials_snapshot(*)
+        )
+      )
+      `,
+        { count: "exact" },
+      );
+
+      if (params?.text?.length) {
+        const searchableFields = [
+          "name",
+          "code",
+          "notes",
+          "included",
+          "excluded",
+          "team_notes",
+        ];
+        const orExpressions = params.text
+          .flatMap((t) => searchableFields.map((f) => `${f}.ilike.%${t}%`))
+          .join(",");
+        query = query.or(orExpressions);
+      }
+
+      if (params?.extras?.length) {
+        for (const extra of params.extras) {
+          if (extra.key === "client") {
+            const { data: orderIds, error: relError } = await this.supabase
+              .from("orders")
+              .select("id")
+              .eq("client_id", extra.value);
+            if (relError) throw relError;
+
+            const ids = (orderIds ?? []).map((r) => r.id);
+            if (ids.length) query = query.in("id", ids);
+          } else {
+            query = query.eq(extra.key, extra.value);
+          }
+        }
+      }
+
+      if (params?.sort) {
+        query = query.order("created_at", { ascending: params.sort === "ASC" });
+      }
+
+      const page = params?.pagination?.page ?? 1;
+      const perPage = params?.pagination?.perPage ?? 10;
+      const from = (page - 1) * perPage;
+      const to = from + perPage - 1;
+      query = query.range(from, to);
+
+      const { data, error, count } = await query;
+      if (error) throw error;
+
+      const items = (data ?? []).map((order) => ({
+        ...order,
+        projects: (order.projects ?? []).map((project: any) => ({
+          ...project,
+          pieces: (project.pieces ?? []).map((piece: any) => {
+            const snapshot = piece.material_snapshot?.[0] ?? {};
+            const materialBase = piece.material ?? {};
+
+            return {
+              id: piece.id,
+              name: piece.name,
+              qtde: piece.qtde,
+              measure: piece.measure,
+              project_id: piece.project_id,
+              material: {
+                ...materialBase,
+                ...snapshot,
+              },
+            };
+          }),
+        })),
+      }));
+
+      const totalPages = Math.ceil((count ?? 0) / perPage);
+
+      return { items: items as Order[], page, totalPages };
+    } catch (err) {
+      this.handleError(err, "OrdersService.getOrders");
+    }
+  }
+
+  async deleteOrder(id: string): Promise<boolean> {
+    try {
+      const { error } = await this.supabase
+        .from("orders")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      return true;
+    } catch (err) {
+      this.handleError(err, "OrdersService.deleteOrder");
+    }
+  }
+}
