@@ -102,6 +102,7 @@ export class OrdersService extends BaseService {
           id: project.id,
           order_id: orderData.id,
           name: project.name,
+          costs: project.costs,
           qtde: project.qtde,
           monthly_expense: project.monthlyExpense ?? 0,
           profit_rate: project.profitRate ?? 0,
@@ -186,7 +187,7 @@ export class OrdersService extends BaseService {
           *,
           pieces:orders_pieces(
             *,
-            material:materials(id, name, description),
+            material:materials(id, name, code, description),
             material_snapshot:orders_pieces_materials_snapshot(*)
           )
         )
@@ -213,7 +214,7 @@ export class OrdersService extends BaseService {
         *,
         pieces:orders_pieces(
           *,
-          material:materials(id, name, description),
+          material:materials(id, name, code, description),
           material_snapshot:orders_pieces_materials_snapshot(*)
         )
       )
@@ -286,7 +287,7 @@ export class OrdersService extends BaseService {
           *,
           pieces:orders_pieces(
             *,
-            material:materials(id, name, description),
+            material:materials(id, name, code, description),
             material_snapshot:orders_pieces_materials_snapshot(*)
           )
         )

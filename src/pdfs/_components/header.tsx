@@ -43,7 +43,7 @@ export const Header = ({
       <View style={{ width: 350, fontSize: 8, lineHeight: 1.4 }}>
         <Text>
           Documento emitido em {dateTime} com base no orçamento/pedido de
-          código: {docCode || "C29115"}
+          código: {docCode || "-"}
         </Text>
       </View>
     )}

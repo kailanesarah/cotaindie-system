@@ -9,17 +9,17 @@ import { SectionTitle } from "../_components/section-title";
 import { SummaryTotalRow } from "../_components/summary-total-row";
 import { TitledTextSection } from "../_components/title-text-section";
 
-interface ClientProps {
+export interface ClientProps {
   name: string;
   code?: string;
 }
 
-interface ReportProjectProps {
+export interface ReportProjectProps {
   name: string;
   qtde: number;
 }
 
-interface UsedMaterialProps {
+export interface UsedMaterialProps {
   code: string;
   name: string;
   intQtde: number | string;
@@ -29,14 +29,14 @@ interface UsedMaterialProps {
   total: string;
 }
 
-interface OtherCostProps {
+export interface OtherCostProps {
   name: string;
   qtde: number | string;
   value: string;
   total: string;
 }
 
-interface ReportDataProps {
+export interface ReportDataProps {
   quoteCode: string;
   reportCode: string;
   title: string;
@@ -49,7 +49,7 @@ interface ReportDataProps {
   notes?: string;
 }
 
-interface MaterialsDocumentProps {
+export interface MaterialsDocumentProps {
   client: ClientProps;
   report: ReportDataProps;
 }
@@ -125,7 +125,7 @@ export const MaterialsDocument = ({
       <SectionTitle>Materiais utilizados</SectionTitle>
       <DataGrid>
         <DataGridRow isHeader>
-          <DataGridCell width="12%" isHeader>
+          <DataGridCell width="15%" isHeader>
             Cód.
           </DataGridCell>
           <DataGridCell flex={1} isHeader>
@@ -152,7 +152,7 @@ export const MaterialsDocument = ({
             key={index}
             noBorderBottom={index === report.usedMaterials.length - 1}
           >
-            <DataGridCell width="12%">{material.code}</DataGridCell>
+            <DataGridCell width="15%">{material.code}</DataGridCell>
             <DataGridCell flex={1}>{material.name}</DataGridCell>
             <DataGridCell width="10%" align="center">
               {material.intQtde}
@@ -171,45 +171,49 @@ export const MaterialsDocument = ({
         ))}
       </DataGrid>
       <SummaryTotalRow label="Total:" value={report.materialsTotal} />
-      <SectionTitle>Equipe e outros custos</SectionTitle>
-      <DataGrid>
-        <DataGridRow isHeader>
-          <DataGridCell width="15%" align="center" isHeader>
-            N°
-          </DataGridCell>
-          <DataGridCell flex={1} isHeader>
-            Equipe
-          </DataGridCell>
-          <DataGridCell width="15%" align="center" isHeader>
-            Qtde
-          </DataGridCell>
-          <DataGridCell width="20%" isHeader>
-            Valor
-          </DataGridCell>
-          <DataGridCell width="20%" isHeader noBorderRight>
-            Total
-          </DataGridCell>
-        </DataGridRow>
-        {report.otherCosts.map((cost, index) => (
-          <DataGridRow
-            key={index}
-            noBorderBottom={index === report.otherCosts.length - 1}
-          >
-            <DataGridCell width="15%" align="center">
-              {index + 1}
-            </DataGridCell>
-            <DataGridCell flex={1}>{cost.name}</DataGridCell>
-            <DataGridCell width="15%" align="center">
-              {cost.qtde}
-            </DataGridCell>
-            <DataGridCell width="20%">{cost.value}</DataGridCell>
-            <DataGridCell width="20%" noBorderRight>
-              {cost.total}
-            </DataGridCell>
-          </DataGridRow>
-        ))}
-      </DataGrid>
-      <SummaryTotalRow label="Total:" value={report.otherCostsTotal} />
+      {report.otherCosts.length > 0 && (
+        <>
+          <SectionTitle>Equipe e outros custos</SectionTitle>
+          <DataGrid>
+            <DataGridRow isHeader>
+              <DataGridCell width="15%" align="center" isHeader>
+                N°
+              </DataGridCell>
+              <DataGridCell flex={1} isHeader>
+                Equipe
+              </DataGridCell>
+              <DataGridCell width="15%" align="center" isHeader>
+                Qtde
+              </DataGridCell>
+              <DataGridCell width="20%" isHeader>
+                Valor
+              </DataGridCell>
+              <DataGridCell width="20%" isHeader noBorderRight>
+                Total
+              </DataGridCell>
+            </DataGridRow>
+            {report.otherCosts.map((cost, index) => (
+              <DataGridRow
+                key={index}
+                noBorderBottom={index === report.otherCosts.length - 1}
+              >
+                <DataGridCell width="15%" align="center">
+                  {index + 1}
+                </DataGridCell>
+                <DataGridCell flex={1}>{cost.name}</DataGridCell>
+                <DataGridCell width="15%" align="center">
+                  {cost.qtde}
+                </DataGridCell>
+                <DataGridCell width="20%">{cost.value}</DataGridCell>
+                <DataGridCell width="20%" noBorderRight>
+                  {cost.total}
+                </DataGridCell>
+              </DataGridRow>
+            ))}
+          </DataGrid>
+          <SummaryTotalRow label="Total:" value={report.otherCostsTotal} />
+        </>
+      )}
       {report.notes && (
         <TitledTextSection title="Observações e outros:">
           {report.notes}

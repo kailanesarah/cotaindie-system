@@ -13,8 +13,10 @@ import Link from "next/link";
 import { DeleteDialog } from "../../_components/delete-dialog";
 import { useDialog } from "../../_hooks/use-dialog";
 import { useGenerateContractDocument } from "../../_hooks/use-generate-contract-document";
+import { useGenerateMaterialsDocument } from "../../_hooks/use-generate-materials-document";
 import { useGenerateQuoteDocument } from "../../_hooks/use-generate-quote-document";
 import { mapOrderToContractDoc } from "../../_utils/map-order-to-contract-doc";
+import { mapOrderToMaterialsDoc } from "../../_utils/map-order-to-materials-doc";
 import { mapOrderToQuoteDoc } from "../../_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../_hooks/use-copy-order";
 import { useDeleteOrder } from "../_hooks/use-delete-order";
@@ -48,6 +50,16 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
 
     generateContractDocument(contractDoc);
   };
+
+  const { generateMaterialsDocument } = useGenerateMaterialsDocument();
+  const handleGenerateMaterial = () => {
+    const materialDoc = mapOrderToMaterialsDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateMaterialsDocument(materialDoc);
+  };
   return (
     <>
       <DropdownMenu>
@@ -74,7 +86,7 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
           <DropdownMenuItem>
             <Icon name="crop" /> Plano de corte
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleGenerateMaterial}>
             <Icon name="download" /> Espelho de materiais
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleGenerateContract}>

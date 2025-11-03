@@ -85,7 +85,7 @@ export const mapOrderToQuoteDoc = (
       document: order.client?.document || "N/A",
       phone: order.client?.phone || "N/A",
       email: order.client?.email || "N/A",
-      code: order.client?.code ? `C${order.client.code}` : undefined,
+      code: order.client?.code,
       address: {
         street: order.client?.street || "",
         complement: order.client?.complement || "",

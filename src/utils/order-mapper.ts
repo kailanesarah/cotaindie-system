@@ -41,6 +41,7 @@ export function mapOrderFromSupabase(rawOrder: any): Order {
           project_id: piece.project_id,
           material: {
             id: materialBase.id ?? "",
+            code: materialBase.code ?? "",
             name: materialBase.name ?? "",
             measure: snapshot.measure ?? [0],
             measureType: snapshot.measure_type ?? "",
