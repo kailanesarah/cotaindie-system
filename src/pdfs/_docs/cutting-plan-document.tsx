@@ -1,3 +1,4 @@
+import { Icon } from "@/components/ui/icon";
 import { Document, Image, Text, View } from "@react-pdf/renderer";
 import React from "react";
 import { DataGrid, DataGridCell, DataGridRow } from "../_components/data-grid";
@@ -8,6 +9,8 @@ import { Hr } from "../_components/hr";
 import { PdfPageLayout } from "../_components/pdf-layout";
 import { SectionTitle } from "../_components/section-title";
 import { TitledTextSection } from "../_components/title-text-section";
+import { vhIcon } from "../assets/vertical-horizontal-icon";
+import { verticalIcon } from "../assets/vertical-icon";
 
 export interface ClientProps {
   name: string;
@@ -100,25 +103,32 @@ export const CuttingPlanDocument = ({
       </DataGrid>
       {plan.projects.map((project, projectIndex) => (
         <React.Fragment key={project.id}>
-          <SectionTitle>
-            {`Projeto ${projectIndex + 1} - ${project.name} (quantidade - ${
-              project.qtde
-            })`}
-          </SectionTitle>
-          <DataGrid>
-            <DataGridRow isHeader>
-              <DataGridCell width="10%" align="center" isHeader>
-                N°
-              </DataGridCell>
-              <DataGridCell flex={1} isHeader>
-                Materiais e peças
-              </DataGridCell>
-              <DataGridCell width="15%" align="center" isHeader noBorderRight>
-                Qtde
-              </DataGridCell>
-            </DataGridRow>
-            {project.materials.map((material, materialIndex) => (
-              <React.Fragment key={material.id}>
+          {project.materials.map((material, materialIndex) => (
+            <View key={material.id} wrap={false} style={{ marginBottom: 12 }}>
+              {materialIndex === 0 && (
+                <SectionTitle>
+                  {`Projeto ${projectIndex + 1} - ${project.name} (quantidade - ${
+                    project.qtde
+                  })`}
+                </SectionTitle>
+              )}
+              <DataGrid>
+                <DataGridRow isHeader>
+                  <DataGridCell width="10%" align="center" isHeader>
+                    N°
+                  </DataGridCell>
+                  <DataGridCell flex={1} isHeader>
+                    Materiais e peças
+                  </DataGridCell>
+                  <DataGridCell
+                    width="15%"
+                    align="center"
+                    isHeader
+                    noBorderRight
+                  >
+                    Qtde
+                  </DataGridCell>
+                </DataGridRow>
                 <DataGridRow isHeader style={{ backgroundColor: "#f0f0f0" }}>
                   <DataGridCell width="10%" align="center">
                     {materialIndex + 1}
@@ -145,14 +155,7 @@ export const CuttingPlanDocument = ({
                   </DataGridRow>
                 ))}
                 {material.sheets.map((sheet, sheetIndex) => (
-                  <DataGridRow
-                    key={sheet.id}
-                    noBorderBottom={
-                      projectIndex === plan.projects.length - 1 &&
-                      materialIndex === project.materials.length - 1 &&
-                      sheetIndex === material.sheets.length - 1
-                    }
-                  >
+                  <DataGridRow key={sheet.id}>
                     <DataGridCell
                       width="100%"
                       noBorderRight
@@ -170,12 +173,14 @@ export const CuttingPlanDocument = ({
                           <Text style={{ marginBottom: 4 }}>{sheet.label}</Text>
                           <View style={{ width: 20, height: 20 }}>
                             <Image
+                              style={{ width: 20, height: 20 }}
                               src={
                                 material.cutDirection === "VH"
-                                  ? "images/horizontal_vertical.png"
-                                  : "images/vertical.png"
+                                  ? vhIcon
+                                  : verticalIcon
                               }
                             />
+                            <Icon name="dow" />
                           </View>
                         </View>
                         <Image
@@ -192,9 +197,9 @@ export const CuttingPlanDocument = ({
                     </DataGridCell>
                   </DataGridRow>
                 ))}
-              </React.Fragment>
-            ))}
-          </DataGrid>
+              </DataGrid>
+            </View>
+          ))}
         </React.Fragment>
       ))}
       {plan.notes && (
