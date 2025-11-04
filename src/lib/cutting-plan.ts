@@ -183,13 +183,13 @@ export class CuttingPlan {
       }
       ctx.restore();
 
-      ctx.font = "14px sans-serif";
+      ctx.font = "16px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
       ctx.fillText(widthLabel, x + w / 2, y + 5, w - 8);
 
       ctx.save();
-      ctx.font = "14px sans-serif";
+      ctx.font = "16px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.translate(x + w - 15, y + h / 2);

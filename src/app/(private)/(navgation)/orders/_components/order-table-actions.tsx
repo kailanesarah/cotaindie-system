@@ -13,9 +13,11 @@ import Link from "next/link";
 import { DeleteDialog } from "../../_components/delete-dialog";
 import { useDialog } from "../../_hooks/use-dialog";
 import { useGenerateContractDocument } from "../../_hooks/use-generate-contract-document";
+import { useGenerateCuttingPlanDocument } from "../../_hooks/use-generate-cutting-plan-document";
 import { useGenerateMaterialsDocument } from "../../_hooks/use-generate-materials-document";
 import { useGenerateQuoteDocument } from "../../_hooks/use-generate-quote-document";
 import { mapOrderToContractDoc } from "../../_utils/map-order-to-contract-doc";
+import { mapOrderToCuttingPlanDoc } from "../../_utils/map-order-to-cutting-plan-doc";
 import { mapOrderToMaterialsDoc } from "../../_utils/map-order-to-materials-doc";
 import { mapOrderToQuoteDoc } from "../../_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../_hooks/use-copy-order";
@@ -60,6 +62,16 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
 
     generateMaterialsDocument(materialDoc);
   };
+
+  const { generateCuttingPlanDocument } = useGenerateCuttingPlanDocument();
+  const handleGenerateCuttingPlan = () => {
+    const materialDoc = mapOrderToCuttingPlanDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateCuttingPlanDocument(materialDoc);
+  };
   return (
     <>
       <DropdownMenu>
@@ -83,7 +95,7 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
           <DropdownMenuItem onClick={handleCopy} disabled={isPendingCopy}>
             <Icon name="file_copy" /> Fazer cópia
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleGenerateCuttingPlan}>
             <Icon name="crop" /> Plano de corte
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleGenerateMaterial}>
