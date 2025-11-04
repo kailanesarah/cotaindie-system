@@ -9,41 +9,42 @@ import { PdfPageLayout } from "../_components/pdf-layout";
 import { SectionTitle } from "../_components/section-title";
 import { TitledTextSection } from "../_components/title-text-section";
 
-interface ClientProps {
+export interface ClientProps {
   name: string;
   code?: string;
 }
 
-interface PiecePlanProps {
+export interface PiecePlanProps {
+  material: any;
   id: string;
   label: string;
   qtde: number | string;
 }
 
-interface SheetPlanProps {
+export interface SheetPlanProps {
   id: string;
   label: string;
   imageBase64: string;
 }
 
-interface MaterialPlanProps {
+export interface MaterialPlanProps {
   id: string;
   name: string;
   code: string;
-  cutDirection: "v" | "vh";
+  cutDirection: "V" | "VH";
   cutDirectionLabel: string;
   pieces: PiecePlanProps[];
   sheets: SheetPlanProps[];
 }
 
-interface ProjectPlanProps {
+export interface ProjectPlanProps {
   id: string;
   name: string;
   qtde: number;
   materials: MaterialPlanProps[];
 }
 
-interface PlanDataProps {
+export interface PlanDataProps {
   quoteCode: string;
   planCode: string;
   title: string;
@@ -52,7 +53,7 @@ interface PlanDataProps {
   notes?: string;
 }
 
-interface CuttingPlanDocumentProps {
+export interface CuttingPlanDocumentProps {
   client: ClientProps;
   plan: PlanDataProps;
 }
@@ -170,7 +171,7 @@ export const CuttingPlanDocument = ({
                           <View style={{ width: 20, height: 20 }}>
                             <Image
                               src={
-                                material.cutDirection === "vh"
+                                material.cutDirection === "VH"
                                   ? "images/horizontal_vertical.png"
                                   : "images/vertical.png"
                               }
@@ -181,8 +182,10 @@ export const CuttingPlanDocument = ({
                           src={sheet.imageBase64}
                           style={{
                             width: "100%",
+                            height: "auto",
                             border: "1px solid #999",
                             backgroundColor: "#f9f9f9",
+                            objectFit: "contain",
                           }}
                         />
                       </View>

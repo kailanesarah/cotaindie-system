@@ -13,9 +13,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
 import { useGenerateContractDocument } from "../../(navgation)/_hooks/use-generate-contract-document";
+import { useGenerateCuttingPlanDocument } from "../../(navgation)/_hooks/use-generate-cutting-plan-document";
 import { useGenerateMaterialsDocument } from "../../(navgation)/_hooks/use-generate-materials-document";
 import { useGenerateQuoteDocument } from "../../(navgation)/_hooks/use-generate-quote-document";
 import { mapOrderToContractDoc } from "../../(navgation)/_utils/map-order-to-contract-doc";
+import { mapOrderToCuttingPlanDoc } from "../../(navgation)/_utils/map-order-to-cutting-plan-doc";
 import { mapOrderToMaterialsDoc } from "../../(navgation)/_utils/map-order-to-materials-doc";
 import { mapOrderToQuoteDoc } from "../../(navgation)/_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
@@ -100,6 +102,16 @@ export const OptionsButton = () => {
 
     generateMaterialsDocument(materialDoc);
   };
+
+  const { generateCuttingPlanDocument } = useGenerateCuttingPlanDocument();
+  const handleGenerateCuttingPlan = () => {
+    const materialDoc = mapOrderToCuttingPlanDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateCuttingPlanDocument(materialDoc);
+  };
   return (
     <>
       <DropdownMenu>
@@ -129,7 +141,7 @@ export const OptionsButton = () => {
           <DropdownMenuItem onClick={handleGenerateQuote}>
             <Icon name="picture_as_pdf" /> Exportar PDF
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleGenerateCuttingPlan}>
             <Icon name="crop" /> Plano de corte
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleGenerateMaterial}>
