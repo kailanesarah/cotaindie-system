@@ -78,7 +78,6 @@ const PiecesTableRowSingle = ({
       {pieces.map((piece) => {
         const calc = calculatePieceMaterial(piece);
         const globalIndex = allPieces.indexOf(piece);
-
         return (
           <TableRow
             key={`un-${gIndex}-${globalIndex}`}
@@ -252,7 +251,7 @@ export const PiecesTable = ({ pieces }: PiecesTableProps) => {
       </TableHeader>
       <TableBody className="text-title-light">
         {materialGroups.map((group, gIndex) =>
-          group.material.measureType === "un" ? (
+          group.material.measureType === "UN" ? (
             <PiecesTableRowSingle
               key={gIndex}
               pieces={group.pieces}

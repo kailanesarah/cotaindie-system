@@ -24,7 +24,7 @@ export function ClientBasicsFields() {
 
   useEffect(() => {
     if (!isFirstRender.current && previousCategory.current !== category) {
-      form.setValue("document.value", "");
+      form.setValue("document", "");
     }
 
     if (isFirstRender.current) {
@@ -74,10 +74,10 @@ export function ClientBasicsFields() {
           </FormItem>
         )}
       />
-      {category === "pf" && (
+      {category === "CPF" && (
         <FormField
           control={form.control}
-          name="document.value"
+          name="document"
           render={({ field }) => (
             <FormItem className="col-span-2">
               <FormLabel isOptional>Cpf</FormLabel>
@@ -98,10 +98,10 @@ export function ClientBasicsFields() {
           )}
         />
       )}
-      {category === "pj" && (
+      {category === "CNPJ" && (
         <FormField
           control={form.control}
-          name="document.value"
+          name="document"
           render={({ field }) => (
             <FormItem className="col-span-2">
               <FormLabel isOptional>Cnpj</FormLabel>

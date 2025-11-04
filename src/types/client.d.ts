@@ -3,21 +3,16 @@ interface Client {
   code?: string;
   name: string;
   notes?: string;
-  type: "pf" | "pj";
+  type: "CPF" | "CNPJ";
 
-  document: {
-    type: "cpf" | "cnpj";
-    value?: string;
-  };
+  document?: string;
 
   email?: string;
   phone?: string;
 
-  address: {
-    street: string;
-    complement?: string;
-    neighborhood: string;
-    city: string;
-    cep?: string;
-  };
+  cep?: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  complement?: string;
 }

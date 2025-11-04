@@ -15,6 +15,7 @@ export const pieceSchema = z
     material: z.object({
       id: z.string("Insira um ID válido"),
       name: z.string("Escolha um material"),
+      code: z.string("Insira um código válido"),
       measure: z.union([
         z.tuple([z.number().positive("Deve ser maior que 0")]),
         z.tuple([
@@ -23,17 +24,18 @@ export const pieceSchema = z
         ]),
       ]),
       baseValue: z.number().min(0, "Insira um valor a partir de zero"),
-      measureType: z.enum(["m2", "ml", "un"], {
+      measureType: z.enum(["M2", "ML", "UN"], {
         message: "Tipo de medida inválido",
       }),
-      unit: z.enum(["cm", "un"], {
+      unit: z.enum(["CM", "UN"], {
         message: "Unidade inválida",
       }),
       wasteTax: z.number(),
+      cutDirection: z.enum(["V", "VH"]).optional(),
     }),
   })
   .superRefine((data, ctx) => {
-    if (data.material.measureType !== "un" && !data.name) {
+    if (data.material.measureType !== "UN" && !data.name) {
       ctx.addIssue({
         path: ["name"],
         code: "custom",
@@ -49,6 +51,7 @@ export const getPiecetDefaultValues = () => {
     name: "",
     qtde: 1,
     material: {
+      code: "",
       baseValue: 0,
     },
   };

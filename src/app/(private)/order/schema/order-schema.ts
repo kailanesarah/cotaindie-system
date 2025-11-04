@@ -1,10 +1,9 @@
 import z from "zod";
-import { clientSchema } from "../../(navgation)/clients/_schema/client-schema";
 import { orderIncludedSchema } from "./order-included-schema";
 import { paymentMethod } from "./order-payment-schema";
 import { projectSchema } from "./project-form-schema";
 
-const statusEnum = z.enum(["approved", "open"]);
+const statusEnum = z.enum(["APPROVED", "OPEN"]);
 
 const PaymentSchema = z.object({
   deliveryDays: z
@@ -32,10 +31,11 @@ const PaymentSchema = z.object({
 export const orderSchema = z
   .object({
     id: z.string().optional(),
+
     status: statusEnum,
 
     name: z.string(),
-    client: clientSchema,
+    client: z.string(),
     expirationDays: z.number(),
     initialDate: z.string(),
 

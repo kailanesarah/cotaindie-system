@@ -1,17 +1,16 @@
 import { SupportDialog } from "@/app/_components/support-dialog";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
-import { requireUserServer } from "@/modules/supabase/supabase-auth-service";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { NavbarBreadcrumb } from "./navbar-breadcrump";
 import { NavbarProfile } from "./navbar-profile";
 import { QuestionsDialog } from "./questions-dialog";
 
-export const Navbar = async () => {
-  const user = await requireUserServer();
+interface INavbarProps {
+  profile: { name: string; role: string; avatar?: string };
+}
 
-export const Navbar = ({ profile }: INavbar) => {
+export const Navbar = ({ profile }: INavbarProps) => {
   return (
     <nav className="border-b-light hidden h-[4.5625rem] items-center border-b bg-white px-4 py-4 lg:flex lg:px-6">
       <div className="flex grow items-center justify-between gap-6">
@@ -35,14 +34,7 @@ export const Navbar = ({ profile }: INavbar) => {
             </DialogTrigger>
             <SupportDialog />
           </Dialog>
-          <NavbarProfile
-            name={
-              typeof user?.user_metadata?.user_name === "string"
-                ? user.user_metadata.user_name
-                : "Usuário"
-            }
-            role="administrador"
-          />
+          <NavbarProfile profile={profile} />
         </div>
       </div>
     </nav>

@@ -1,4 +1,4 @@
-export const cutDirectionMap: Record<"vh" | "v", string> = {
-  vh: "Vertical e Horizontal",
-  v: "Vertical",
+export const cutDirectionMap: Record<"VH" | "V", string> = {
+  VH: "Vertical e Horizontal",
+  V: "Vertical",
 } as const;

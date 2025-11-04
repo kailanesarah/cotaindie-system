@@ -1,11 +1,11 @@
-type Status = "approved" | "open";
+type Status = "APPROVED" | "OPEN";
 type Payment =
-  | "credit"
-  | "debit"
-  | "bank_transfer"
-  | "pix"
-  | "to_agree"
-  | "others";
+  | "CREDIT"
+  | "DEBIT"
+  | "BANK_TRANSFER"
+  | "PIX"
+  | "TO_AGREE"
+  | "OTHERS";
 
 interface Order {
   id: string;

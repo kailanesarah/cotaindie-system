@@ -6,14 +6,20 @@ import { useAction } from "next-safe-action/hooks";
 import toast from "react-hot-toast";
 import { upsertOrderAction } from "../_actions/upsert-order-action";
 import { useOrderStore } from "../_stores/order-store";
+import { orderSchema, type OrderType } from "../schema/order-schema";
 
-export const upseUpsertOrder = () => {
+export const useUpsertOrder = () => {
   const queryClient = useQueryClient();
-  const { order, triggers } = useOrderStore();
+  const { order, triggers, setOrderFull } = useOrderStore();
 
   const { execute: executeAction, isPending } = useAction(upsertOrderAction, {
-    onSuccess: async () => {
+    onSuccess: async (res) => {
       await queryClient.invalidateQueries({ queryKey: ["orders"] });
+
+      console.log(res);
+
+      setOrderFull(res.data);
+
       toast((t) => (
         <ToastCard
           id={t.id}
@@ -25,7 +31,6 @@ export const upseUpsertOrder = () => {
     },
     onError: (err) => {
       console.log(err);
-
       toast((t) => (
         <ToastCard
           id={t.id}
@@ -50,26 +55,14 @@ export const upseUpsertOrder = () => {
       return false;
     }
 
-    const triggerKeys = Object.keys(triggers);
-    if (triggerKeys.length === 0) {
-      toast((t) => (
-        <ToastCard
-          id={t.id}
-          status="warning"
-          title="Preencha todos os dados!"
-          text="Alguns campos obrigatórios ainda não foram preenchidos."
-        />
-      ));
-      return false;
-    }
-
     let allValid = true;
 
-    for (const key of triggerKeys) {
+    for (const key of Object.keys(triggers)) {
       const trigger = triggers[key];
-      if (!trigger) continue;
 
+      if (!trigger) continue;
       const isValid = await trigger();
+
       if (!isValid) allValid = false;
     }
 
@@ -85,9 +78,27 @@ export const upseUpsertOrder = () => {
       return false;
     }
 
-    executeAction(order as Order);
+    const dataFormatted = { ...order, client: order?.client?.id };
+    const result = orderSchema.safeParse(dataFormatted);
 
-    return true;
+    if (!result.success) {
+      console.error(result.error);
+
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="error"
+          title="Dados inválidos!"
+          text="Algo está errado, algum dado está inválido."
+        />
+      ));
+
+      return false;
+    }
+
+    const payload: OrderType = result.data;
+
+    executeAction(payload);
   };
 
   return { execute, isPending };

@@ -16,7 +16,7 @@ export function ClientAdressFields() {
     <>
       <FormField
         control={form.control}
-        name="address.city"
+        name="city"
         render={({ field }) => (
           <FormItem className="col-span-1 lg:col-span-2">
             <FormLabel>Cidade</FormLabel>
@@ -29,7 +29,7 @@ export function ClientAdressFields() {
       />
       <FormField
         control={form.control}
-        name="address.cep"
+        name="cep"
         render={({ field }) => (
           <FormItem className="col-span-1 lg:col-span-2">
             <FormLabel isOptional>CEP</FormLabel>
@@ -49,7 +49,7 @@ export function ClientAdressFields() {
       />
       <FormField
         control={form.control}
-        name="address.neighborhood"
+        name="neighborhood"
         render={({ field }) => (
           <FormItem className="col-span-1 lg:col-span-2">
             <FormLabel>Bairro</FormLabel>
@@ -62,7 +62,7 @@ export function ClientAdressFields() {
       />
       <FormField
         control={form.control}
-        name="address.street"
+        name="street"
         render={({ field }) => (
           <FormItem className="col-span-1 lg:col-span-3">
             <FormLabel>Endereço</FormLabel>
@@ -75,7 +75,7 @@ export function ClientAdressFields() {
       />
       <FormField
         control={form.control}
-        name="address.complement"
+        name="complement"
         render={({ field }) => (
           <FormItem className="col-span-1 lg:col-span-3">
             <FormLabel isOptional>Complemento ou referência</FormLabel>

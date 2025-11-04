@@ -8,11 +8,11 @@ export const statusMap: Record<
   (typeof statusList)[number]["id"],
   { text: string; type: BadgeVariant }
 > = {
-  open: {
+  OPEN: {
     text: "Cotado",
     type: "alert",
   },
-  approved: {
+  APPROVED: {
     text: "Finalizado",
     type: "success",
   },

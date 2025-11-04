@@ -1,12 +1,12 @@
 import z from "zod";
 
 export const paymentMethod = [
-  "credit",
-  "debit",
-  "bank_transfer",
-  "pix",
-  "others",
-  "to_agree",
+  "CREDIT",
+  "DEBIT",
+  "BANK_TRANSFER",
+  "PIX",
+  "TO_AGREE",
+  "OTHERS",
 ] as const;
 
 export const orderPaymentSchema = z

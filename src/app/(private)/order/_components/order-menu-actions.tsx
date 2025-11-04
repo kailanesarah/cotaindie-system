@@ -17,29 +17,86 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
+import { useGenerateContractDocument } from "../../(navgation)/_hooks/use-generate-contract-document";
+import { useGenerateCuttingPlanDocument } from "../../(navgation)/_hooks/use-generate-cutting-plan-document";
+import { useGenerateMaterialsDocument } from "../../(navgation)/_hooks/use-generate-materials-document";
+import { useGenerateQuoteDocument } from "../../(navgation)/_hooks/use-generate-quote-document";
+import { mapOrderToContractDoc } from "../../(navgation)/_utils/map-order-to-contract-doc";
+import { mapOrderToCuttingPlanDoc } from "../../(navgation)/_utils/map-order-to-cutting-plan-doc";
+import { mapOrderToMaterialsDoc } from "../../(navgation)/_utils/map-order-to-materials-doc";
+import { mapOrderToQuoteDoc } from "../../(navgation)/_utils/map-order-to-quote-doc";
 import { useCopyOrder } from "../../(navgation)/orders/_hooks/use-copy-order";
-
-import { upseUpsertOrder } from "../_hooks/use-order-save";
+import { useDeleteOrder } from "../../(navgation)/orders/_hooks/use-delete-order";
+import { useUpsertOrder } from "../_hooks/use-order-save";
 import { useOrderStore } from "../_stores/order-store";
 
 export const OrderMenuActions = () => {
   const { order, setStatusInfo } = useOrderStore();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const { execute: handleSave } = upseUpsertOrder();
-
-  const handleDelete = () => {
-    console.log("Deleted!");
-    setIsDeleteOpen(false);
-  };
-
-  const id = order.id;
+  const router = useRouter();
+  const { execute: handleSave } = useUpsertOrder();
 
   const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
+  const { execute: executeDelete, isPending: isPendingDelete } =
+    useDeleteOrder();
+
+  const handleDelete = async () => {
+    if (order.id) {
+      executeDelete(order.id);
+    }
+
+    setIsDeleteOpen(false);
+
+    window.close();
+    router.push("/orders");
+  };
+
   const handleCopy = () => {
-    if (id) executeCopy(id);
+    if (order.id) executeCopy(order.id);
+  };
+
+  const { generateQuoteDocument } = useGenerateQuoteDocument();
+  const handleGenerateQuote = () => {
+    const quoteDoc = mapOrderToQuoteDoc(order);
+    if (!quoteDoc) {
+      return;
+    }
+
+    generateQuoteDocument(quoteDoc);
+  };
+
+  const { generateContractDocument } = useGenerateContractDocument();
+  const handleGenerateContract = () => {
+    const contractDoc = mapOrderToContractDoc(order);
+    if (!contractDoc) {
+      return;
+    }
+
+    generateContractDocument(contractDoc);
+  };
+
+  const { generateMaterialsDocument } = useGenerateMaterialsDocument();
+  const handleGenerateMaterial = () => {
+    const materialDoc = mapOrderToMaterialsDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateMaterialsDocument(materialDoc);
+  };
+
+  const { generateCuttingPlanDocument } = useGenerateCuttingPlanDocument();
+  const handleGenerateCuttingPlan = () => {
+    const materialDoc = mapOrderToCuttingPlanDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateCuttingPlanDocument(materialDoc);
   };
 
   return (
@@ -62,14 +119,14 @@ export const OrderMenuActions = () => {
           classNameViewport="px-0"
         >
           <SelectItem
-            value="open"
+            value="OPEN"
             className="text-yellow-darker font-semibold outline-0"
           >
             Apenas cotado
           </SelectItem>
           <Separator />
           <SelectItem
-            value="approved"
+            value="APPROVED"
             className="text-green-default font-semibold outline-0"
           >
             Pedido finalizado
@@ -89,26 +146,26 @@ export const OrderMenuActions = () => {
             <Button className="group w-8 rounded-l-none border-0 focus:z-10">
               <Icon
                 name="keyboard_arrow_down"
-                className="group-data-[state=open]:rotate-180"
+                className="group-data-[state=OPEN]:rotate-180"
               />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[12.5rem]">
-            {id && (
+            {order.id && (
               <DropdownMenuItem onClick={handleCopy} disabled={isPendingCopy}>
                 <Icon name="file_copy" /> Fazer cópia
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleGenerateQuote}>
               <Icon name="picture_as_pdf" /> Exportar PDF
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleGenerateCuttingPlan}>
               <Icon name="crop" /> Plano de corte
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleGenerateMaterial}>
               <Icon name="download" /> Espelho de materiais
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleGenerateContract}>
               <Icon name="contract" /> Baixar contrato
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -122,8 +179,12 @@ export const OrderMenuActions = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
         <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-          <DeleteDialog handleDelete={handleDelete} />
+          <DeleteDialog
+            handleDelete={handleDelete}
+            isPending={isPendingDelete}
+          />
         </Dialog>
       </div>
     </div>

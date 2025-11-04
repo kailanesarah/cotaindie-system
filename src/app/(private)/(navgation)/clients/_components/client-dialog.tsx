@@ -10,7 +10,7 @@ import {
 import { ClientForm } from "./client-form";
 
 export const ClientDialog = ({ client }: { client?: Client }) => {
-  const id = client?.id;
+  const code = client?.code;
   const name = client?.name;
 
   return (
@@ -18,18 +18,18 @@ export const ClientDialog = ({ client }: { client?: Client }) => {
       <DialogHeader>
         <div className="flex items-center gap-3">
           <DialogIcon name="article_person" className="hidden lg:block" />
-          {client?.id && (
-            <Badge className="h-5 text-[0.6875rem] lg:hidden">{id}</Badge>
+          {code && (
+            <Badge className="h-5 text-[0.6875rem] lg:hidden">C - {code}</Badge>
           )}
         </div>
         <DialogHeaderContent>
-          <DialogTitle>{id ? name : "Adicione um novo cliente"}</DialogTitle>
-          {client?.id && (
+          <DialogTitle>{code ? name : "Adicione um novo cliente"}</DialogTitle>
+          {code && (
             <DialogDescription className="flex gap-3">
               <Badge className="hidden h-5 text-[0.6875rem] lg:block">
-                {id}
+                C - {code}
               </Badge>
-              Alterações só serão refletidas em cotações novas.
+              Alterações serão aplicadas parcialmente em cotações atigas.
             </DialogDescription>
           )}
         </DialogHeaderContent>

@@ -9,7 +9,7 @@ import { SidebarMobile } from "./app-sidebar-mobile";
 import { NavbarBreadcrumb } from "./navbar-breadcrump";
 
 interface INavbarMobile {
-  profile: { name: string; role: string; imageUrl?: string };
+  profile: { name: string; role: string; avatar?: string };
 }
 
 export const NavbarMobile = ({ profile }: INavbarMobile) => {

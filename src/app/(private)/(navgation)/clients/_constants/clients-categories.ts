@@ -1,4 +1,4 @@
 export const clientsCategories: Category[] = [
-  { id: "pf", name: "Pessoa física" },
-  { id: "pj", name: "Pessoa jurídica" },
+  { id: "CPF", name: "Pessoa física" },
+  { id: "CNPJ", name: "Pessoa jurídica" },
 ];

@@ -1,8 +1,8 @@
 export const paymentCategories: Category[] = [
-  { id: "pix", name: "Pix" },
-  { id: "credit", name: "Cartão de crédito" },
-  { id: "debit", name: "Cartão de débito" },
-  { id: "to_agree", name: "A combinar" },
-  { id: "bank_transfer", name: "Transferência bancária" },
-  { id: "others", name: "Outros" },
+  { id: "PIX", name: "Pix" },
+  { id: "CREDIT", name: "Cartão de crédito" },
+  { id: "DEBIT", name: "Cartão de débito" },
+  { id: "TO_AGREE", name: "A combinar" },
+  { id: "BANK_TRANSFER", name: "Transferência bancária" },
+  { id: "OTHERS", name: "Outros" },
 ];

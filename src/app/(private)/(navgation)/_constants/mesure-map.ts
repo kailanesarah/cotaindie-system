@@ -1,5 +1,5 @@
 export const measureMap = {
-  m2: "cm",
-  ml: "cm",
-  un: "un",
+  M2: "CM",
+  ML: "CM",
+  UN: "UN",
 } as const;

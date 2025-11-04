@@ -5,10 +5,10 @@ export const materialSchema = z.object({
   category: z.string().min(1, "Categoria obrigatória"),
   name: z.string().min(1, "Nome obrigatório"),
   description: z.string().optional(),
-  measureType: z.enum(["m2", "ml", "un"], {
+  measureType: z.enum(["M2", "ML", "UN"], {
     message: "Tipo de medida inválido",
   }),
-  unit: z.enum(["cm", "un"], {
+  unit: z.enum(["CM", "UN"], {
     message: "Unidade inválida",
   }),
   wasteTax: z.number().nonnegative("Deve ser maior ou igual a 0"),
@@ -20,7 +20,7 @@ export const materialSchema = z.object({
       z.number().positive("Deve ser maior que 0"),
     ]),
   ]),
-  cutDirection: z.enum(["v", "vh"]).optional(),
+  cutDirection: z.enum(["V", "VH"]).optional(),
 });
 
 export const getMaterialDefaultValues = (
@@ -31,13 +31,13 @@ export const getMaterialDefaultValues = (
     category: material?.category?.id ?? "",
     name: material?.name ?? "",
     description: material?.description ?? "",
-    measureType: material?.measureType ?? "m2",
-    unit: material?.unit ?? "cm",
+    measureType: material?.measureType ?? "M2",
+    unit: material?.unit ?? "CM",
     wasteTax: material?.wasteTax ?? 0,
     baseValue: material?.baseValue ?? 0,
     measure: material?.measure
       ? (material.measure.map((v) => Number(v)) as [number] | [number, number])
       : [0, 0],
-    cutDirection: material?.cutDirection ?? "vh",
+    cutDirection: material?.cutDirection ?? "VH",
   };
 };

@@ -5,6 +5,10 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useState, type ReactNode } from "react";
+import { useGenerateCuttingPlanDocument } from "../../(navgation)/_hooks/use-generate-cutting-plan-document";
+import { useGenerateMaterialsDocument } from "../../(navgation)/_hooks/use-generate-materials-document";
+import { mapOrderToCuttingPlanDoc } from "../../(navgation)/_utils/map-order-to-cutting-plan-doc";
+import { mapOrderToMaterialsDoc } from "../../(navgation)/_utils/map-order-to-materials-doc";
 import { StepperProvider } from "../_provider/project-stepper-provider";
 import { useOrderStore } from "../_stores/order-store";
 import { currencyFormatter } from "../_utils/currency-formatter";
@@ -36,6 +40,25 @@ export const OrderProjectsActions = () => {
 
   const isSmallScreen = useMediaQuery("(max-width: 1023px)");
 
+  const { generateMaterialsDocument } = useGenerateMaterialsDocument();
+  const handleGenerateMaterial = () => {
+    const materialDoc = mapOrderToMaterialsDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateMaterialsDocument(materialDoc);
+  };
+
+  const { generateCuttingPlanDocument } = useGenerateCuttingPlanDocument();
+  const handleGenerateCuttingPlan = () => {
+    const materialDoc = mapOrderToCuttingPlanDoc(order);
+    if (!materialDoc) {
+      return;
+    }
+
+    generateCuttingPlanDocument(materialDoc);
+  };
   return (
     <div className="flex gap-3">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -51,11 +74,19 @@ export const OrderProjectsActions = () => {
       </Dialog>
       {hasProjects && (
         <>
-          <Button variant="secondary" square={isSmallScreen}>
+          <Button
+            variant="secondary"
+            square={isSmallScreen}
+            onClick={handleGenerateMaterial}
+          >
             <Icon name="download" />
             <span className="hidden lg:inline">Espelho de materiais</span>
           </Button>
-          <Button variant="secondary" square={isSmallScreen}>
+          <Button
+            variant="secondary"
+            square={isSmallScreen}
+            onClick={handleGenerateCuttingPlan}
+          >
             <Icon name="crop" />
             <span className="hidden lg:inline">Plano de corte</span>
           </Button>

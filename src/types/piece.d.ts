@@ -7,6 +7,7 @@ interface Piece {
     Material,
     | "id"
     | "name"
+    | "code"
     | "measure"
     | "measureType"
     | "baseValue"
