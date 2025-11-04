@@ -1,4 +1,11 @@
+"use client";
+
 import { CuttingPlan } from "@/lib/cutting-plan";
+import type {
+  CuttingPlanDocumentProps,
+  MaterialPlanProps,
+  PlanDataProps,
+} from "../_docs/cutting-plan-document";
 
 const mockClient = {
   name: "Cliente exemplo",
@@ -49,6 +56,7 @@ const optimizerConfigPainel = {
   ],
 };
 
+// Calcula os planos de corte
 const planCozinha = new CuttingPlan(optimizerConfigCozinha).calculate({
   includeImages: true,
 });
@@ -59,7 +67,67 @@ const planPainel = new CuttingPlan(optimizerConfigPainel).calculate({
   includeImages: true,
 });
 
-const mockPlan = {
+const materialCozinha: MaterialPlanProps = {
+  id: "mat1",
+  name: "MDF Branco 18MM",
+  code: "M28321",
+  cutDirection: "VH",
+  cutDirectionLabel: "Corte: Horizontal e vertical",
+  pieces: [],
+  sheets: planCozinha.base64Images.map((img, i) => ({
+    id: `s${i + 1}`,
+    label: `Chapa ${i + 1} (${optimizerConfigCozinha.sheetW}x${optimizerConfigCozinha.sheetH} cm)`,
+    imageBase64: img,
+  })),
+};
+materialCozinha.pieces = optimizerConfigCozinha.items.map((piece, i) => ({
+  id: `p${i + 1}`,
+  material: materialCozinha,
+  label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
+  qtde: 1,
+}));
+
+const materialCloset: MaterialPlanProps = {
+  id: "mat2",
+  name: "MDF Carvalho 18MM",
+  code: "M28322",
+  cutDirection: "VH",
+  cutDirectionLabel: "Corte: Horizontal e vertical",
+  pieces: [],
+  sheets: planCloset.base64Images.map((img, i) => ({
+    id: `s${i + 3}`,
+    label: `Chapa ${i + 3} (${optimizerConfigCloset.sheetW}x${optimizerConfigCloset.sheetH} cm)`,
+    imageBase64: img,
+  })),
+};
+materialCloset.pieces = optimizerConfigCloset.items.map((piece, i) => ({
+  id: `p${i + 4}`,
+  material: materialCloset,
+  label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
+  qtde: 1,
+}));
+
+const materialPainel: MaterialPlanProps = {
+  id: "mat3",
+  name: "MDF Amadeirado 15MM",
+  code: "M28323",
+  cutDirection: "VH",
+  cutDirectionLabel: "Corte: Horizontal e vertical",
+  pieces: [],
+  sheets: planPainel.base64Images.map((img, i) => ({
+    id: `s${i + 6}`,
+    label: `Chapa ${i + 6} (${optimizerConfigPainel.sheetW}x${optimizerConfigPainel.sheetH} cm)`,
+    imageBase64: img,
+  })),
+};
+materialPainel.pieces = optimizerConfigPainel.items.map((piece, i) => ({
+  id: `p${i + 8}`,
+  material: materialPainel,
+  label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
+  qtde: 1,
+}));
+
+const mockPlan: PlanDataProps = {
   quoteCode: "C29115",
   planCode: "P29115",
   title: "Plano de corte automático",
@@ -69,78 +137,23 @@ const mockPlan = {
       id: "proj1",
       name: "Móveis da cozinha",
       qtde: 1,
-      materials: [
-        {
-          id: "mat1",
-          name: "MDF Branco 18MM",
-          code: "M28321",
-          cutDirection: "VH" as "V" | "VH",
-          cutDirectionLabel: "Corte: Horizontal e vertical",
-          pieces: optimizerConfigCozinha.items.map((piece, i) => ({
-            id: `p${i + 1}`,
-            label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
-            qtde: 1,
-          })),
-          sheets: planCozinha.base64Images.map((img, i) => ({
-            id: `s${i + 1}`,
-            label: `Chapa ${i + 1} (${optimizerConfigCozinha.sheetW}x${optimizerConfigCozinha.sheetH} cm)`,
-            imageBase64: img,
-          })),
-        },
-      ],
+      materials: [materialCozinha],
     },
     {
       id: "proj2",
       name: "Closet do quarto",
       qtde: 1,
-      materials: [
-        {
-          id: "mat2",
-          name: "MDF Carvalho 18MM",
-          code: "M28322",
-          cutDirection: "VH" as "V" | "VH",
-          cutDirectionLabel: "Corte: Horizontal e vertical",
-          pieces: optimizerConfigCloset.items.map((piece, i) => ({
-            id: `p${i + 4}`,
-            label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
-            qtde: 1,
-          })),
-          sheets: planCloset.base64Images.map((img, i) => ({
-            id: `s${i + 3}`,
-            label: `Chapa ${i + 3} (${optimizerConfigCloset.sheetW}x${optimizerConfigCloset.sheetH} cm)`,
-            imageBase64: img,
-          })),
-        },
-      ],
+      materials: [materialCloset],
     },
     {
       id: "proj3",
       name: "Painel da sala",
       qtde: 1,
-      materials: [
-        {
-          id: "mat3",
-          name: "MDF Amadeirado 15MM",
-          code: "M28323",
-          cutDirection: "VH" as "V" | "VH",
-          cutDirectionLabel: "Corte: Horizontal e vertical",
-          pieces: optimizerConfigPainel.items.map((piece, i) => ({
-            id: `p${i + 8}`,
-            label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
-            qtde: 1,
-          })),
-          sheets: planPainel.base64Images.map((img, i) => ({
-            id: `s${i + 6}`,
-            label: `Chapa ${i + 6} (${optimizerConfigPainel.sheetW}x${optimizerConfigPainel.sheetH} cm)`,
-            imageBase64: img,
-          })),
-        },
-      ],
+      materials: [materialPainel],
     },
   ],
   notes: `
-    Aproveitamento médio:
-    ${(
+    Aproveitamento médio: ${(
       ((planCozinha.totalFractionalSheets +
         planCloset.totalFractionalSheets +
         planPainel.totalFractionalSheets) /
@@ -152,7 +165,7 @@ const mockPlan = {
   `,
 };
 
-export const cuttingPlanDocMock = {
+export const cuttingPlanDocMock: CuttingPlanDocumentProps = {
   client: mockClient,
   plan: mockPlan,
 };
