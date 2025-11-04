@@ -5,7 +5,7 @@ const mockClient = {
   code: "C38223",
 };
 
-const optimizerConfig = {
+const optimizerConfigCozinha = {
   sheetW: 275,
   sheetH: 183,
   margin: 1,
@@ -13,14 +13,51 @@ const optimizerConfig = {
   allowRotate: true,
   wastePercentage: 5,
   items: [
-    { name: "Porta de correr", w: 80, h: 32 },
-    { name: "Porta de correr", w: 80, h: 32 },
-    { name: "Prateleira simples", w: 16, h: 32 },
+    { name: "Porta de armário", w: 70, h: 45 },
+    { name: "Fundo de balcão", w: 120, h: 55 },
+    { name: "Prateleira interna", w: 55, h: 45 },
   ],
 };
 
-const planInstance = new CuttingPlan(optimizerConfig);
-const planResults = planInstance.calculate({ includeImages: true });
+const optimizerConfigCloset = {
+  sheetW: 275,
+  sheetH: 183,
+  margin: 1,
+  pieceSpacing: 1,
+  allowRotate: true,
+  wastePercentage: 4,
+  items: [
+    { name: "Lateral grande", w: 220, h: 45 },
+    { name: "Fundo do armário", w: 200, h: 80 },
+    { name: "Prateleira interna", w: 80, h: 45 },
+    { name: "Porta do armário", w: 210, h: 40 },
+  ],
+};
+
+const optimizerConfigPainel = {
+  sheetW: 275,
+  sheetH: 183,
+  margin: 1,
+  pieceSpacing: 1,
+  allowRotate: true,
+  wastePercentage: 6,
+  items: [
+    { name: "Painel principal", w: 180, h: 120 },
+    { name: "Nicho decorativo", w: 60, h: 30 },
+    { name: "Base inferior", w: 180, h: 40 },
+    { name: "Prateleira flutuante", w: 120, h: 25 },
+  ],
+};
+
+const planCozinha = new CuttingPlan(optimizerConfigCozinha).calculate({
+  includeImages: true,
+});
+const planCloset = new CuttingPlan(optimizerConfigCloset).calculate({
+  includeImages: true,
+});
+const planPainel = new CuttingPlan(optimizerConfigPainel).calculate({
+  includeImages: true,
+});
 
 const mockPlan = {
   quoteCode: "C29115",
@@ -37,16 +74,16 @@ const mockPlan = {
           id: "mat1",
           name: "MDF Branco 18MM",
           code: "M28321",
-          cutDirection: "vh" as "v" | "vh",
+          cutDirection: "VH" as "V" | "VH",
           cutDirectionLabel: "Corte: Horizontal e vertical",
-          pieces: optimizerConfig.items.map((piece, i) => ({
+          pieces: optimizerConfigCozinha.items.map((piece, i) => ({
             id: `p${i + 1}`,
             label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
             qtde: 1,
           })),
-          sheets: planResults.base64Images.map((img, i) => ({
+          sheets: planCozinha.base64Images.map((img, i) => ({
             id: `s${i + 1}`,
-            label: `Chapa ${i + 1} (${optimizerConfig.sheetW}x${optimizerConfig.sheetH} cm)`,
+            label: `Chapa ${i + 1} (${optimizerConfigCozinha.sheetW}x${optimizerConfigCozinha.sheetH} cm)`,
             imageBase64: img,
           })),
         },
@@ -61,16 +98,16 @@ const mockPlan = {
           id: "mat2",
           name: "MDF Carvalho 18MM",
           code: "M28322",
-          cutDirection: "v" as "v" | "vh",
-          cutDirectionLabel: "Corte: Vertical",
-          pieces: [
-            { id: "p4", label: "- Lateral grande (220x45 cm)", qtde: 2 },
-            { id: "p5", label: "- Fundo do armário (200x80 cm)", qtde: 1 },
-            { id: "p6", label: "- Prateleira interna (80x45 cm)", qtde: 4 },
-          ],
-          sheets: planResults.base64Images.map((img, i) => ({
+          cutDirection: "VH" as "V" | "VH",
+          cutDirectionLabel: "Corte: Horizontal e vertical",
+          pieces: optimizerConfigCloset.items.map((piece, i) => ({
+            id: `p${i + 4}`,
+            label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
+            qtde: 1,
+          })),
+          sheets: planCloset.base64Images.map((img, i) => ({
             id: `s${i + 3}`,
-            label: `Chapa ${i + 3} (${optimizerConfig.sheetW}x${optimizerConfig.sheetH} cm)`,
+            label: `Chapa ${i + 3} (${optimizerConfigCloset.sheetW}x${optimizerConfigCloset.sheetH} cm)`,
             imageBase64: img,
           })),
         },
@@ -85,25 +122,34 @@ const mockPlan = {
           id: "mat3",
           name: "MDF Amadeirado 15MM",
           code: "M28323",
-          cutDirection: "vh" as "v" | "vh",
+          cutDirection: "VH" as "V" | "VH",
           cutDirectionLabel: "Corte: Horizontal e vertical",
-          pieces: [
-            { id: "p7", label: "- Painel principal (180x120 cm)", qtde: 1 },
-            { id: "p8", label: "- Nicho decorativo (60x30 cm)", qtde: 2 },
-          ],
-          sheets: planResults.base64Images.map((img, i) => ({
-            id: `s${i + 5}`,
-            label: `Chapa ${i + 5} (${optimizerConfig.sheetW}x${optimizerConfig.sheetH} cm)`,
+          pieces: optimizerConfigPainel.items.map((piece, i) => ({
+            id: `p${i + 8}`,
+            label: `- ${piece.name} (${piece.w}x${piece.h} cm)`,
+            qtde: 1,
+          })),
+          sheets: planPainel.base64Images.map((img, i) => ({
+            id: `s${i + 6}`,
+            label: `Chapa ${i + 6} (${optimizerConfigPainel.sheetW}x${optimizerConfigPainel.sheetH} cm)`,
             imageBase64: img,
           })),
         },
       ],
     },
   ],
-  notes: `Aproveitamento total: ${(
-    (planResults.totalFractionalSheets / planResults.totalIntegerSheets) *
-    100
-  ).toFixed(2)}%`,
+  notes: `
+    Aproveitamento médio:
+    ${(
+      ((planCozinha.totalFractionalSheets +
+        planCloset.totalFractionalSheets +
+        planPainel.totalFractionalSheets) /
+        (planCozinha.totalIntegerSheets +
+          planCloset.totalIntegerSheets +
+          planPainel.totalIntegerSheets)) *
+      100
+    ).toFixed(2)}%
+  `,
 };
 
 export const cuttingPlanDocMock = {
