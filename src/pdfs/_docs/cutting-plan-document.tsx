@@ -1,4 +1,3 @@
-import { Icon } from "@/components/ui/icon";
 import { Document, Image, Text, View } from "@react-pdf/renderer";
 import React from "react";
 import { DataGrid, DataGridCell, DataGridRow } from "../_components/data-grid";
@@ -180,7 +179,6 @@ export const CuttingPlanDocument = ({
                                   : verticalIcon
                               }
                             />
-                            <Icon name="dow" />
                           </View>
                         </View>
                         <Image

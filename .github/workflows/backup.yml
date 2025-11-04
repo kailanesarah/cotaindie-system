@@ -1,0 +1,89 @@
+name: supabase-backup
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at midnight
+
+env:
+  BACKUP_ENABLED: true
+
+jobs:
+  run_db_backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }}
+
+    steps:
+      - name: Check if backups are enabled
+        run: |
+          if [ "$BACKUP_ENABLED" != "true" ]; then
+            echo "::warning::Backups are disabled. Exiting workflow."
+            exit 0
+          fi
+
+      - name: Verify environment variables
+        if: env.BACKUP_ENABLED == 'true'
+        run: |
+          if [[ ! "$SUPABASE_DB_URL" == postgresql://* ]]; then
+            echo "::error::Database URL has incorrect format"
+            exit 1
+          fi
+          echo "Database URL has correct format"
+
+      - name: Checkout repository
+        if: env.BACKUP_ENABLED == 'true'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0 # Fetch all history for proper Git operations
+
+      - name: Generate timestamp
+        id: timestamp
+        run: echo "time=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
+
+      - name: Setup Supabase CLI
+        if: env.BACKUP_ENABLED == 'true'
+        uses: supabase/setup-cli@v1.5.0
+        with:
+          version: latest
+
+      - name: Create backup directory
+        if: env.BACKUP_ENABLED == 'true'
+        run: mkdir -p prisma/backups/${{ steps.timestamp.outputs.time }}
+
+      - name: Backup database
+        if: env.BACKUP_ENABLED == 'true'
+        run: |
+          # Backup roles
+          supabase db dump --db-url "$SUPABASE_DB_URL" \
+            -f prisma/backups/${{ steps.timestamp.outputs.time }}/roles.sql --role-only
+
+          # Backup schema
+          supabase db dump --db-url "$SUPABASE_DB_URL" \
+            -f prisma/backups/${{ steps.timestamp.outputs.time }}/schema.sql
+
+          # Backup data
+          supabase db dump --db-url "$SUPABASE_DB_URL" \
+            -f prisma/backups/${{ steps.timestamp.outputs.time }}/data.sql --data-only --use-copy
+
+      - name: Compress backup files
+        if: env.BACKUP_ENABLED == 'true'
+        run: |
+          cd prisma/backups
+          zip -r ${{ steps.timestamp.outputs.time }}.zip ${{ steps.timestamp.outputs.time }}
+          echo "Backup compressed successfully."
+
+      - name: Upload backup artifact
+        if: env.BACKUP_ENABLED == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ steps.timestamp.outputs.time }}
+          path: prisma/backups/${{ steps.timestamp.outputs.time }}.zip
+          retention-days: 7

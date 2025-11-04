@@ -5,7 +5,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [20],
-      measureType: "m2",
+      measureType: "M2",
       name: "MDF 15MM Branco",
     },
     measureBase: 20,
@@ -15,7 +15,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [15],
-      measureType: "m2",
+      measureType: "M2",
       name: "Metalon 20MM neutro",
     },
     measureBase: 15,
@@ -25,7 +25,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [20],
-      measureType: "m2",
+      measureType: "M2",
       name: "MDF 18MM Beige",
     },
     measureBase: 20,
@@ -35,7 +35,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [1],
-      measureType: "un",
+      measureType: "UN",
       name: "Parafusos longos M21",
     },
     measureBase: 1,
@@ -45,7 +45,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [1],
-      measureType: "un",
+      measureType: "UN",
       name: "Dobradiças com pistão",
     },
     measureBase: 1,
@@ -55,7 +55,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [10],
-      measureType: "ml",
+      measureType: "ML",
       name: "Perfil de Alumínio",
     },
     measureBase: 10,
@@ -65,7 +65,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [5],
-      measureType: "un",
+      measureType: "UN",
       name: "Corrediça telescópica",
     },
     measureBase: 5,
@@ -75,7 +75,7 @@ export const materialsData: TMaterialData[] = [
     material: {
       code: "C-2394",
       measure: [30],
-      measureType: "m2",
+      measureType: "M2",
       name: "Vidro temperado 8MM",
     },
     measureBase: 30,
