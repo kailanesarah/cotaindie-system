@@ -53,7 +53,7 @@ export const useOrderStore = create<OrderStore>()(
       rawAmount: 0,
       // deliveryDays: undefined,
       // paymentMethod: undefined,
-      // advancePaymentMethod: undefined,
+      advancePaymentMethod: undefined,
       discountPercent: 0,
       installmentCount: 1,
       name: "",
