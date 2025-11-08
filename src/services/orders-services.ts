@@ -320,4 +320,123 @@ export class OrdersService extends BaseService {
       this.handleError(err, "OrdersService.deleteOrder");
     }
   }
+
+  async copyOrder(orderId: string): Promise<{ id: string }> {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await this.supabase.auth.getUser();
+
+      if (authError) throw new Error(authError.message);
+      if (!user) throw new Error("User not authenticated");
+
+      const { data: original, error: fetchError } = await this.supabase
+        .from("orders")
+        .select(
+          `
+        *,
+        client:clients(*),
+        projects:orders_projects(
+          *,
+          pieces:orders_pieces(
+            *,
+            material_snapshot:orders_pieces_materials_snapshot(*)
+          )
+        )
+      `,
+        )
+        .eq("id", orderId)
+        .single();
+
+      if (fetchError) throw new Error(fetchError.message);
+      if (!original) throw new Error("Order not found");
+
+      const {
+        id: _oldId,
+        client,
+        projects,
+        created_at,
+        updated_at,
+        ...orderData
+      } = original;
+
+      const { data: newOrder, error: insertOrderError } = await this.supabase
+        .from("orders")
+        .insert({
+          ...orderData,
+          name: `(Cópia) ${orderData.name ?? ""}`.trim(),
+          code: await generateId(),
+          user_id: user.id,
+        })
+        .select()
+        .single();
+
+      if (insertOrderError) throw new Error(insertOrderError.message);
+
+      for (const project of original.projects ?? []) {
+        const {
+          id: _projectOldId,
+          pieces,
+          created_at,
+          updated_at,
+          ...projectData
+        } = project;
+
+        const { data: newProject, error: projectError } = await this.supabase
+          .from("orders_projects")
+          .insert({
+            ...projectData,
+            order_id: newOrder.id,
+          })
+          .select()
+          .single();
+
+        if (projectError) throw new Error(projectError.message);
+
+        for (const piece of project.pieces ?? []) {
+          const {
+            id: _pieceOldId,
+            material_snapshot,
+            created_at,
+            updated_at,
+            ...pieceData
+          } = piece;
+
+          const { data: newPiece, error: pieceError } = await this.supabase
+            .from("orders_pieces")
+            .insert({
+              ...pieceData,
+              project_id: newProject.id,
+            })
+            .select()
+            .single();
+
+          if (pieceError) throw new Error(pieceError.message);
+
+          if (material_snapshot) {
+            const {
+              id: _snapId,
+              created_at: _snapCreated,
+              updated_at: _snapUpdated,
+              ...snapData
+            } = material_snapshot;
+
+            const { error: snapshotError } = await this.supabase
+              .from("orders_pieces_materials_snapshot")
+              .insert({
+                ...snapData,
+                piece_id: newPiece.id,
+              });
+
+            if (snapshotError) throw new Error(snapshotError.message);
+          }
+        }
+      }
+
+      return { id: newOrder.id };
+    } catch (err) {
+      this.handleError(err, "OrdersService.duplicateOrder");
+    }
+  }
 }

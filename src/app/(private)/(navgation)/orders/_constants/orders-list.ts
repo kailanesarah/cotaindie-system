@@ -34,6 +34,7 @@ export const orders: Order[] = [
             measure: [70, 200],
             material: {
               id: "00000000-0000-0000-0000-000000300001",
+              code: "MAT-001",
               name: "MDF Branco",
               measure: [70, 200],
               measureType: "ML",
@@ -50,6 +51,7 @@ export const orders: Order[] = [
             measure: [30, 120],
             material: {
               id: "00000000-0000-0000-0000-000000300002",
+              code: "MAT-002",
               name: "MDF Branco",
               measure: [30, 120],
               measureType: "ML",
@@ -116,6 +118,7 @@ export const orders: Order[] = [
             measure: [60, 300],
             material: {
               id: "00000000-0000-0000-0000-000000300003",
+              code: "MAT-003",
               name: "MDF Carvalho",
               measure: [60, 300],
               measureType: "M2",
@@ -132,6 +135,7 @@ export const orders: Order[] = [
             measure: [40, 150],
             material: {
               id: "00000000-0000-0000-0000-000000300004",
+              code: "MAT-004",
               name: "MDF Carvalho",
               measure: [40, 150],
               measureType: "M2",
@@ -148,6 +152,7 @@ export const orders: Order[] = [
             measure: [60, 200],
             material: {
               id: "00000000-0000-0000-0000-000000300005",
+              code: "MAT-005",
               name: "Granito Preto",
               measure: [60, 200],
               measureType: "M2",
@@ -215,6 +220,7 @@ export const orders: Order[] = [
             measure: [30, 200],
             material: {
               id: "00000000-0000-0000-0000-000000300006",
+              code: "MAT-006",
               name: "Aço Pintado",
               measure: [30, 200],
               measureType: "M2",
@@ -231,6 +237,7 @@ export const orders: Order[] = [
             measure: [70, 200],
             material: {
               id: "00000000-0000-0000-0000-000000300007",
+              code: "MAT-007",
               name: "Vidro temperado",
               measure: [70, 200],
               measureType: "ML",

@@ -62,7 +62,8 @@ export function mapOrderFromSupabase(rawOrder: any): Order {
     discountPercent: rawOrder.discount_percent ?? 0,
     installmentCount: rawOrder.installment_count ?? 1,
     advanceAmount: rawOrder.advance_amount ?? 0,
-    advancePaymentMethod: rawOrder.advance_payment_method as Payment,
+    advancePaymentMethod:
+      (rawOrder.advance_payment_method as Payment) ?? undefined,
     notes: rawOrder.notes ?? "",
   };
 }

@@ -27,7 +27,7 @@ export const orderPaymentSchema = z
     advanceAmount: z
       .number("Insira um adiantamento")
       .min(0, "O adiantamento deve ser a partir de zero"),
-    advancePaymentMethod: z.enum(paymentMethod).optional(),
+    advancePaymentMethod: z.enum(paymentMethod).optional().nullable(),
     installmentCount: z
       .number("Insira a quantidade de parcelas")
       .int("O valor deve ser um número inteiro")

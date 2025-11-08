@@ -9,5 +9,6 @@ export const ROUTES = {
     PRODUCTS: "/materials",
     ORDERS: "/orders",
     ORDER: "/order/new",
+    ORDER_ID: "/order",
   },
 };
