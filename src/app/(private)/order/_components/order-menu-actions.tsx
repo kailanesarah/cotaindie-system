@@ -39,7 +39,6 @@ export const OrderMenuActions = () => {
 
   const router = useRouter();
   const { execute: handleSave } = useUpsertOrder();
-
   const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
   const { execute: executeDelete, isPending: isPendingDelete } =
     useDeleteOrder();
