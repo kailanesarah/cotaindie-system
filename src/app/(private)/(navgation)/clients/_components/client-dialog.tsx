@@ -1,4 +1,4 @@
-import { Badge } from "@/components/temp/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   DialogContent,
   DialogDescription,
@@ -6,7 +6,7 @@ import {
   DialogHeaderContent,
   DialogIcon,
   DialogTitle,
-} from "@/components/temp/dialog";
+} from "@/components/ui/dialog";
 import { ClientForm } from "./client-form";
 
 export const ClientDialog = ({ client }: { client?: Client }) => {

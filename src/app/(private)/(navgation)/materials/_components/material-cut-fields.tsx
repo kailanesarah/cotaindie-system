@@ -6,16 +6,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/temp/form";
-import { Icon } from "@/components/temp/icon";
-import { InputDisabled } from "@/components/temp/input-disabled";
+} from "@/components/ui/form";
+import { Icon } from "@/components/ui/icon";
+import { InputDisabled } from "@/components/ui/input-disabled";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/temp/select";
+} from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
 import { cutDirectionMap } from "../_utils/cut-direction-map";
 

@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/temp/table";
+} from "@/components/ui/table";
 import { useEffect } from "react";
 import { useOrderStore } from "../_stores/order-store";
 import { currencyFormatter } from "../_utils/currency-formatter";

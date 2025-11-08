@@ -6,16 +6,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/temp/form";
-import { Input } from "@/components/temp/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/temp/select";
-import { Textarea } from "@/components/temp/textarea";
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useFormContext } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { useGetCategories } from "../../_hooks/use-get-categories";

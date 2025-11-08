@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
-import { Dialog } from "@/components/temp/dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/temp/dropdown-menu";
-import { Icon } from "@/components/temp/icon";
+} from "@/components/ui/dropdown-menu";
+import { Icon } from "@/components/ui/icon";
 import { ROUTES } from "@/constants/urls";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

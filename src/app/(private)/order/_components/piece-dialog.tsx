@@ -4,7 +4,7 @@ import {
   DialogHeaderContent,
   DialogIcon,
   DialogTitle,
-} from "@/components/temp/dialog";
+} from "@/components/ui/dialog";
 import { useFormContext } from "react-hook-form";
 import { PieceForm } from "./piece-form";
 

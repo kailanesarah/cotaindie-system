@@ -1,7 +1,7 @@
 "use client";
 
 import { currencyFormatter } from "@/app/(private)/order/_utils/currency-formatter";
-import { Skeleton } from "@/components/temp/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMetrics } from "../_hooks/use-get-metrics";
 import {
   MetricCard,

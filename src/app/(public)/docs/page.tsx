@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/temp/select";
+} from "@/components/ui/select";
 import { contractDocMock } from "@/pdfs/_constants/contract-doc-mock";
 import { cuttingPlanDocMock } from "@/pdfs/_constants/cutting-plan-doc-mock";
 import { materialsDocMock } from "@/pdfs/_constants/materials-doc-mock";

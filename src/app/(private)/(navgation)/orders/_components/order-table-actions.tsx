@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
-import { Dialog } from "@/components/temp/dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/temp/dropdown-menu";
-import { Icon } from "@/components/temp/icon";
+} from "@/components/ui/dropdown-menu";
+import { Icon } from "@/components/ui/icon";
 import Link from "next/link";
 import { DeleteDialog } from "../../_components/delete-dialog";
 import { useDialog } from "../../_hooks/use-dialog";

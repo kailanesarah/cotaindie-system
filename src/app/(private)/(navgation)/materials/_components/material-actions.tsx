@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
-import { Dialog, DialogFooter, DialogTrigger } from "@/components/temp/dialog";
-import { Icon } from "@/components/temp/icon";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Icon } from "@/components/ui/icon";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useFormContext } from "react-hook-form";
 import { DeleteDialog } from "../../_components/delete-dialog";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
+import { Button } from "@/components/ui/button";
 import {
   DialogBody,
   DialogClose,
@@ -9,8 +9,8 @@ import {
   DialogFooter,
   DialogIcon,
   DialogTitle,
-} from "@/components/temp/dialog";
-import { Icon } from "@/components/temp/icon";
+} from "@/components/ui/dialog";
+import { Icon } from "@/components/ui/icon";
 
 export const DeleteDialog = ({
   handleDelete,

@@ -1,8 +1,8 @@
 "use client";
 
 import { OrderMenuActions } from "@/app/(private)/order/_components/order-menu-actions";
-import { Badge } from "@/components/temp/badge";
-import { Icon } from "@/components/temp/icon";
+import { Badge } from "@/components/ui/badge";
+import { Icon } from "@/components/ui/icon";
 import { ROUTES } from "@/constants/urls";
 import { useRouter } from "next/navigation";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@/components/temp/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   DialogContent,
   DialogDescription,
@@ -8,7 +8,7 @@ import {
   DialogHeaderContent,
   DialogIcon,
   DialogTitle,
-} from "@/components/temp/dialog";
+} from "@/components/ui/dialog";
 import { Stepper } from "../_provider/project-stepper-provider";
 import { ProjectForm } from "./project-form";
 

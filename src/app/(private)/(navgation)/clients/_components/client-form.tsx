@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogBody } from "@/components/temp/dialog";
+import { DialogBody } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -8,8 +8,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/temp/form";
-import { Textarea } from "@/components/temp/textarea";
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type z from "zod";

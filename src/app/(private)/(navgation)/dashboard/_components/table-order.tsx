@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@/components/temp/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/temp/table";
+} from "@/components/ui/table";
 import { statusMap } from "../../_constants/status-map";
 import { OrderTableActions } from "../../orders/_components/order-table-actions";
 

@@ -6,7 +6,7 @@ import {
   DialogHeaderContent,
   DialogIcon,
   DialogTitle,
-} from "@/components/temp/dialog";
+} from "@/components/ui/dialog";
 import { questionsItems } from "../_constants/questions-items";
 import { QuestionList } from "./question-list";
 

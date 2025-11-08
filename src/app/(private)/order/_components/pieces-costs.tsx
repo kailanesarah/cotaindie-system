@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
-import { Icon } from "@/components/temp/icon";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import type { ReactNode } from "react";
 import { currencyFormatter } from "../_utils/currency-formatter";
 

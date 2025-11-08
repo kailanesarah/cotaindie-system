@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
-import { Dialog, DialogTrigger } from "@/components/temp/dialog";
-import { Icon } from "@/components/temp/icon";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Icon } from "@/components/ui/icon";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useState, type ReactNode } from "react";
 import { useGenerateCuttingPlanDocument } from "../../(navgation)/_hooks/use-generate-cutting-plan-document";

@@ -1,6 +1,6 @@
 "use client";
 
-import { ToastCard } from "@/components/temp/toast-card";
+import { ToastCard } from "@/components/ui/toast-card";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAction } from "next-safe-action/hooks";
 import toast from "react-hot-toast";

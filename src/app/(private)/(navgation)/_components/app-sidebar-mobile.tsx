@@ -3,8 +3,8 @@
 import { useLogout } from "@/app/(private)/_hooks/use-logout";
 import LogoSymbol from "@/assets/imgs/logo-symbol.svg";
 import LogoTitle from "@/assets/imgs/logo-title.svg";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/temp/avatar";
-import { Icon } from "@/components/temp/icon";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Icon } from "@/components/ui/icon";
 import {
   Sheet,
   SheetClose,
@@ -13,7 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/temp/sheet";
+} from "@/components/ui/sheet";
 import { ROUTES } from "@/constants/urls";
 import Image from "next/image";
 import Link from "next/link";

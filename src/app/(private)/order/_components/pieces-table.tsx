@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
-import { Dialog } from "@/components/temp/dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/temp/dropdown-menu";
-import { Icon } from "@/components/temp/icon";
+} from "@/components/ui/dropdown-menu";
+import { Icon } from "@/components/ui/icon";
 import {
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/temp/table";
+} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Fragment, useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";

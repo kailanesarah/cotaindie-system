@@ -1,6 +1,6 @@
 "use client";
 
-import { ToastCard } from "@/components/temp/toast-card";
+import { ToastCard } from "@/components/ui/toast-card";
 import toast from "react-hot-toast";
 import { useSearch } from "../../_hooks/use-search";
 import { getMaterialsAction } from "../_actions/get-materials-action";

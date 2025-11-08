@@ -1,7 +1,7 @@
 "use client";
 
 import { copyOrderAction } from "@/app/(private)/order/_actions/copy-order-action";
-import { ToastCard } from "@/components/temp/toast-card";
+import { ToastCard } from "@/components/ui/toast-card";
 import { ROUTES } from "@/constants/urls";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAction } from "next-safe-action/hooks";

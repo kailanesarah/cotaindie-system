@@ -7,17 +7,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/temp/form";
-import { Input } from "@/components/temp/input";
-import { InputDisabled } from "@/components/temp/input-disabled";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { InputDisabled } from "@/components/ui/input-disabled";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/temp/select";
-import { Textarea } from "@/components/temp/textarea";
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";

@@ -1,4 +1,4 @@
-import { ToastCard } from "@/components/temp/toast-card";
+import { ToastCard } from "@/components/ui/toast-card";
 import {
   QuoteDocument,
   type QuoteDocumentProps,

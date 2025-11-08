@@ -3,7 +3,7 @@
 import { useLogout } from "@/app/(private)/_hooks/use-logout";
 import LogoSymbol from "@/assets/imgs/logo-symbol.svg";
 import LogoTitle from "@/assets/imgs/logo-title.svg";
-import { Icon } from "@/components/temp/icon";
+import { Icon } from "@/components/ui/icon";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-} from "@/components/temp/sidebar";
+} from "@/components/ui/sidebar";
 import {
   SidebarButton,
   SidebarLink,
@@ -22,7 +22,7 @@ import {
   SidebarLinkDescription,
   SidebarLinkIcon,
   SidebarLinkTitle,
-} from "@/components/temp/sidebar-button";
+} from "@/components/ui/sidebar-button";
 import { ROUTES } from "@/constants/urls";
 import Image from "next/image";
 import Link from "next/link";

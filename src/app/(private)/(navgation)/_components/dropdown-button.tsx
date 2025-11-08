@@ -1,7 +1,7 @@
 "use client";
 
-import { DropdownMenuItem } from "@/components/temp/dropdown-menu";
-import { Icon } from "@/components/temp/icon";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Icon } from "@/components/ui/icon";
 import { useLogout } from "../../_hooks/use-logout";
 
 export const DropdownLogout = () => {

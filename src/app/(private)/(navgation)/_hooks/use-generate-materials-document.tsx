@@ -1,6 +1,6 @@
 "use client";
 
-import { ToastCard } from "@/components/temp/toast-card";
+import { ToastCard } from "@/components/ui/toast-card";
 import {
   MaterialsDocument,
   type MaterialsDocumentProps,

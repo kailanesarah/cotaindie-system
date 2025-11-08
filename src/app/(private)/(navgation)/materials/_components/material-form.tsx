@@ -1,7 +1,7 @@
 "use client";
 
-import { DialogBody } from "@/components/temp/dialog";
-import { Form } from "@/components/temp/form";
+import { DialogBody } from "@/components/ui/dialog";
+import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type z from "zod";

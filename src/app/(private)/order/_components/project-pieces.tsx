@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
-import { Dialog, DialogTrigger } from "@/components/temp/dialog";
-import { Icon } from "@/components/temp/icon";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Icon } from "@/components/ui/icon";
 import type { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import { currencyFormatter } from "../_utils/currency-formatter";

@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/temp/card";
+} from "@/components/ui/card";
 import {
   type ChartConfig,
   ChartContainer,
@@ -14,7 +14,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/temp/chart";
+} from "@/components/ui/chart";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { Area, AreaChart, ReferenceLine, XAxis, YAxis } from "recharts";

@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogBody } from "@/components/temp/dialog";
+import { DialogBody } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -10,16 +10,16 @@ import {
   FormList,
   FormListItem,
   FormMessage,
-} from "@/components/temp/form";
-import { Input } from "@/components/temp/input";
-import { InputDisabled } from "@/components/temp/input-disabled";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { InputDisabled } from "@/components/ui/input-disabled";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/temp/select";
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useId, useRef } from "react";

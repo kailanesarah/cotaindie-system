@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/temp/button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,10 +8,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/temp/form";
-import { Icon } from "@/components/temp/icon";
-import { Input } from "@/components/temp/input";
-import { InputPassword } from "@/components/temp/input-password";
+} from "@/components/ui/form";
+import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
+import { InputPassword } from "@/components/ui/input-password";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
