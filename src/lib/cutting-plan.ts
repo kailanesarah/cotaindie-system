@@ -116,6 +116,12 @@ export class CuttingPlan {
   }
 
   #generateBase64Image(sheet: Sheet, sheetW: number, sheetH: number): string {
+    if (typeof document === "undefined") {
+      console.warn("Trying to generate canvas on server. Skipping...");
+
+      return "";
+    }
+
     const unit = "cm";
     const exportCanvas = document.createElement("canvas");
     const ctx = exportCanvas.getContext("2d");

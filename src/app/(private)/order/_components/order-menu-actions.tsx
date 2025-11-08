@@ -39,7 +39,6 @@ export const OrderMenuActions = () => {
 
   const router = useRouter();
   const { execute: handleSave } = useUpsertOrder();
-
   const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
   const { execute: executeDelete, isPending: isPendingDelete } =
     useDeleteOrder();
@@ -167,9 +166,6 @@ export const OrderMenuActions = () => {
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleGenerateContract}>
               <Icon name="contract" /> Baixar contrato
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Icon name="logout" /> Finalizar e salvar
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-red-default"

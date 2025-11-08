@@ -15,16 +15,16 @@ import { ContractDocument } from "@/pdfs/_docs/contract-document";
 import { CuttingPlanDocument } from "@/pdfs/_docs/cutting-plan-document";
 import { MaterialsDocument } from "@/pdfs/_docs/materials-document";
 import { QuoteDocument } from "@/pdfs/_docs/quote-document";
-import dynamic from "next/dynamic";
-import { useState } from "react";
-
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  { ssr: false },
-);
+import { PDFViewer } from "@react-pdf/renderer";
+import { useLayoutEffect, useState } from "react";
 
 export default function DocsPage() {
   const [docIndex, setDocIndex] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  useLayoutEffect(() => setLoaded(true), []);
+
+  if (!loaded) return null;
 
   const documents = [
     {

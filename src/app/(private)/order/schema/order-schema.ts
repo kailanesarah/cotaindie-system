@@ -12,7 +12,7 @@ const PaymentSchema = z.object({
   discountPercent: z
     .number("Insira um desconto")
     .min(0, "Desconto deve ser a partir de zero")
-    .max(100, "Desconto máximo de 100%"),
+    .max(1, "Desconto máximo de 100%"),
   paymentMethod: z.enum(paymentMethod, {
     message: "Escolha uma opção válida",
   }),
@@ -44,6 +44,15 @@ export const orderSchema = z
     rawAmount: z.number(),
   })
   .merge(orderIncludedSchema)
-  .merge(PaymentSchema);
+  .merge(PaymentSchema)
+  .refine(
+    (data) => {
+      return data.advanceAmount > 0 ? !!data.advancePaymentMethod : true;
+    },
+    {
+      path: ["advancePaymentMethod"],
+      message: "Selecione uma forma de pagamento para o adiantamento",
+    },
+  );
 
 export type OrderType = z.infer<typeof orderSchema>;

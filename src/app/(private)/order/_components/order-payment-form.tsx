@@ -84,6 +84,18 @@ export const OrderPaymentForm = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const percent = form.getValues("discountPercent") ?? 0;
+    const discountValue = rawAmount * percent;
+
+    form.setValue("discount", discountValue, {
+      shouldDirty: false,
+      shouldValidate: true,
+    });
+
+    setPayment({ discountPercent: percent });
+  }, [rawAmount]);
+
   return (
     <Form {...form}>
       <form className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:items-start">
@@ -108,7 +120,7 @@ export const OrderPaymentForm = () => {
                     const { floatValue } = values;
                     return floatValue === undefined || floatValue >= 1;
                   }}
-                  onBlur={(e) => {
+                  onBlur={() => {
                     field.onBlur();
                     setPayment({ deliveryDays: field.value });
                   }}
@@ -163,9 +175,9 @@ export const OrderPaymentForm = () => {
               <FormControl>
                 <NumericFormat
                   value={
-                    field.value != null
-                      ? Math.min(Math.max(field.value * 100, 0), 100)
-                      : ""
+                    field.value == null
+                      ? ""
+                      : Math.min(Math.max(field.value * 100, 0), 100)
                   }
                   onValueChange={(values) => {
                     const percent = Math.min(
@@ -176,29 +188,22 @@ export const OrderPaymentForm = () => {
 
                     field.onChange(decimalPercent);
 
-                    const discountValue = parseFloat(
-                      String(decimalPercent * rawAmount),
-                    );
+                    const discountValue = decimalPercent * rawAmount;
                     form.setValue("discount", discountValue, {
                       shouldValidate: true,
                       shouldDirty: true,
                     });
-                  }}
-                  onBlur={() => {
-                    field.onBlur();
-                    setPayment({ discountPercent: field.value });
+
+                    setPayment({ discountPercent: decimalPercent });
                   }}
                   allowNegative={false}
-                  decimalScale={4}
+                  decimalScale={5}
                   fixedDecimalScale
                   suffix="%"
                   decimalSeparator=","
                   placeholder="Ex: 10%"
                   customInput={Input}
-                  isAllowed={(values) => {
-                    const { floatValue } = values;
-                    return (floatValue ?? 0) <= 100;
-                  }}
+                  isAllowed={(values) => (values.floatValue ?? 0) <= 100}
                 />
               </FormControl>
               <FormMessage />
@@ -213,11 +218,14 @@ export const OrderPaymentForm = () => {
               const newValue = values.floatValue ?? 0;
               field.onChange(newValue);
 
-              const percent = parseFloat(String(newValue / rawAmount));
+              const percent = newValue / rawAmount;
+
               form.setValue("discountPercent", percent, {
                 shouldValidate: true,
                 shouldDirty: true,
               });
+
+              setPayment({ discountPercent: percent });
             };
 
             return (
@@ -228,19 +236,17 @@ export const OrderPaymentForm = () => {
                     value={field.value ?? ""}
                     onValueChange={handleChange}
                     allowNegative={false}
-                    decimalScale={2}
+                    decimalScale={3}
                     fixedDecimalScale
                     prefix="R$ "
                     thousandSeparator="."
                     decimalSeparator=","
                     placeholder="Ex: R$ 500,00"
                     customInput={Input}
-                    isAllowed={(values) => {
-                      const { floatValue } = values;
-                      return (
-                        floatValue === undefined || floatValue <= rawAmount
-                      );
-                    }}
+                    isAllowed={(values) =>
+                      values.floatValue === undefined ||
+                      values.floatValue <= rawAmount
+                    }
                   />
                 </FormControl>
                 <FormMessage />

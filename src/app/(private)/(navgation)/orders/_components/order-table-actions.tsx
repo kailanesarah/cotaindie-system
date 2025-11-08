@@ -31,7 +31,9 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
   const handleDelete = () => setDeleteOpen(true);
 
   const { execute: executeCopy, isPending: isPendingCopy } = useCopyOrder();
-  const handleCopy = () => executeCopy(order.id);
+  const handleCopy = () => {
+    if (order.id) executeCopy(order.id);
+  };
 
   const { generateQuoteDocument } = useGenerateQuoteDocument();
   const handleGenerateQuote = () => {
