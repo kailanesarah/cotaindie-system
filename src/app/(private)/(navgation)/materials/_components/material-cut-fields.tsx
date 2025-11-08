@@ -1,5 +1,6 @@
 "use client";
 
+import { DialogBody } from "@/components/ui/dialog";
 import {
   FormControl,
   FormField,
@@ -28,7 +29,7 @@ export const MaterialCutFields = () => {
   const cutDirection = form.watch("cutDirection") as "VH" | "V";
 
   return (
-    <>
+    <DialogBody className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:items-start">
       <FormField
         control={form.control}
         name="cutDirection"
@@ -63,6 +64,6 @@ export const MaterialCutFields = () => {
         />
         {cutDirectionMap[cutDirection]}
       </InputDisabled>
-    </>
+    </DialogBody>
   );
 };

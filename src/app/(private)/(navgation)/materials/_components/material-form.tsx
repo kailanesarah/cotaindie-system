@@ -36,9 +36,7 @@ export const MateriaForm = ({ material }: { material?: Material }) => {
         <DialogBody className="flex flex-col items-start gap-3 lg:flex-row">
           <MaterialDinamicFields />
         </DialogBody>
-        <DialogBody className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:items-start">
-          <MaterialCutFields />
-        </DialogBody>
+        <MaterialCutFields />
         <MaterialActions isPending={isPending} />
       </form>
     </Form>
