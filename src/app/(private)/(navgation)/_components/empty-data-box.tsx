@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
+import { Button } from "@/components/temp/button";
+import { Icon } from "@/components/temp/icon";
 import { cn } from "@/lib/utils";
 import { useSearchContext } from "../_context/search-provider";
 

@@ -4,8 +4,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { Icon } from "@/components/ui/icon";
+} from "@/components/temp/chart";
+import { Icon } from "@/components/temp/icon";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 import { Pie, PieChart, ResponsiveContainer } from "recharts";

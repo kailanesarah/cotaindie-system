@@ -1,6 +1,6 @@
 import { SupportDialog } from "@/app/_components/support-dialog";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
+import { Button } from "@/components/temp/button";
+import { Icon } from "@/components/temp/icon";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { NavbarBreadcrumb } from "./navbar-breadcrump";
 import { NavbarProfile } from "./navbar-profile";

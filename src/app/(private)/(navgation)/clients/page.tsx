@@ -1,4 +1,4 @@
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/temp/scroll-area";
 import { AddButton } from "../_components/add-button";
 import { EmptyDataBox } from "../_components/empty-data-box";
 import { ErrorDataBox } from "../_components/error-data-box";

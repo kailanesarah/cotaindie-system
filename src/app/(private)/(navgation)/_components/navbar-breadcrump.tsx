@@ -7,8 +7,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Icon } from "@/components/ui/icon";
+} from "@/components/temp/breadcrumb";
+import { Icon } from "@/components/temp/icon";
 import { ROUTES } from "@/constants/urls";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

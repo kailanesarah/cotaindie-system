@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/temp/badge";
+import { Dialog, DialogTrigger } from "@/components/temp/dialog";
+import { Separator } from "@/components/temp/separator";
 import { useDialog } from "../../_hooks/use-dialog";
 import { parseCurency } from "../../_utils/parse-currency";
 import { formatMeasure } from "../_utils/format-mesure";

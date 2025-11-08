@@ -1,6 +1,6 @@
 "use client";
 
-import { ToastCard } from "@/components/ui/toast-card";
+import { ToastCard } from "@/components/temp/toast-card";
 import { ROUTES } from "@/constants/urls";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";

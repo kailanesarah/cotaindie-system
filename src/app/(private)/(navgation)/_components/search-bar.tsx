@@ -1,16 +1,16 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/temp/badge";
+import { Button } from "@/components/temp/button";
+import { Icon } from "@/components/temp/icon";
+import { Input } from "@/components/temp/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/temp/select";
 import { cn } from "@/lib/utils";
 import {
   type ChangeEvent,

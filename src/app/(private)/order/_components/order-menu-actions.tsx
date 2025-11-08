@@ -1,22 +1,22 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
+import { Button } from "@/components/temp/button";
+import { Dialog } from "@/components/temp/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Icon } from "@/components/ui/icon";
+} from "@/components/temp/dropdown-menu";
+import { Icon } from "@/components/temp/icon";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/temp/select";
+import { Separator } from "@/components/temp/separator";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";

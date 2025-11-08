@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogHeaderContent,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/temp/dialog";
 import { SupportForm } from "./support-form";
 
 export const SupportDialog = () => {

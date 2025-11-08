@@ -1,7 +1,7 @@
 import { SupportDialog } from "@/app/_components/support-dialog";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Icon } from "@/components/ui/icon";
+import { Button } from "@/components/temp/button";
+import { Dialog, DialogTrigger } from "@/components/temp/dialog";
+import { Icon } from "@/components/temp/icon";
 import Link from "next/link";
 
 export const SupportBox = () => {

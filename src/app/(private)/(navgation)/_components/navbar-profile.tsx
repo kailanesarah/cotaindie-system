@@ -1,10 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/temp/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Icon } from "@/components/ui/icon";
+} from "@/components/temp/dropdown-menu";
+import { Icon } from "@/components/temp/icon";
 import { getInitialLetters } from "../_utils/get-initial-letters";
 import { DropdownLogout } from "./dropdown-button";
 

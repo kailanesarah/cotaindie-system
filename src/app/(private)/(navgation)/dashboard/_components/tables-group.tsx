@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/temp/skeleton";
 import { useGetDataTables } from "../_hooks/use-get-data-tables";
 import { TableMaterial } from "./table-material";
 import { TableOrder } from "./table-order";

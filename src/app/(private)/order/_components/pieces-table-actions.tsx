@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
+import { Button } from "@/components/temp/button";
+import { Dialog } from "@/components/temp/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Icon } from "@/components/ui/icon";
+} from "@/components/temp/dropdown-menu";
+import { Icon } from "@/components/temp/icon";
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";

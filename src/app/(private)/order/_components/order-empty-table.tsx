@@ -1,4 +1,4 @@
-import { Icon } from "@/components/ui/icon";
+import { Icon } from "@/components/temp/icon";
 
 export const OrderEmptyTable = ({
   title,

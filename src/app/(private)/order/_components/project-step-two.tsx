@@ -1,23 +1,23 @@
-import { Button } from "@/components/ui/button";
-import { DialogBody } from "@/components/ui/dialog";
+import { Button } from "@/components/temp/button";
+import { DialogBody } from "@/components/temp/dialog";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Icon } from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
-import { InputDisabled } from "@/components/ui/input-disabled";
+} from "@/components/temp/form";
+import { Icon } from "@/components/temp/icon";
+import { Input } from "@/components/temp/input";
+import { InputDisabled } from "@/components/temp/input-disabled";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/temp/select";
+import { Separator } from "@/components/temp/separator";
 import { Fragment } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { NumericFormat } from "react-number-format";

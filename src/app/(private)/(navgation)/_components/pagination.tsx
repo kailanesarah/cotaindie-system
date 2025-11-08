@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
+import { Button } from "@/components/temp/button";
+import { Icon } from "@/components/temp/icon";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/temp/select";
 import { useSearchContext } from "../_context/search-provider";
 
 export const SearchPagination = () => {

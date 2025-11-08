@@ -1,4 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/temp/sidebar";
 import { supabaseServer } from "@/lib/supabase/server";
 import { AuthService } from "@/services/auth-services";
 import type { ReactNode } from "react";

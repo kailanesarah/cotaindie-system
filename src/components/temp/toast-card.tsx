@@ -1,4 +1,4 @@
-import { Icon } from "@/components/ui/icon";
+import { Icon } from "@/components/temp/icon";
 import { cn } from "@/lib/utils";
 import toast, { type Toast } from "react-hot-toast";
 

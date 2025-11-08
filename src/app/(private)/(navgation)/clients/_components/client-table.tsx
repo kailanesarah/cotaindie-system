@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/temp/badge";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/temp/table";
 import { useClientsSearch } from "../_hooks/use-search-clients";
 import { clientTypeMap } from "../_utils/client-type-map";
 import { ClientTableActions } from "./client-table-actions";

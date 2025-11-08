@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
+import { Button } from "@/components/temp/button";
+import { Icon } from "@/components/temp/icon";
 import { ROUTES } from "@/constants/urls";
 import type { ReactNode } from "react";
 

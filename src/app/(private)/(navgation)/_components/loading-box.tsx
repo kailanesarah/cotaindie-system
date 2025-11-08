@@ -1,6 +1,6 @@
 "use client";
 
-import { Icon } from "@/components/ui/icon";
+import { Icon } from "@/components/temp/icon";
 import { cn } from "@/lib/utils";
 import { useSearchContext } from "../_context/search-provider";
 

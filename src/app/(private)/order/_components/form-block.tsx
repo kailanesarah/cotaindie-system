@@ -1,4 +1,4 @@
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/temp/separator";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 

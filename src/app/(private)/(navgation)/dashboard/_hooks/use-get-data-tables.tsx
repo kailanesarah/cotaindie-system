@@ -1,6 +1,6 @@
 "use client";
 
-import { ToastCard } from "@/components/ui/toast-card";
+import { ToastCard } from "@/components/temp/toast-card";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import toast from "react-hot-toast";

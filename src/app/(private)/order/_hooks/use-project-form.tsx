@@ -1,4 +1,4 @@
-import { ToastCard } from "@/components/ui/toast-card";
+import { ToastCard } from "@/components/temp/toast-card";
 import toast from "react-hot-toast";
 import { useOrderStore } from "../_stores/order-store";
 

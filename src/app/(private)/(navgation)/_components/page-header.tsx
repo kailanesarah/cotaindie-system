@@ -1,4 +1,4 @@
-import { Icon } from "@/components/ui/icon";
+import { Icon } from "@/components/temp/icon";
 import type { ReactNode } from "react";
 
 export const PageHeader = ({ children }: { children: ReactNode }) => {
