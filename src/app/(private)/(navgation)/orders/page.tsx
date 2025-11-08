@@ -1,7 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { EmptyDataBox } from "../_components/empty-data-box";
-import { ErrorDataBox } from "../_components/error-data-box";
-import { LoadingBox } from "../_components/loading-box";
+import { hasItemsActions } from "../../_actions/has-items-action";
 import { PageContent } from "../_components/page-content";
 import {
   PageHeader,
@@ -23,12 +21,17 @@ import {
 } from "../_components/search-bar";
 import { DialogProvider } from "../_context/dialog-provider";
 import { SearchProvider } from "../_context/search-provider";
+import { AddClientCard } from "../clients/_components/add-client-card";
+import { AddMaterialsCard } from "../materials/_components/add-materials-card";
 import { AddOrderButton } from "./_components/add-order-button";
-import { OrderTable } from "./_components/order-table";
+import { AddOrderCard } from "./_components/add-order-card";
+import { OrderSearchContent } from "./_components/order-search-content";
 import { SelectClients } from "./_components/select-clients";
 import { statusList } from "./_constants/status-list";
 
 export default async function OrdersPage() {
+  const { has_orders, has_clients, has_materials } = await hasItemsActions();
+
   return (
     <DialogProvider>
       <PageMain>
@@ -43,31 +46,42 @@ export default async function OrdersPage() {
               </PageHeaderDescription>
             </PageHeaderHeading>
           </PageHeaderContent>
-          <PageHeaderAction>
-            <AddOrderButton>Novo orçamento</AddOrderButton>
-          </PageHeaderAction>
+          {!has_orders && has_clients && has_materials && (
+            <PageHeaderAction>
+              <AddOrderButton>Novo orçamento</AddOrderButton>
+            </PageHeaderAction>
+          )}
         </PageHeader>
         <SearchProvider>
-          <SearchBar>
-            <SearchTextFilter />
-            <SearchSortWrap>
-              <SelectFilter
-                deafultText="Todos os status"
-                filterKey="status"
-                options={statusList}
-              />
-              <SelectClients />
-              <SearchSortPeriod />
-            </SearchSortWrap>
-          </SearchBar>
+          {has_orders && (
+            <SearchBar>
+              <SearchTextFilter />
+              <SearchSortWrap>
+                <SelectFilter
+                  deafultText="Todos os status"
+                  filterKey="status"
+                  options={statusList}
+                />
+                <SelectClients />
+                <SearchSortPeriod />
+              </SearchSortWrap>
+            </SearchBar>
+          )}
           <ScrollArea className="flex grow items-stretch px-0">
             <PageContent className="flex max-w-dvw grow flex-col px-0 !py-0 lg:px-0">
-              <OrderTable />
-              <EmptyDataBox className="mx-4 my-3 lg:mx-6 lg:my-4" />
-              <ErrorDataBox className="mx-4 my-3 lg:mx-6 lg:my-4" />
+              {!has_materials && (
+                <AddMaterialsCard className="mx-4 mt-3 lg:mx-6 lg:mt-4" />
+              )}
+              {!has_clients && <AddClientCard />}
+
+              {has_orders && has_clients && has_materials && (
+                <OrderSearchContent />
+              )}
+              {!has_orders && has_clients && has_materials && (
+                <AddOrderCard className="mx-4 my-3 lg:mx-6 lg:my-4" />
+              )}
             </PageContent>
           </ScrollArea>
-          <LoadingBox className="mx-4 my-3 lg:mx-6 lg:my-4" />
           <SearchPagination />
         </SearchProvider>
       </PageMain>
