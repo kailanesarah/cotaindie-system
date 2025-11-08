@@ -1,4 +1,3 @@
-import { SupportDialog } from "@/app/_components/support-dialog";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
@@ -25,7 +24,7 @@ export const Navbar = ({ profile }: INavbarProps) => {
             </DialogTrigger>
             <QuestionsDialog />
           </Dialog>
-          <Dialog>
+          {/* <Dialog>
             <DialogTrigger asChild>
               <Button variant="link">
                 <Icon name="forum" />
@@ -33,7 +32,7 @@ export const Navbar = ({ profile }: INavbarProps) => {
               </Button>
             </DialogTrigger>
             <SupportDialog />
-          </Dialog>
+          </Dialog> */}
           <NavbarProfile profile={profile} />
         </div>
       </div>
