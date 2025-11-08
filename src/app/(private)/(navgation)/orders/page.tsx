@@ -46,7 +46,7 @@ export default async function OrdersPage() {
               </PageHeaderDescription>
             </PageHeaderHeading>
           </PageHeaderContent>
-          {!has_orders && has_clients && has_materials && (
+          {has_orders && has_clients && has_materials && (
             <PageHeaderAction>
               <AddOrderButton>Novo orçamento</AddOrderButton>
             </PageHeaderAction>
