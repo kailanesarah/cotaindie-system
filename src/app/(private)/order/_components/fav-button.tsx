@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
+import { ROUTES } from "@/constants/urls";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteDialog } from "../../(navgation)/_components/delete-dialog";
@@ -66,7 +67,7 @@ export const OptionsButton = () => {
     setIsDeleteOpen(false);
 
     window.close();
-    router.push("/orders");
+    router.push(ROUTES.PRIVATE.ORDERS);
   };
 
   const handleCopy = () => {
@@ -127,7 +128,6 @@ export const OptionsButton = () => {
             />
           </Button>
         </DropdownMenuTrigger>
-
         <DropdownMenuContent
           sideOffset={8}
           align="end"
@@ -149,9 +149,6 @@ export const OptionsButton = () => {
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleGenerateContract}>
             <Icon name="contract" /> Baixar contrato
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Icon name="logout" /> Finalizar e salvar
           </DropdownMenuItem>
           <DropdownMenuItem
             className="text-red-default"

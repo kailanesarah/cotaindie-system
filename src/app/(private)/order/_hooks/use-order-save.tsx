@@ -16,8 +16,6 @@ export const useUpsertOrder = () => {
     onSuccess: async (res) => {
       await queryClient.invalidateQueries({ queryKey: ["orders"] });
 
-      console.log(res);
-
       setOrderFull(res.data);
 
       toast((t) => (

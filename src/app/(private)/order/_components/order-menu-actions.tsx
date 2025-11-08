@@ -168,9 +168,6 @@ export const OrderMenuActions = () => {
             <DropdownMenuItem onClick={handleGenerateContract}>
               <Icon name="contract" /> Baixar contrato
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Icon name="logout" /> Finalizar e salvar
-            </DropdownMenuItem>
             <DropdownMenuItem
               className="text-red-default"
               onClick={() => setIsDeleteOpen(true)}
