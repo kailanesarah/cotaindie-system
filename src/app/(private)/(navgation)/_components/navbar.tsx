@@ -1,6 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
-import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
+import { useSentryFeedback } from "@/hooks/use-sentry-feedback";
 import { NavbarBreadcrumb } from "./navbar-breadcrump";
 import { NavbarProfile } from "./navbar-profile";
 import { QuestionsDialog } from "./questions-dialog";
@@ -10,6 +13,8 @@ interface INavbarProps {
 }
 
 export const Navbar = ({ profile }: INavbarProps) => {
+  const { buttonRef } = useSentryFeedback();
+
   return (
     <nav className="border-b-light hidden h-[4.5625rem] items-center border-b bg-white px-4 py-4 lg:flex lg:px-6">
       <div className="flex grow items-center justify-between gap-6">
@@ -24,15 +29,10 @@ export const Navbar = ({ profile }: INavbarProps) => {
             </DialogTrigger>
             <QuestionsDialog />
           </Dialog>
-          {/* <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="link">
-                <Icon name="forum" />
-                Ajuda e Suporte
-              </Button>
-            </DialogTrigger>
-            <SupportDialog />
-          </Dialog> */}
+          <Button variant="link" ref={buttonRef}>
+            <Icon name="forum" />
+            Ajuda e Suporte
+          </Button>
           <NavbarProfile profile={profile} />
         </div>
       </div>

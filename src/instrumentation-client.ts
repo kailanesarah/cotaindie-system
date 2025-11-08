@@ -12,6 +12,7 @@ Sentry.init({
     Sentry.replayIntegration(),
     Sentry.feedbackIntegration({
       colorScheme: "#system",
+      autoInject: false,
       showBranding: false,
       isEmailRequired: true,
       enableScreenshot: true,

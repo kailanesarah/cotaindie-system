@@ -185,3 +185,11 @@ div[role="status"][aria-live="polite"] {
     font-size: calc(0.8744959677419355rem + 0.8064516129032256vw);
   }
 } */
+
+#sentry-feedback {
+  --z-index: 999999;
+
+  --accent-background: #b0261a;
+  --success-color: #0f7c5a;
+  --error-color: #e43e3e;
+}
