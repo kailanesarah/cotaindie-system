@@ -72,7 +72,9 @@ export default async function OrdersPage() {
               {!has_materials && (
                 <AddMaterialsCard className="mx-4 mt-3 lg:mx-6 lg:mt-4" />
               )}
-              {!has_clients && <AddClientCard />}
+              {!has_clients && (
+                <AddClientCard className="mx-4 my-3 lg:mx-6 lg:my-4" />
+              )}
 
               {has_orders && has_clients && has_materials && (
                 <OrderSearchContent />

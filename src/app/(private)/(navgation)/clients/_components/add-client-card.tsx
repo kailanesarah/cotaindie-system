@@ -1,4 +1,5 @@
 import { Icon } from "@/components/ui/icon";
+import { cn } from "@/lib/utils";
 import { AddButton } from "../../_components/add-button";
 import {
   DataBox,
@@ -8,9 +9,9 @@ import {
 } from "../../_components/data-box";
 import { ClientDialog } from "./client-dialog";
 
-export const AddClientCard = () => {
+export const AddClientCard = ({ className }: { className?: string }) => {
   return (
-    <DataBox className="mx-4 my-3 lg:mx-6 lg:my-4">
+    <DataBox className={cn(className)}>
       <DataBoxContent>
         <Icon name="add_2" className="text-red-default" size={28} />
         <DataBoxTitle>Adicione um novo cliente</DataBoxTitle>
