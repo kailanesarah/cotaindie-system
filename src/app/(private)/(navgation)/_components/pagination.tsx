@@ -13,7 +13,6 @@ import { useSearchContext } from "../_context/search-provider";
 
 export const SearchPagination = () => {
   const { state, dispatch } = useSearchContext();
-
   const { page, perPage, totalPages } = state.pagination;
 
   const changePage = (newPage: number) => {
@@ -24,6 +23,9 @@ export const SearchPagination = () => {
   const changePerPage = (newPerPage: number) => {
     dispatch({ type: "SET_PER_PAGE", payload: newPerPage });
   };
+
+  const displayPage = totalPages === 0 ? 0 : page;
+  const displayTotal = totalPages || 0;
 
   return (
     <div className="border-b-light sticky bottom-0 flex items-center justify-end gap-6 border-t bg-white px-4 py-3 lg:px-6 lg:py-4">
@@ -46,16 +48,19 @@ export const SearchPagination = () => {
           </SelectContent>
         </Select>
       </div>
+
       <div className="flex items-center gap-4 whitespace-nowrap">
         <div className="flex min-w-[4rem] justify-end gap-1 text-right lg:min-w-auto">
           <span className="hidden lg:block">Página</span>
-          {page} de {totalPages}
+          {displayPage} de {displayTotal}
         </div>
+
         <div className="flex gap-3">
           <Button
             variant="secondary"
             square
             onClick={() => changePage(page - 1)}
+            disabled={page <= 1}
           >
             <Icon name="arrow_back_ios_new" className="!text-lg lg:!text-xl" />
           </Button>
@@ -63,6 +68,7 @@ export const SearchPagination = () => {
             variant="secondary"
             square
             onClick={() => changePage(page + 1)}
+            disabled={page >= totalPages}
           >
             <Icon name="arrow_forward_ios" className="!text-lg lg:!text-xl" />
           </Button>
