@@ -12,10 +12,8 @@ import { Pie, PieChart, ResponsiveContainer } from "recharts";
 
 export const MetricCard = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="rounded-default border-red-default grow overflow-clip border-b-[0.125rem] bg-white lg:border-b-0 lg:border-l-[0.1875rem]">
-      <div className="border-b-light rounded-tl-default rounded-tr-default lg:rounded-tr-default lg:rounded-br-default flex h-full items-start justify-between gap-6 border px-4 py-4 lg:border-l-0 lg:px-6">
-        {children}
-      </div>
+    <div className="border-b-light rounded-default rounded-tl-default rounded-tr-default lg:rounded-tr-default lg:rounded-br-default flex h-full grow items-start justify-between gap-6 overflow-clip border bg-white px-4 py-4 lg:border-l-0 lg:px-6">
+      {children}
     </div>
   );
 };

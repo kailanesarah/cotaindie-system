@@ -29,7 +29,7 @@ export const SearchBar = ({
 }) => (
   <div
     className={cn(
-      "border-b-light top-0 flex flex-col gap-3 border-b bg-white px-4 py-4 lg:flex-row lg:gap-6 lg:px-6 lg:py-6",
+      "border-b-light top-0 flex flex-col gap-3 border-b-0 bg-white px-4 py-4 lg:flex-row lg:gap-6 lg:px-6 lg:py-6",
       className,
     )}
   >

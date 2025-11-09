@@ -20,9 +20,9 @@ import { cn } from "@/lib/utils";
 import { Area, AreaChart, ReferenceLine, XAxis, YAxis } from "recharts";
 import { MetricIcon } from "./chart";
 
-const COLOR_TOTAL = "var(--color-black-default)";
-const COLOR_APPROVED = "var(--color-red-default)";
-const COLOR_PROFIT = "var(--color-blue-default)";
+const COLOR_TOTAL = "#010003ab";
+const COLOR_APPROVED = "#b0271ad5";
+const COLOR_PROFIT = "#067ea9dd";
 
 const chartConfig = {
   total: { label: "Total geral", color: COLOR_TOTAL },

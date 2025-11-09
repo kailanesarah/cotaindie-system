@@ -62,7 +62,7 @@ export default async function MaterialsPage() {
               </SearchSortWrap>
             </SearchBar>
           )}
-          <PageContent>
+          <PageContent className="p-3 lg:p-6">
             {has_materials && <MaterialsSearchContent />}
             {!has_materials && <AddMaterialsCard />}
           </PageContent>

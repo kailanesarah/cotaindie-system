@@ -15,7 +15,7 @@ export const MaterialCard = ({ material }: { material: Material }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="border-b-light rounded-default flex cursor-pointer flex-col gap-4 border bg-white p-4 lg:gap-5 lg:p-6">
+        <div className="border-b-light rounded-default flex cursor-pointer flex-col gap-4 border-0 bg-white p-4 lg:gap-5 lg:p-6">
           <div className="flex flex-col gap-2">
             <div className="text-title-light line-clamp-1 text-base font-semibold">
               {material.name}

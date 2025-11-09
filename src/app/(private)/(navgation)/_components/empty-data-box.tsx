@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { cn } from "@/lib/utils";
 import {
   DataBox,
   DataBoxContent,
@@ -16,7 +17,7 @@ interface EmptyDataBoxProps {
 
 export const EmptyDataBox = ({ onReset, className }: EmptyDataBoxProps) => {
   return (
-    <DataBox className={className}>
+    <DataBox className={cn("m-3 lg:m-6", className)}>
       <DataBoxContent>
         <Icon name="search" className="text-red-default" size={28} />
         <DataBoxTitle>Nenhum resultado encontrado</DataBoxTitle>

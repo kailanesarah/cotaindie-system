@@ -26,7 +26,7 @@ export const TablesGroup = () => {
   }
 
   return (
-    <div className="mt-4 hidden grid-cols-1 gap-6 lg:mt-0 lg:grid lg:grid-cols-2 lg:gap-4">
+    <div className="mt-6 hidden grid-cols-1 gap-6 lg:mt-3 lg:grid lg:grid-cols-2 lg:gap-4">
       <TableWrap>
         <TableTitle>Orçamentos recentes</TableTitle>
         <TableContent>

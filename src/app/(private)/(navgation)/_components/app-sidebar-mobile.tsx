@@ -60,22 +60,34 @@ export const SidebarMobile = ({ links, profile }: IAppSidebarMobile) => {
             href={ROUTES.PRIVATE.DASHBOARD}
             className="border-r-dark flex h-[4.5rem] items-center justify-center gap-1.5 border-r px-5"
           >
-            <Image src={LogoSymbol} priority alt="Logo Cota Indie" width={24} />
-            <Image src={LogoTitle} priority alt="Logo Cota Indie" width={88} />
+            <Image
+              src={LogoSymbol}
+              priority
+              alt="Logo Cota Indie"
+              width={24}
+              className="w-[1.5rem]"
+            />
+            <Image
+              src={LogoTitle}
+              priority
+              alt="Logo Cota Indie"
+              width={88}
+              className="w-[5.5rem]"
+            />
           </Link>
           <SheetClose className="border-l-dark relative flex h-[4.5rem] w-[4.5rem] cursor-pointer items-center justify-center border-l">
             <div className="bg-title-dark absolute h-[1px] w-8 rotate-45" />
             <div className="bg-title-dark absolute h-[1px] w-8 -rotate-45" />
           </SheetClose>
         </SheetHeader>
-        <div className="text-title-dark flex flex-col py-2">
+        <div className="text-title-dark flex flex-col pb-2">
           {links.map(({ title, description, href, icon }, index) => {
             const isActive = pathname === href;
             return (
               <SheetClose asChild key={title + index}>
                 <Link
                   href={href}
-                  className={`border-b-dark flex items-center gap-3 border-b p-4 first:border-t hover:bg-gray-800 ${
+                  className={`border-b-dark flex items-center gap-3 border-b p-4 hover:bg-gray-800 ${
                     isActive ? "bg-black-light/75" : ""
                   }`}
                 >

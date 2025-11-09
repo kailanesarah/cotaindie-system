@@ -28,7 +28,7 @@ export const SearchPagination = () => {
   const displayTotal = totalPages || 0;
 
   return (
-    <div className="border-b-light sticky bottom-0 flex items-center justify-end gap-6 border-t bg-white px-4 py-3 lg:px-6 lg:py-4">
+    <div className="border-b-light sticky bottom-0 flex items-center justify-end gap-6 border-t-0 bg-white px-4 py-3 shadow-[0_0px_12px_0px_rgba(0,0,0,0.07)] lg:px-6 lg:py-4 lg:shadow-none">
       <div className="flex items-center gap-4 whitespace-nowrap">
         <span className="hidden lg:block">Itens mostrados</span>
         <Select

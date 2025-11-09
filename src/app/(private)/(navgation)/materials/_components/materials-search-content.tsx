@@ -15,15 +15,13 @@ export const MaterialsSearchContent = () => {
     <>
       {!loading && data && <ResultGrid data={data} />}
 
-      {loading && <LoadingBox className="mx-4 my-3 lg:mx-6 lg:my-4" />}
+      {loading && <LoadingBox className="p-0 lg:p-0" />}
 
       {data && !loading && data.items.length === 0 && !error && (
-        <EmptyDataBox onReset={reset} className="mx-4 my-3 lg:mx-6 lg:my-4" />
+        <EmptyDataBox onReset={reset} className="m-0 lg:m-0" />
       )}
 
-      {error && (
-        <ErrorDataBox error={error} className="mx-4 my-3 lg:mx-6 lg:my-4" />
-      )}
+      {error && <ErrorDataBox error={error} />}
     </>
   );
 };

@@ -33,7 +33,7 @@ export default async function DashboardPage() {
             </PageHeaderHeading>
           </PageHeaderContent>
         </PageHeader>
-        <PageContent className="flex flex-col gap-2 pb-0 lg:gap-4 lg:pb-6">
+        <PageContent className="flex flex-col gap-2 pb-0 lg:gap-4 lg:p-6">
           {!has_materials && <AddMaterialsCard />}
           {!has_clients && <AddClientCard />}
           {!has_orders && has_clients && has_materials && <AddOrderCard />}

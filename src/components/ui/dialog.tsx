@@ -48,7 +48,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "bg-black-default/75 fixed inset-0 z-50 grid place-items-center overflow-y-auto",
+        "fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-[#00000075]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out",
         "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       )}
