@@ -4,6 +4,7 @@ import { ToastCard } from "@/components/ui/toast-card";
 import { ROUTES } from "@/constants/urls";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useRevalidatePaths } from "../../_hooks/use-revalidate";
 import { upsertOrderAction } from "../_actions/upsert-order-action";
@@ -14,6 +15,7 @@ export const useUpsertOrder = () => {
   const queryClient = useQueryClient();
   const { order, triggers, setOrderFull } = useOrderStore();
   const { revalidate } = useRevalidatePaths();
+  const router = useRouter();
 
   const { execute: executeAction, isPending } = useAction(upsertOrderAction, {
     onSuccess: async (res) => {
@@ -26,6 +28,7 @@ export const useUpsertOrder = () => {
         exact: false,
       });
 
+      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.id}`);
       setOrderFull(res.data);
 
       toast((t) => (
