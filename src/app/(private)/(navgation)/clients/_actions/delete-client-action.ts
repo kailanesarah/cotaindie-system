@@ -1,11 +1,9 @@
 "use server";
 
 import { deleteSchema } from "@/app/(private)/_schema/delete-schema";
-import { ROUTES } from "@/constants/urls";
 import { actionClient } from "@/lib/safe-action";
 import { supabaseServer } from "@/lib/supabase/server";
 import { ClientsService } from "@/services/clients-services";
-import { revalidatePath } from "next/cache";
 
 export const deleteClientAction = actionClient
   .schema(deleteSchema)
@@ -16,9 +14,9 @@ export const deleteClientAction = actionClient
       const supabase = await supabaseServer();
       const clientsService = new ClientsService(supabase);
 
-      revalidatePath(ROUTES.PRIVATE.CLIENTS);
+      await clientsService.deleteClient(id);
 
-      return await clientsService.deleteClient(id);
+      return true;
     } catch (err) {
       console.error(err);
 

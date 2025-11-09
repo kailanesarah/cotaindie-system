@@ -1,10 +1,8 @@
 "use server";
 
-import { ROUTES } from "@/constants/urls";
 import { actionClient } from "@/lib/safe-action";
 import { supabaseServer } from "@/lib/supabase/server";
 import { MaterialsService } from "@/services/materials-services";
-import { revalidatePath } from "next/cache";
 import { materialSchema } from "../_schema/material-schema";
 
 export const usertMaterialAction = actionClient
@@ -15,8 +13,6 @@ export const usertMaterialAction = actionClient
       const materialsService = new MaterialsService(supabase);
 
       const material = await materialsService.upsertMaterial(parsedInput);
-
-      revalidatePath(ROUTES.PRIVATE.PRODUCTS);
 
       return material;
     } catch (err) {

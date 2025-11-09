@@ -1,10 +1,8 @@
 "use server";
 
-import { ROUTES } from "@/constants/urls";
 import { actionClient } from "@/lib/safe-action";
 import { supabaseServer } from "@/lib/supabase/server";
 import { ClientsService } from "@/services/clients-services";
-import { revalidatePath } from "next/cache";
 import { clientSchema } from "../_schema/client-schema";
 
 export const upsertClientAction = actionClient
@@ -15,8 +13,6 @@ export const upsertClientAction = actionClient
       const clientsService = new ClientsService(supabase);
 
       const client = await clientsService.upsertClient(parsedInput);
-
-      revalidatePath(ROUTES.PRIVATE.CLIENTS);
 
       return client;
     } catch (err) {
