@@ -1,6 +1,7 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { supabaseServer } from "@/lib/supabase/server";
 import { AuthService } from "@/services/auth-services";
+import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 import { AppSidebar } from "./_components/app-sidebar";
 import { Navbar } from "./_components/navbar";
@@ -23,8 +24,11 @@ export default async function NavigationLayout({
     avatar: data?.avatar,
   };
 
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <div className="hidden lg:block">
         <AppSidebar menuItems={sidebarLinks} />
       </div>
