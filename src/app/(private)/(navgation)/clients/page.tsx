@@ -65,7 +65,7 @@ export default async function ClientsPage() {
             <PageContent className="flex max-w-dvw grow flex-col px-0 !py-0 lg:px-0">
               {has_clients && <ClientSearchContent />}
               {!has_clients && (
-                <AddClientCard className="mx-4 my-3 lg:mx-6 lg:my-4" />
+                <AddClientCard className="mx-4 my-3 lg:mx-6 lg:my-6" />
               )}
             </PageContent>
           </ScrollArea>

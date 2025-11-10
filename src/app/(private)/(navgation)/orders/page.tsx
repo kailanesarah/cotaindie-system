@@ -70,10 +70,10 @@ export default async function OrdersPage() {
           <ScrollArea className="flex grow items-stretch px-0">
             <PageContent className="flex max-w-dvw grow flex-col px-0 !py-0 lg:px-0">
               {!has_materials && (
-                <AddMaterialsCard className="mx-4 mt-3 lg:mx-6 lg:mt-4" />
+                <AddMaterialsCard className="mx-4 mt-3 lg:mx-6 lg:mt-6" />
               )}
               {!has_clients && (
-                <AddClientCard className="mx-4 my-3 lg:mx-6 lg:my-4" />
+                <AddClientCard className="mx-4 my-3 lg:mx-6 lg:my-6" />
               )}
 
               {has_orders && has_clients && has_materials && (
