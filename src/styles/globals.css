@@ -166,26 +166,28 @@ div[role="status"][aria-live="polite"] {
   );
   --base: calc((var(--font-from) - var(--vw-from) * var(--coefficient)) / 16);
 }
+
 html {
   font-size: calc(var(--base) * 1rem + var(--coefficient) * 1vw);
 }
+
 @media screen and (max-width: 1440px) {
   :root {
-    --font-from: 13;
+    --font-from: 14;
     --font-to: 14;
     --vw-from: calc(479 / 100);
     --vw-to: calc(1440 / 100);
   }
 }
+
 @media screen and (max-width: 479px) {
   :root {
-    --font-from: 12;
-    --font-to: 13;
+    --font-from: 13;
+    --font-to: 14;
     --vw-from: calc(1 / 100);
     --vw-to: calc(479 / 100);
   }
 }
-
 #sentry-feedback {
   --z-index: 999999;
 
