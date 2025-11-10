@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -28,7 +29,8 @@ import {
 } from "../schema/order-reference-schema";
 
 export const OrderReferenceForm = () => {
-  const { data: clients } = useGetClients();
+  const { data: clients, loading: clientsLoading } = useGetClients();
+  const loading = useOrderStore((state) => state.loading);
 
   const setReference = useOrderStore((state) => state.setReference);
   const setTrigger = useOrderStore((state) => state.setTrigger);
@@ -40,13 +42,17 @@ export const OrderReferenceForm = () => {
       title: order.name,
       client: order.client?.id,
       startsAt: order.initialDate ? new Date(order.initialDate) : new Date(),
-      endsAt: order.expirationDays?.toString(),
+      endsAt: order.expirationDays?.toString() ?? "",
     },
   });
 
   useEffect(() => {
     setTrigger("referencesForm", form.trigger);
   }, [form.trigger, setTrigger]);
+
+  if (loading || clientsLoading) {
+    return <Skeleton className="h-10" />;
+  }
 
   return (
     <Form {...form}>
@@ -84,9 +90,7 @@ export const OrderReferenceForm = () => {
                   onValueChange={(val) => {
                     field.onChange(val);
                     const client = clients.find((c) => c.id === val);
-                    if (client) {
-                      setReference({ client });
-                    }
+                    if (client) setReference({ client });
                   }}
                 >
                   <SelectTrigger
@@ -122,15 +126,12 @@ export const OrderReferenceForm = () => {
                   allowFutureDates
                   onBlur={() => {
                     field.onBlur();
-                    if (field.value) {
+                    if (field.value)
                       setReference({ initialDate: field.value.toISOString() });
-                    }
                   }}
                   onChange={(val) => {
                     field.onChange(val);
-                    if (val) {
-                      setReference({ initialDate: val.toISOString() });
-                    }
+                    if (val) setReference({ initialDate: val.toISOString() });
                   }}
                 />
               </FormControl>

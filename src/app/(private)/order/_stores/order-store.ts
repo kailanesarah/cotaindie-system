@@ -3,6 +3,8 @@ import { subscribeWithSelector } from "zustand/middleware";
 
 interface OrderStore {
   order: Partial<Order>;
+  loading: boolean;
+  setLoading: (value: boolean) => void;
 
   setStatusInfo: (data: Partial<Pick<Order, "status">>) => void;
   setReference: (
@@ -51,18 +53,23 @@ export const useOrderStore = create<OrderStore>()(
       status: "OPEN" as Status,
       initialDate: new Date().toISOString(),
       rawAmount: 0,
-      // deliveryDays: undefined,
-      // paymentMethod: undefined,
+      deliveryDays: undefined,
+      paymentMethod: undefined,
       advancePaymentMethod: undefined,
       discountPercent: 0,
       installmentCount: 1,
       name: "",
       notes: "",
+      expirationDays: undefined,
       // projects: undefined,
       included: "",
       excluded: "",
       teamNotes: "",
     },
+
+    loading: true,
+
+    setLoading: (value: boolean) => set({ loading: value }),
 
     setStatusInfo: (data) =>
       set((state) => ({ order: { ...state.order, ...data } })),

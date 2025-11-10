@@ -1,9 +1,12 @@
 "use client";
 
 import { ToastCard } from "@/components/ui/toast-card";
+import { ROUTES } from "@/constants/urls";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useRevalidatePaths } from "../../_hooks/use-revalidate";
 import { upsertOrderAction } from "../_actions/upsert-order-action";
 import { useOrderStore } from "../_stores/order-store";
 import { orderSchema, type OrderType } from "../schema/order-schema";
@@ -11,11 +14,21 @@ import { orderSchema, type OrderType } from "../schema/order-schema";
 export const useUpsertOrder = () => {
   const queryClient = useQueryClient();
   const { order, triggers, setOrderFull } = useOrderStore();
+  const { revalidate } = useRevalidatePaths();
+  const router = useRouter();
 
   const { execute: executeAction, isPending } = useAction(upsertOrderAction, {
     onSuccess: async (res) => {
-      await queryClient.invalidateQueries({ queryKey: ["orders"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["orders"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["orders"],
+        exact: false,
+      });
 
+      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.code}`);
       setOrderFull(res.data);
 
       toast((t) => (
@@ -26,6 +39,8 @@ export const useUpsertOrder = () => {
           text="Orçamento adicionado ou atualizado."
         />
       ));
+
+      await revalidate([ROUTES.PRIVATE.ORDERS]);
     },
     onError: (err) => {
       console.log(err);

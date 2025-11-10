@@ -1,3 +1,5 @@
+"use client";
+
 import { useDialogContext } from "../_context/dialog-provider";
 
 export function useDialog(key?: string) {

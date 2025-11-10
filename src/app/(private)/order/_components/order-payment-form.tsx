@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -34,13 +35,15 @@ export const OrderPaymentForm = () => {
   const setTrigger = useOrderStore((state) => state.setTrigger);
   const setPayment = useOrderStore((state) => state.setPayment);
   const order = useOrderStore((state) => state.order);
+  const loading = useOrderStore((state) => state.loading);
 
   const form = useForm<orderPaymentType>({
     resolver: zodResolver(orderPaymentSchema),
     defaultValues: {
       deliveryDays: order.deliveryDays,
       paymentMethod: order.paymentMethod,
-      discountPercent: order.discountPercent,
+      discountPercent: order.discountPercent || 0,
+      discount: 0,
       advanceAmount: order.advanceAmount,
       advancePaymentMethod: order.advancePaymentMethod,
       installmentCount: order.installmentCount,
@@ -57,7 +60,7 @@ export const OrderPaymentForm = () => {
   const installmentCount = Number(form.watch("installmentCount") ?? 0);
 
   const discountMessage = discount
-    ? `Desconto final: ${currencyFormatter.format(discount)}.`
+    ? `Desconto final: ${currencyFormatter.format(discount)}`
     : "Desconto não aplicado";
 
   const remainingPerInstallment = installmentCount
@@ -88,13 +91,31 @@ export const OrderPaymentForm = () => {
     const percent = form.getValues("discountPercent") ?? 0;
     const discountValue = rawAmount * percent;
 
+    console.log("valor ", discountValue);
+
     form.setValue("discount", discountValue, {
       shouldDirty: false,
       shouldValidate: true,
     });
 
-    setPayment({ discountPercent: percent });
+    form.setValue("advanceAmount", 0, {
+      shouldDirty: false,
+      shouldValidate: true,
+    });
+
+    setPayment({ discountPercent: percent, advanceAmount: 0 });
   }, [rawAmount]);
+
+  if (loading) {
+    return (
+      <div className="flex grid-cols-1 flex-col gap-3 lg:grid-cols-1">
+        <Skeleton className="h-10" />
+        <Skeleton className="h-10" />
+        <Skeleton className="h-10" />
+        <Skeleton className="h-24" />
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -197,7 +218,7 @@ export const OrderPaymentForm = () => {
                     setPayment({ discountPercent: decimalPercent });
                   }}
                   allowNegative={false}
-                  decimalScale={5}
+                  decimalScale={2}
                   fixedDecimalScale
                   suffix="%"
                   decimalSeparator=","
@@ -236,7 +257,7 @@ export const OrderPaymentForm = () => {
                     value={field.value ?? ""}
                     onValueChange={handleChange}
                     allowNegative={false}
-                    decimalScale={3}
+                    decimalScale={4}
                     fixedDecimalScale
                     prefix="R$ "
                     thousandSeparator="."
@@ -386,7 +407,7 @@ export const OrderPaymentForm = () => {
           name="notes"
           render={({ field }) => (
             <FormItem className="col-span-1 lg:col-span-12">
-              <FormLabel>Observações (cliente)</FormLabel>
+              <FormLabel isOptional>Observações (cliente)</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}

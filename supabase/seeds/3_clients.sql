@@ -1,0 +1,120 @@
+-- DO $$
+-- DECLARE
+--     v_user_id uuid := '00000000-0000-0000-0000-000000000000';
+--     v_client_1_id uuid := gen_random_uuid();
+--     v_client_2_id uuid := gen_random_uuid();
+--     v_client_3_id uuid := gen_random_uuid();
+--     v_client_4_id uuid := gen_random_uuid();
+--     v_client_5_id uuid := gen_random_uuid();
+--     v_client_6_id uuid := gen_random_uuid();
+--     v_client_7_id uuid := gen_random_uuid();
+-- BEGIN
+--     INSERT INTO public.clients 
+--         (id, code, name, notes, type, document, email, phone, street, neighborhood, city, cep, user_id)
+--     VALUES
+--         (
+--             v_client_1_id,
+--             '2394',
+--             'Maria do Carmo Almeida',
+--             'Cliente prefere entrega pela manhã, entre 8h e 10h',
+--             'CPF',
+--             '123.456.789-00',
+--             'maria.almeida@email.com',
+--             '(11) 91234-5678',
+--             'Rua das Flores, 123',
+--             'Centro',
+--             'São Paulo',
+--             '01000-000',
+--             v_user_id
+--         ),
+--         (
+--             v_client_2_id,
+--             '6543',
+--             'José Roberto Madeiras Ltda',
+--             'Cliente prefere entrega pela manhã, entre 8h e 10h',
+--             'CNPJ',
+--             '12.345.678/0001-90',
+--             'contato@madeirasltda.com',
+--             '(11) 3344-5566',
+--             'Av. Paulista, 1500',
+--             'Bela Vista',
+--             'São Paulo',
+--             '01310-200',
+--             v_user_id
+--         ),
+--         (
+--             v_client_3_id,
+--             '8943',
+--             'Eliane Souza Pereira',
+--             'Solicita que a entrega seja agendada sempre para às sextas-feiras',
+--             'CPF',
+--             '987.654.321-00',
+--             'elianesp@email.com',
+--             '(21) 99876-5432',
+--             'Rua do Mercado, 45',
+--             'Centro',
+--             'Rio de Janeiro',
+--             '20010-120',
+--             v_user_id
+--         ),
+--         (
+--             v_client_4_id,
+--             '1234',
+--             'Moveis Delmar ME',
+--             'Aceita entrega apenas com nota fiscal impressa',
+--             'CNPJ',
+--             '23.456.789/0001-11',
+--             'vendas@moveisdelmar.com',
+--             '(41) 3322-7788',
+--             'Rua XV de Novembro, 800',
+--             'Centro',
+--             'Curitiba',
+--             '80020-310',
+--             v_user_id
+--         ),
+--         (
+--             v_client_5_id,
+--             '7433',
+--             'André Luiz Tavares',
+--             'Cliente costuma viajar, recomenda confirmar por WhatsApp antes',
+--             'CPF',
+--             '321.654.987-00',
+--             'andre.tavares@email.com',
+--             '(31) 97777-8888',
+--             'Rua das Palmeiras, 250',
+--             'Savassi',
+--             'Belo Horizonte',
+--             '30140-100',
+--             v_user_id
+--         ),
+--         (
+--             v_client_6_id,
+--             '0632',
+--             'MDF Pro Suprimentos Ltda',
+--             'Entregas somente de segunda a quinta, no horário comercial',
+--             'CNPJ',
+--             '34.567.890/0001-22',
+--             'contato@mdfpro.com',
+--             '(47) 3555-6677',
+--             'Rodovia BR-101, Km 1200',
+--             'Industrial',
+--             'Joinville',
+--             '89220-000',
+--             v_user_id
+--         ),
+--         (
+--             v_client_7_id,
+--             '2257',
+--             'Cláudia Ribeiro Fonseca',
+--             'Solicita que entregas sejam feitas na casa da mãe, endereço alternativo',
+--             'CPF',
+--             '654.987.321-00',
+--             'claudia.rf@email.com',
+--             '(85) 98888-9999',
+--             'Rua das Acácias, 90',
+--             'Aldeota',
+--             'Fortaleza',
+--             '60150-160',
+--             v_user_id
+--         );
+-- END $$;

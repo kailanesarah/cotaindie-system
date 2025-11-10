@@ -1,5 +1,6 @@
 "use client";
 
+import { useRevalidatePaths } from "@/app/(private)/_hooks/use-revalidate";
 import { copyOrderAction } from "@/app/(private)/order/_actions/copy-order-action";
 import { ToastCard } from "@/components/ui/toast-card";
 import { ROUTES } from "@/constants/urls";
@@ -11,13 +12,21 @@ import { useDialog } from "../../_hooks/use-dialog";
 export const useCopyOrder = () => {
   const queryClient = useQueryClient();
   const { setOpen } = useDialog();
+  const { revalidate } = useRevalidatePaths();
 
   const { execute, isPending } = useAction(copyOrderAction, {
     onSuccess: async (result) => {
       const newId = result.data?.id;
       if (!newId) return;
 
-      await queryClient.invalidateQueries({ queryKey: ["orders"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["orders"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["orders"],
+        exact: false,
+      });
 
       setOpen(false);
 
@@ -29,6 +38,8 @@ export const useCopyOrder = () => {
           text="Orçamento copiado e salvo no histórico."
         />
       ));
+
+      await revalidate([ROUTES.PRIVATE.ORDERS]);
 
       window.open(`${ROUTES.PRIVATE.ORDER_ID}/${newId}`, "_blank");
     },

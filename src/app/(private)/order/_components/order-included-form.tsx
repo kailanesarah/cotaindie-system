@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -23,6 +24,7 @@ export const OrderIncludedForm = () => {
   const setExcluded = useOrderStore((state) => state.setExcluded);
   const setTrigger = useOrderStore((state) => state.setTrigger);
   const order = useOrderStore((state) => state.order);
+  const loading = useOrderStore((state) => state.loading);
 
   const form = useForm<orderIncludedType>({
     resolver: zodResolver(orderIncludedSchema),
@@ -37,6 +39,16 @@ export const OrderIncludedForm = () => {
   useEffect(() => {
     setTrigger("excludedForm", form.trigger);
   }, [form.trigger, setTrigger]);
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-12 gap-3">
+        <Skeleton className="col-span-12 h-10" />
+        <Skeleton className="col-span-12 h-10" />
+        <Skeleton className="col-span-12 h-24" />
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>

@@ -103,7 +103,7 @@ export const CuttingPlanDocument = ({
       {plan.projects.map((project, projectIndex) => (
         <React.Fragment key={project.id}>
           {project.materials.map((material, materialIndex) => (
-            <View key={material.id} wrap={false} style={{ marginBottom: 12 }}>
+            <View key={material.id} wrap={true} style={{ marginBottom: 12 }}>
               {materialIndex === 0 && (
                 <SectionTitle>
                   {`Projeto ${projectIndex + 1} - ${project.name} (quantidade - ${
@@ -147,53 +147,67 @@ export const CuttingPlanDocument = ({
                     <DataGridCell width="10%" align="center">
                       {`${materialIndex + 1}.${pieceIndex + 1}`}
                     </DataGridCell>
-                    <DataGridCell flex={1}>{piece.label}</DataGridCell>
+                    <DataGridCell flex={1}>
+                      <Text>
+                        {piece.label}
+                        {(piece as any)._measure &&
+                          ` (${(piece as any)._measure[0]} x ${(piece as any)._measure[1]} cm)`}
+                      </Text>
+                    </DataGridCell>
                     <DataGridCell width="15%" align="center" noBorderRight>
                       {piece.qtde}
                     </DataGridCell>
                   </DataGridRow>
                 ))}
                 {material.sheets.map((sheet, sheetIndex) => (
-                  <DataGridRow key={sheet.id}>
-                    <DataGridCell
-                      width="100%"
-                      noBorderRight
-                      style={{ padding: 0 }}
-                    >
-                      <View style={{ padding: 8 }}>
-                        <View
-                          style={{
-                            justifyContent: "space-between",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginBottom: 8,
-                          }}
-                        >
-                          <Text style={{ marginBottom: 4 }}>{sheet.label}</Text>
-                          <View style={{ width: 20, height: 20 }}>
-                            <Image
-                              style={{ width: 20, height: 20 }}
-                              src={
-                                material.cutDirection === "VH"
-                                  ? vhIcon
-                                  : verticalIcon
-                              }
-                            />
+                  <View
+                    key={sheet.id}
+                    wrap={false}
+                    style={{ marginBottom: 12 }}
+                  >
+                    <DataGridRow>
+                      <DataGridCell
+                        width="100%"
+                        noBorderRight
+                        style={{ padding: 0 }}
+                      >
+                        <View style={{ padding: 8 }}>
+                          <View
+                            style={{
+                              justifyContent: "space-between",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              marginBottom: 8,
+                            }}
+                          >
+                            <Text style={{ marginBottom: 4 }}>
+                              {sheet.label}
+                            </Text>
+                            <View style={{ width: 20, height: 20 }}>
+                              <Image
+                                style={{ width: 20, height: 20 }}
+                                src={
+                                  material.cutDirection === "VH"
+                                    ? vhIcon
+                                    : verticalIcon
+                                }
+                              />
+                            </View>
                           </View>
+                          <Image
+                            src={sheet.imageBase64}
+                            style={{
+                              width: "100%",
+                              height: "auto",
+                              border: "1px solid #999",
+                              backgroundColor: "#f9f9f9",
+                              objectFit: "contain",
+                            }}
+                          />
                         </View>
-                        <Image
-                          src={sheet.imageBase64}
-                          style={{
-                            width: "100%",
-                            height: "auto",
-                            border: "1px solid #999",
-                            backgroundColor: "#f9f9f9",
-                            objectFit: "contain",
-                          }}
-                        />
-                      </View>
-                    </DataGridCell>
-                  </DataGridRow>
+                      </DataGridCell>
+                    </DataGridRow>
+                  </View>
                 ))}
               </DataGrid>
             </View>

@@ -1,10 +1,12 @@
+import { ROUTES } from "@/constants/urls";
+import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+import { hasItemsActions } from "../_actions/has-items-action";
 import {
   FavButtonWrapper,
   OptionsButton,
   SaveButton,
 } from "./_components/fav-button";
-import { OrderMenu } from "./_components/order-menu";
 import { SummaryBar } from "./_components/summary-bar";
 
 interface OrderLayoutProps {
@@ -14,9 +16,14 @@ interface OrderLayoutProps {
 export default async function OrderLayout({
   children,
 }: Readonly<OrderLayoutProps>) {
+  const { has_clients, has_materials } = await hasItemsActions();
+
+  if (!has_clients || !has_materials) {
+    redirect(ROUTES.PRIVATE.ORDERS);
+  }
+
   return (
     <div className="grow">
-      <OrderMenu />
       {children}
       <FavButtonWrapper>
         <OptionsButton />

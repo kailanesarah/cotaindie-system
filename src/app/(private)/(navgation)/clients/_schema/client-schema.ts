@@ -15,7 +15,11 @@ export const clientSchema = z.object({
     .email("Digite um email válido")
     .optional()
     .or(z.literal("")),
-  phone: z.string().min(10, "Digite o número de telefone").optional(),
+  phone: z
+    .string()
+    .min(1, "Digite o número de telefone")
+    .optional()
+    .or(z.literal("")),
   notes: z.string().optional(),
 
   street: z.string().min(1, "Digite o nome do endereço"),

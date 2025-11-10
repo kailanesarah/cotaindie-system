@@ -9,9 +9,5 @@ export const TableTitle = ({ children }: { children: ReactNode }) => {
 };
 
 export const TableContent = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="rounded-default border-red-default overflow-hidden border-t-[0.1875rem]">
-      {children}
-    </div>
-  );
+  return <div className="rounded-default overflow-hidden">{children}</div>;
 };
