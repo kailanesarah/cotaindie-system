@@ -38,13 +38,19 @@ export const useDeleteClient = () => {
 
       await revalidate([ROUTES.PRIVATE.ORDER]);
     },
-    onError: (err) => {
+    onError: (err: any) => {
+      const message =
+        err?.error?.serverError ||
+        err?.error?.thrownError?.message ||
+        err?.message ||
+        "Ocorreu um erro desconhecido.";
+
       toast((t) => (
         <ToastCard
           id={t.id}
           status="error"
           title="Erro ao remover o cliente!"
-          text={err.error.thrownError?.message}
+          text={message}
         />
       ));
     },
