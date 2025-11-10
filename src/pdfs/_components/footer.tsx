@@ -29,7 +29,7 @@ export const Footer = ({
   const footerText = variant === "quote" ? quoteText : defaultText;
 
   return (
-    <View style={{ paddingTop: 10 }}>
+    <View style={{ paddingTop: 20, backgroundColor: "white" }}>
       <Hr />
       <View
         style={{
