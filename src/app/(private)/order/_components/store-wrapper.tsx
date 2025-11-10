@@ -28,6 +28,7 @@ export function OrderStoreWrapper({
     }
   }, [data]);
 
+  if (!id) setLoading(false);
   if (!id) return <>{children}</>;
 
   return <div key={key}>{children}</div>;
