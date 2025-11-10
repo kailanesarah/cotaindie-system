@@ -80,7 +80,7 @@ export default async function OrdersPage() {
                 <OrderSearchContent />
               )}
               {!has_orders && has_clients && has_materials && (
-                <AddOrderCard className="mx-4 my-3 lg:mx-6 lg:my-4" />
+                <AddOrderCard className="mx-4 my-3 lg:mx-6 lg:my-6" />
               )}
             </PageContent>
           </ScrollArea>

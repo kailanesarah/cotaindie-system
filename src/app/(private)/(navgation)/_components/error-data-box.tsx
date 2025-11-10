@@ -20,7 +20,7 @@ export const ErrorDataBox = ({ error, className }: ErrorDataBoxProps) => {
       <DataBoxContent>
         <Icon name="error_outline" className="text-red-default" size={28} />
         <DataBoxTitle>Ocorreu um erro</DataBoxTitle>
-        <DataBoxDescription>{error}</DataBoxDescription>
+        {error && <DataBoxDescription>{error}</DataBoxDescription>}
       </DataBoxContent>
     </DataBox>
   );

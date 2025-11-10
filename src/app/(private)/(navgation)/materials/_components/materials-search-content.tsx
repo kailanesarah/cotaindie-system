@@ -21,7 +21,7 @@ export const MaterialsSearchContent = () => {
         <EmptyDataBox onReset={reset} className="m-0 lg:m-0" />
       )}
 
-      {error && <ErrorDataBox error={error} />}
+      {error && <ErrorDataBox error={error} className="m-0 lg:m-0" />}
     </>
   );
 };
