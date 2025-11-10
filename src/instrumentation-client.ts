@@ -10,22 +10,33 @@ Sentry.init({
   // Add optional integrations for additional features
   integrations: [
     Sentry.replayIntegration(),
+    Sentry.feedbackIntegration({
+      colorScheme: "#system",
+      showBranding: false,
+      isEmailRequired: true,
+      enableScreenshot: true,
+      triggerLabel: "Relatar problema",
+      formTitle: "Relatar problema",
+      submitButtonLabel: "Enviar",
+      cancelButtonLabel: "Cancelar",
+      confirmButtonLabel: "Confirmar",
+      addScreenshotButtonLabel: "Adicionar imagem da tela",
+      removeScreenshotButtonLabel: "Remover imagem",
+      nameLabel: "Nome",
+      amePlaceholder: "Seu nome",
+      emailLabel: "Email",
+      emailPlaceholder: "oi@cotaindie.com",
+      isRequiredLabel: "(obrigatório)",
+      messageLabel: "Descrição",
+      messagePlaceholder: "Descreva o que aconteceu...",
+      successMessageText:
+        "Obrigado! Estaremos resolvendo o probelma o quanto antes.",
+    }),
   ],
-
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
-  // Enable logs to be sent to Sentry
   enableLogs: true,
-
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
   replaysSessionSampleRate: 0.1,
-
-  // Define how likely Replay events are sampled when an error occurs.
   replaysOnErrorSampleRate: 1.0,
-
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
 });
 
