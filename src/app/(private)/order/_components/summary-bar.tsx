@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { Separator } from "@radix-ui/react-separator";
@@ -21,7 +22,7 @@ import { calculateOrderSummary } from "../functions/order-summary";
 import { SummaryTag } from "./summary-tag";
 
 export const SummaryBar = () => {
-  const { order, setStatusInfo } = useOrderStore();
+  const { order, setStatusInfo, loading } = useOrderStore();
   const { totalAmount, installmentValue, discountValue } =
     calculateOrderSummary(order);
 
@@ -39,6 +40,23 @@ export const SummaryBar = () => {
 
     generateQuoteDocument(quoteDoc);
   };
+
+  if (loading) {
+    return (
+      <div className="pointer-events-none fixed top-0 right-0 bottom-0 left-0 flex h-full w-full items-end">
+        <div className="border-b-light pointer-events-auto flex min-h-[5rem] grow items-center border-t bg-white px-4 pt-4 pb-4 shadow-[0_0_32px_0_rgba(0,0,0,0.08)] lg:min-h-[6.25rem] lg:px-6 lg:pt-5 lg:pb-6">
+          <div className="max-w-container-small mx-auto flex w-full items-center justify-between gap-3 lg:gap-6">
+            <div className="flex w-full flex-col gap-2 lg:w-auto">
+              <Skeleton className="h-6 w-32 lg:w-48" />
+              <Skeleton className="mt-1 h-4 w-48 lg:w-64" />
+            </div>
+            <Skeleton className="h-10 w-28 lg:w-36" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="pointer-events-none fixed top-0 right-0 bottom-0 left-0 flex h-full w-full items-end">
       <div className="border-b-light pointer-events-auto flex min-h-[5rem] grow items-center border-t bg-white px-4 pt-4 pb-4 shadow-[0_0_32px_0_rgba(0,0,0,0.08)] lg:min-h-[6.25rem] lg:px-6 lg:pt-5 lg:pb-6">

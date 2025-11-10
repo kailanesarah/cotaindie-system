@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -34,6 +35,7 @@ export const OrderPaymentForm = () => {
   const setTrigger = useOrderStore((state) => state.setTrigger);
   const setPayment = useOrderStore((state) => state.setPayment);
   const order = useOrderStore((state) => state.order);
+  const loading = useOrderStore((state) => state.loading);
 
   const form = useForm<orderPaymentType>({
     resolver: zodResolver(orderPaymentSchema),
@@ -104,7 +106,16 @@ export const OrderPaymentForm = () => {
     setPayment({ discountPercent: percent, advanceAmount: 0 });
   }, [rawAmount]);
 
-  console.log(form.formState.errors);
+  if (loading) {
+    return (
+      <div className="flex grid-cols-1 flex-col gap-3 lg:grid-cols-1">
+        <Skeleton className="h-10" />
+        <Skeleton className="h-10" />
+        <Skeleton className="h-10" />
+        <Skeleton className="h-24" />
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>

@@ -14,14 +14,17 @@ export function OrderStoreWrapper({
   children,
 }: Readonly<OrderStoreWrapperProps>) {
   const setOrderFull = useOrderStore((state) => state.setOrderFull);
+  const setLoading = useOrderStore((state) => state.setLoading);
+
   const [key, setKey] = useState<string | number>(0);
 
   const { data } = useGetOrderById({ id });
-
   useEffect(() => {
     if (data) {
       setOrderFull(data);
       setKey(data.id);
+
+      setLoading(false);
     }
   }, [data]);
 

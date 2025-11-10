@@ -45,14 +45,14 @@ export const MaterialCutFields = () => {
           name="cutDirection"
           render={({ field }) => (
             <FormItem className="col-span-1">
-              <FormLabel>Sentido de corte</FormLabel>
+              <FormLabel>Sentido de corte e textura</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value || "VH"}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Selecione o sentido de corte" />
+                    <SelectValue placeholder="Selecione o sentido de corte e textura" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="VH">{cutDirectionMap["VH"]}</SelectItem>

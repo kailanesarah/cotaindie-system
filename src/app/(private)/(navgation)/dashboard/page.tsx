@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { hasItemsActions } from "../../_actions/has-items-action";
 import { PageContent } from "../_components/page-content";
 import {
@@ -35,7 +36,9 @@ export default async function DashboardPage() {
         </PageHeader>
         <PageContent className="flex flex-col gap-2 pb-0 lg:gap-4 lg:p-6">
           {!has_materials && <AddMaterialsCard />}
-          {!has_clients && <AddClientCard />}
+          {!has_clients && (
+            <AddClientCard className={cn(!has_materials && "last:mt-2")} />
+          )}
           {!has_orders && has_clients && has_materials && <AddOrderCard />}
           {has_clients && has_materials && has_orders && (
             <>
