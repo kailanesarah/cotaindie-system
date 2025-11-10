@@ -1,0 +1,68 @@
+-- DO $$
+-- DECLARE
+--     v_user_id uuid := '00000000-0000-0000-0000-000000000000';
+--     v_cat_mdf_id uuid;
+--     v_cat_compensado_id uuid;
+--     v_cat_ferragens_id uuid;
+--     v_cat_consumo_id uuid;
+--     v_cat_fita_id uuid;
+--     v_cat_bucha_id uuid;
+--     v_cat_metalon_id uuid;
+--     v_cat_vidros_id uuid;
+--     v_cat_iluminacao_id uuid;
+--     v_mat_u1_id uuid := gen_random_uuid();
+--     v_mat_u2_id uuid := gen_random_uuid();
+--     v_mat_u3_id uuid := gen_random_uuid();
+--     v_mat_u4_id uuid := gen_random_uuid();
+--     v_mat_u5_id uuid := gen_random_uuid();
+--     v_mat_m1_id uuid := gen_random_uuid();
+--     v_mat_m2_id uuid := gen_random_uuid();
+--     v_mat_m3_id uuid := gen_random_uuid();
+--     v_mat_m4_id uuid := gen_random_uuid();
+--     v_mat_m5_id uuid := gen_random_uuid();
+--     v_mat_m6_id uuid := gen_random_uuid();
+--     v_mat_m7_id uuid := gen_random_uuid();
+--     v_mat_m8_id uuid := gen_random_uuid();
+-- BEGIN
+--     SELECT id INTO v_cat_mdf_id FROM public.materials_categories WHERE name = 'MDF' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_compensado_id FROM public.materials_categories WHERE name = 'Compensado' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_ferragens_id FROM public.materials_categories WHERE name = 'Ferragens' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_consumo_id FROM public.materials_categories WHERE name = 'Material de consumo' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_fita_id FROM public.materials_categories WHERE name = 'Fita de borda' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_bucha_id FROM public.materials_categories WHERE name = 'Bucha' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_metalon_id FROM public.materials_categories WHERE name = 'Metalon' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_vidros_id FROM public.materials_categories WHERE name = 'Vidros' AND user_id = v_user_id;
+--     SELECT id INTO v_cat_iluminacao_id FROM public.materials_categories WHERE name = 'Iluminação' AND user_id = v_user_id;
+--     INSERT INTO public.materials 
+--         (id, code, name, description, measure_type, unit, waste_tax, base_value, measure, cut_direction, user_id)
+--     VALUES
+--         (v_mat_u1_id, '1249', 'Painel MDF 18mm', 'Painel de MDF cru, espessura 18mm, dimensões 275x183, ideal para móveis e interiores.', 'M2', 'CM', 0.05, 120, ARRAY[503.25, 44], 'VH', v_user_id),
+--         (v_mat_u2_id, '1250', 'Compensado Naval', 'Compensado naval de 12mm, resistente à água, adequado para ambientes úmidos e projetos externos.', 'M2', 'CM', 0.05, 150, ARRAY[400, 300], 'VH', v_user_id),
+--         (v_mat_u3_id, '1251', 'Dobradiça 35mm', 'Dobradiça metálica de 35mm para portas e móveis, garantindo abertura suave e durabilidade.', 'UN', 'UN', 0.02, 5, ARRAY[1], NULL, v_user_id),
+--         (v_mat_u4_id, '1252', 'Parafuso 4x40mm', 'Parafuso zincado 4x40mm, resistente à corrosão, ideal para fixação em madeira.', 'UN', 'UN', 0.02, 0.5, ARRAY[1], NULL, v_user_id),
+--         (v_mat_u5_id, '1253', 'Fita de borda PVC', 'Fita de borda em PVC branca de 22mm, para acabamento de móveis e painéis.', 'ML', 'CM', 0.05, 1.5, ARRAY[100], NULL, v_user_id),
+--         (v_mat_m1_id, '1254', 'Painel MDF 6mm Branco', 'Painel de MDF 6mm com revestimento branco, usado para fundos de armário. Dimensões 275x183.', 'M2', 'CM', 0.05, 85, ARRAY[503.25, 44], 'VH', v_user_id),
+--         (v_mat_m2_id, '1255', 'Bucha 8mm (S8)', 'Bucha de nylon S8 para fixação em paredes de alvenaria, pacote com 100 un.', 'UN', 'UN', 0.01, 0.25, ARRAY[1], NULL, v_user_id),
+--         (v_mat_m3_id, '1256', 'Metalon 30x30mm', 'Barra de Metalon (aço carbono) 30x30mm, parede de 1.2mm. Usado para estruturas de móveis.', 'ML', 'CM', 0.1, 30, ARRAY[100], NULL, v_user_id),
+--         (v_mat_m4_id, '1257', 'Puxador Concha Preto Fosco', 'Puxador de metal estilo concha, acabamento preto fosco. Ideal para gavetas.', 'UN', 'UN', 0.0, 18, ARRAY[1], NULL, v_user_id),
+--         (v_mat_m5_id, '1258', 'Cola Branca PVA 1kg', 'Cola PVA extra forte para madeira, embalagem de 1kg.', 'UN', 'UN', 0.05, 32, ARRAY[1], NULL, v_user_id),
+--         (v_mat_m6_id, '1259', 'Vidro Incolor 4mm', 'Chapa de vidro incolor comum, espessura 4mm, faturado por ml.', 'ML', 'CM', 0.15, 95, ARRAY[10000], NULL, v_user_id),
+--         (v_mat_m7_id, '1260', 'Fita de LED 12V (Metro)', 'Fita de LED branca fria, 12V, 120 LEDs por metro. Vendido por metro linear.', 'ML', 'CM', 0.03, 12.5, ARRAY[100], NULL, v_user_id),
+--         (v_mat_m8_id, '1261', 'Painel MDF 18mm Freijó', 'Painel de MDF 18mm revestido com laminado padrão Freijó. Dimensões 275x183.', 'M2', 'CM', 0.05, 380, ARRAY[503.25, 44], 'VH', v_user_id);
+--     INSERT INTO public.materials_categories_relation 
+--         (material_id, category_id)
+--     VALUES
+--         (v_mat_u1_id, v_cat_mdf_id),
+--         (v_mat_u2_id, v_cat_compensado_id),
+--         (v_mat_u3_id, v_cat_ferragens_id),
+--         (v_mat_u4_id, v_cat_consumo_id),
+--         (v_mat_u5_id, v_cat_fita_id),
+--         (v_mat_m1_id, v_cat_mdf_id),
+--         (v_mat_m2_id, v_cat_bucha_id),
+--         (v_mat_m3_id, v_cat_metalon_id),
+--         (v_mat_m4_id, v_cat_ferragens_id),
+--         (v_mat_m5_id, v_cat_consumo_id),
+--         (v_mat_m6_id, v_cat_vidros_id),
+--         (v_mat_m7_id, v_cat_iluminacao_id),
+--         (v_mat_m8_id, v_cat_mdf_id);
+-- END $$;
