@@ -14,15 +14,10 @@ import {
 import { OrderIncludedForm } from "../_components/order-included-form";
 import { OrderMenu } from "../_components/order-menu";
 import { OrderPaymentForm } from "../_components/order-payment-form";
-import {
-  OrderProjects,
-  OrderProjectsActions,
-  OrderProjectsContent,
-  OrderProjectsTotal,
-} from "../_components/order-projects";
+import { OrderProjects } from "../_components/order-projects";
+import { OrderProjectsSection } from "../_components/order-projects-section";
 import { OrderReferenceForm } from "../_components/order-reference-form";
 import { OrderStoreWrapper } from "../_components/store-wrapper";
-import { SummaryTable } from "../_components/summary-table";
 
 interface IOrderPage {
   params: Promise<{ code: string }>;
@@ -77,11 +72,7 @@ export default async function OrderPage({ params }: Readonly<IOrderPage>) {
               <FormSeparator className="hidden lg:block" />
               <FormContent>
                 <OrderProjects>
-                  <OrderProjectsContent>
-                    <SummaryTable />
-                    <OrderProjectsActions />
-                  </OrderProjectsContent>
-                  <OrderProjectsTotal />
+                  <OrderProjectsSection />
                 </OrderProjects>
               </FormContent>
               <FormSeparator />
