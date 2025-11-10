@@ -40,7 +40,7 @@ export const OrderReferenceForm = () => {
       title: order.name,
       client: order.client?.id,
       startsAt: order.initialDate ? new Date(order.initialDate) : new Date(),
-      endsAt: order.expirationDays?.toString(),
+      endsAt: order.expirationDays?.toString() ?? "",
     },
   });
 
