@@ -197,8 +197,6 @@ export class MaterialsService extends BaseService {
         .delete()
         .eq("id", id);
 
-      console.log(error);
-
       if (error) throw error;
 
       return true;

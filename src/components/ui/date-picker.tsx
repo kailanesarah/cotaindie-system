@@ -26,7 +26,7 @@ export function DatePicker({
   onChange,
   onBlur,
   placeholder = "Pick a date",
-  format = "MM/dd/yyyy",
+  format = "dd/MM/yyyy",
   allowFutureDates = false,
 }: Readonly<DatePickerProps>) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);

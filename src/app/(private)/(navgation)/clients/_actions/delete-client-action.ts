@@ -3,6 +3,7 @@
 import { deleteSchema } from "@/app/(private)/_schema/delete-schema";
 import { actionClient } from "@/lib/safe-action";
 import { supabaseServer } from "@/lib/supabase/server";
+import type { PostgresError } from "@/services/base-service";
 import { ClientsService } from "@/services/clients-services";
 
 export const deleteClientAction = actionClient
@@ -14,9 +15,17 @@ export const deleteClientAction = actionClient
       const supabase = await supabaseServer();
       const clientsService = new ClientsService(supabase);
 
-      return await clientsService.deleteClient(id);
-    } catch (err) {
-      console.error(err);
+      await clientsService.deleteClient(id);
+
+      return true;
+    } catch (err: unknown) {
+      const pgErr = err as PostgresError;
+
+      if (pgErr.code === "23503") {
+        throw new Error(
+          "Não é possível deletar este cliente porque ele está sendo usado em algum orçamento.",
+        );
+      }
 
       throw new Error("Ocorreu um erro ao deletar o cliente.");
     }

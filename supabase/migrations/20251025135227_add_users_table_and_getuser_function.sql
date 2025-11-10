@@ -26,6 +26,7 @@ CREATE OR REPLACE FUNCTION public."getUser"()
  RETURNS jsonb
  LANGUAGE sql
  STABLE SECURITY DEFINER
+ SET search_path = ''
 AS $function$SELECT jsonb_build_object(
     'id', au.id,
     'name', u.name,
@@ -42,6 +43,7 @@ CREATE OR REPLACE FUNCTION public.getuser()
  RETURNS jsonb
  LANGUAGE sql
  STABLE SECURITY DEFINER
+ SET search_path = ''
 AS $function$
 SELECT jsonb_build_object(
     'id', au.id,

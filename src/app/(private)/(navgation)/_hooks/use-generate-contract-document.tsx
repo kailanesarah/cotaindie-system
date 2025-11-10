@@ -22,7 +22,7 @@ export const useGenerateContractDocument = () => {
       return;
     }
 
-    if (!data.client) {
+    if (!data.client.name) {
       toast((t) => (
         <ToastCard
           id={t.id}

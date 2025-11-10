@@ -83,7 +83,7 @@ export const OrderTableActions = ({ order }: { order: Order }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent sideOffset={12} align="end" alignOffset={16}>
-          <Link href={`/order/${order.id}`} target="_blank">
+          <Link href={`/order/${order.code}`} target="_blank">
             <DropdownMenuItem>
               <Icon name="edit_square" /> Editar
             </DropdownMenuItem>

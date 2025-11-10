@@ -12,7 +12,7 @@ export function calculatePieceMaterial(piece: Piece): PieceCalculationResult {
     const config = {
       sheetW: piece.material.measure[0],
       sheetH: piece.material.measure[1] ?? 0,
-      margin: 0,
+      margin: 1,
       pieceSpacing: 0,
       allowRotate: piece.material.cutDirection === "VH",
       wastePercentage: piece.material.wasteTax ?? 0,

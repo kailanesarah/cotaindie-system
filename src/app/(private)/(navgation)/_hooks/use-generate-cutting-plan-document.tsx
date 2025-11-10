@@ -12,7 +12,7 @@ export const useGenerateCuttingPlanDocument = () => {
   const generateCuttingPlanDocument = async (
     data: CuttingPlanDocumentProps,
   ) => {
-    if (!data.client?.name) {
+    if (!data.client.name) {
       toast((t) => (
         <ToastCard
           id={t.id}

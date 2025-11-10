@@ -11,6 +11,7 @@ import {
   FormListItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { InputDisabled } from "@/components/ui/input-disabled";
 import {
@@ -54,9 +55,12 @@ export const PieceForm = ({
     defaultValues: getPiecetDefaultValues(),
   });
 
+  console.log(form.formState.errors);
+
   const { watch, setValue } = form;
 
   const measureType = watch("material.measureType");
+  const cutDirection = watch("material.cutDirection");
   const unit = watch("material.unit");
   const measure = watch("material.measure");
   const material = watch("material.name");
@@ -291,7 +295,7 @@ export const PieceForm = ({
                   name="measure.0"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Comprimento</FormLabel>
+                      <FormLabel>Largura</FormLabel>
                       <FormControl>
                         <NumericFormat
                           value={field.value}
@@ -333,34 +337,53 @@ export const PieceForm = ({
                     </FormItem>
                   )}
                 />
+                <InputDisabled className="shrink-0 lg:mt-[1.375rem]">
+                  <Icon
+                    name={
+                      cutDirection === "VH" ? "grid_on" : "table_rows_narrow"
+                    }
+                  />
+                  {cutDirection === "VH"
+                    ? "Textura Ver. e Hor."
+                    : "Textura horiz."}
+                </InputDisabled>
               </>
             )}
             {measureType === "ML" && (
-              <FormField
-                control={form.control}
-                name="measure.0"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Comprimento</FormLabel>
-                    <FormControl>
-                      <NumericFormat
-                        value={field.value}
-                        onValueChange={(values) =>
-                          field.onChange(values.floatValue ?? 10)
-                        }
-                        suffix={` ${measureMap["ML"]}`}
-                        allowNegative={false}
-                        decimalScale={0}
-                        customInput={Input}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <>
+                <FormField
+                  control={form.control}
+                  name="measure.0"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Comprimento</FormLabel>
+                      <FormControl>
+                        <NumericFormat
+                          value={field.value}
+                          onValueChange={(values) =>
+                            field.onChange(values.floatValue ?? 10)
+                          }
+                          suffix={` ${measureMap["ML"]}`}
+                          allowNegative={false}
+                          decimalScale={0}
+                          customInput={Input}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <InputDisabled className="shrink-0 lg:mt-[1.375rem]">
+                  <Icon name={"table_rows_narrow"} />
+                  Comp. horizontal
+                </InputDisabled>
+              </>
             )}
             <InputDisabled
-              className={cn("w-full", measureType !== "UN" && "mt-[1.375rem]")}
+              className={cn(
+                measureType === "UN" && "w-full",
+                measureType !== "UN" && "mt-[1.375rem] shrink-0",
+              )}
             >
               Unidade: {measureType}
             </InputDisabled>

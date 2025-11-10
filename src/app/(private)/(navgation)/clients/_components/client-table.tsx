@@ -1,5 +1,6 @@
 "use client";
 
+import type { SearchResult } from "@/app/(private)/_types/search-result";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -9,13 +10,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useClientsSearch } from "../_hooks/use-search-clients";
 import { clientTypeMap } from "../_utils/client-type-map";
 import { ClientTableActions } from "./client-table-actions";
 
-export const ClientsTable = () => {
-  const { data } = useClientsSearch();
-
+export const ClientsTable = ({
+  data,
+}: {
+  data: SearchResult<Client> | undefined;
+}) => {
   if (!data?.items || data?.items.length === 0) return;
 
   return (

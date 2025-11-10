@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/icon";
 import { ROUTES } from "@/constants/urls";
 import { useRouter } from "next/navigation";
 
-export const OrderMenu = ({ order }: { order?: Order }) => {
+export const OrderMenu = ({ code }: { code?: string }) => {
   const router = useRouter();
 
   const handleClose = () => {
@@ -17,7 +17,7 @@ export const OrderMenu = ({ order }: { order?: Order }) => {
     }
   };
 
-  const menuTitle = order ? "Editar orçamento" : "Adicionar novo orçamento";
+  const menuTitle = code ? "Editar orçamento" : "Adicionar novo orçamento";
 
   return (
     <nav className="bg-black-default sticky top-0 z-10 flex h-[4.5rem] items-center justify-between px-4 py-4 pr-0 text-white shadow-[0_0_32px_0_rgba(0,0,0,0.16)] lg:h-[4.5625rem] lg:px-6 lg:pr-6">
@@ -30,7 +30,11 @@ export const OrderMenu = ({ order }: { order?: Order }) => {
           <Icon name="close" size={40} />
         </button>
         <div className="flex min-w-0 items-center gap-3">
-          {order && <Badge>{order.code}</Badge>}
+          {code && (
+            <Badge className="border-white/25 bg-transparent text-white">
+              Q - {code}
+            </Badge>
+          )}
           <h6 className="!text-title-dark truncate overflow-hidden text-ellipsis whitespace-nowrap">
             {menuTitle}
           </h6>

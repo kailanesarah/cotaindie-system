@@ -19,9 +19,9 @@ export const QueryProvider = ({ children }: QueryProviderProps) => {
       new ReactQueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 0,
+            staleTime: 1000 * 60 * 20, //20 minutes
             refetchOnWindowFocus: false,
-            refetchInterval: 0,
+            refetchInterval: 1000 * 60 * 20, //20 minutes
             retry: 1,
           },
         },
@@ -30,14 +30,14 @@ export const QueryProvider = ({ children }: QueryProviderProps) => {
 
   useEffect(() => {
     const localStoragePersistor = createAsyncStoragePersister({
-      storage: window.localStorage,
+      storage: globalThis.localStorage,
       key: "react-query",
     });
 
     const [, promise] = persistQueryClient({
       queryClient,
       persister: localStoragePersistor,
-      maxAge: 1000 * 60 * 60 * 1,
+      maxAge: 1000 * 60 * 60 * 1, //24 hours
     });
 
     promise.catch((error) => {

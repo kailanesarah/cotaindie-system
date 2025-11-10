@@ -62,8 +62,8 @@ export const SummaryBar = () => {
               </span>
               {advanceAmount > 0 && (
                 <>
-                  <span>|</span>
-                  <span>
+                  <span className="hidden lg:block">|</span>
+                  <span className="hidden lg:block">
                     Adiantamento: {currencyFormatter.format(advanceAmount)}
                   </span>
                 </>

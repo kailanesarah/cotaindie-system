@@ -434,7 +434,7 @@ export class OrdersService extends BaseService {
         }
       }
 
-      return { id: newOrder.id };
+      return { id: newOrder.code };
     } catch (err) {
       this.handleError(err, "OrdersService.duplicateOrder");
     }

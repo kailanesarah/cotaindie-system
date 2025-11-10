@@ -48,7 +48,7 @@ export const MaterialDinamicFields = () => {
             name="measure.0"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Comprimento</FormLabel>
+                <FormLabel>Largura</FormLabel>
                 <FormControl>
                   <NumericFormat
                     value={field.value}

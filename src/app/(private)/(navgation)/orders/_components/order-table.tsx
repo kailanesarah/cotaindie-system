@@ -1,5 +1,6 @@
 "use client";
 
+import type { SearchResult } from "@/app/(private)/_types/search-result";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -10,12 +11,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { statusMap } from "../../_constants/status-map";
-import { useOrdersSearch } from "../_hooks/use-search-orders";
 import { OrderTableActions } from "./order-table-actions";
 
-export const OrderTable = () => {
-  const { data } = useOrdersSearch();
-
+export const OrderTable = ({
+  data,
+}: {
+  data: SearchResult<Order> | undefined;
+}) => {
   if (!data?.items || data?.items.length === 0) return;
 
   return (

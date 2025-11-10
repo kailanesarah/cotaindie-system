@@ -3,6 +3,7 @@ set check_function_bodies = off;
 CREATE OR REPLACE FUNCTION public.is_valid_costs_jsonb(costs_jsonb jsonb)
  RETURNS boolean
  LANGUAGE plpgsql
+ SET search_path = ''
  IMMUTABLE
 AS $function$DECLARE
     obj jsonb;
