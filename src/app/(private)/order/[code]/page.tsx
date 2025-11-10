@@ -25,35 +25,35 @@ import { OrderStoreWrapper } from "../_components/store-wrapper";
 import { SummaryTable } from "../_components/summary-table";
 
 interface IOrderPage {
-  params: Promise<{ id: string }>;
+  params: Promise<{ code: string }>;
 }
 
 export default async function OrderPage({ params }: Readonly<IOrderPage>) {
-  const { id } = await params;
+  const { code } = await params;
 
-  let orderId: string | null = null;
+  let id = undefined;
 
-  let code = undefined;
-
-  if (id && id !== "new") {
+  if (code && code !== "new") {
     const supabase = await supabaseServer();
 
     const { data: order, error } = await supabase
       .from("orders")
       .select("id, code")
-      .eq("id", id)
+      .eq("code", code)
       .single();
 
     if (error || !order) notFound();
-    orderId = order.id;
-    code = order.code;
+
+    id = order.id;
   }
+
+  const orderCode = code !== "new" ? code : "";
 
   return (
     <>
-      <OrderMenu code={code} />
+      <OrderMenu code={orderCode} />
       <PageMain>
-        <OrderStoreWrapper id={orderId ?? ""}>
+        <OrderStoreWrapper id={id ?? ""}>
           <FormGroup>
             <FormSection>
               <FormHeading>

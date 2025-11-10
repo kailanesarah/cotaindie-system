@@ -30,7 +30,11 @@ export const OrderMenu = ({ code }: { code?: string }) => {
           <Icon name="close" size={40} />
         </button>
         <div className="flex min-w-0 items-center gap-3">
-          {code && <Badge>Q - {code}</Badge>}
+          {code && (
+            <Badge className="border-white/25 bg-transparent text-white">
+              Q - {code}
+            </Badge>
+          )}
           <h6 className="!text-title-dark truncate overflow-hidden text-ellipsis whitespace-nowrap">
             {menuTitle}
           </h6>

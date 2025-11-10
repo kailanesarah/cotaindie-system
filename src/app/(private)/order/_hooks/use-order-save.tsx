@@ -28,7 +28,7 @@ export const useUpsertOrder = () => {
         exact: false,
       });
 
-      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.id}`);
+      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.code}`);
       setOrderFull(res.data);
 
       toast((t) => (
