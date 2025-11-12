@@ -11,18 +11,21 @@ interface GroupedPiecesResult {
 
 export function groupPiecesByMaterial(pieces: Piece[]): GroupedPiecesResult {
   const grouped = pieces.reduce<Record<string, GroupedPieces>>((acc, piece) => {
-    const materialId = piece.material.name;
+    const { id, baseValue } = piece.material;
+    const { measure, measureType, cutDirection } = piece.material;
 
-    if (!acc[materialId]) {
-      acc[materialId] = {
+    const key = `${id}|${measure}|${measureType}|${cutDirection}|${baseValue}`;
+
+    if (!acc[key]) {
+      acc[key] = {
         material: piece.material,
         pieces: [],
         totalQtde: 0,
       };
     }
 
-    acc[materialId].pieces.push(piece);
-    acc[materialId].totalQtde += piece.qtde;
+    acc[key].pieces.push(piece);
+    acc[key].totalQtde += piece.qtde;
 
     return acc;
   }, {});

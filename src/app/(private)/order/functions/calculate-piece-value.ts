@@ -48,7 +48,7 @@ export function calculatePieceMaterial(piece: Piece): PieceCalculationResult {
   const totalUnit = unitFraction * piece.qtde;
 
   const quantityInt = Math.ceil(totalUnit);
-  const quantityFrac = parseFloat(totalUnit.toFixed(2));
+  const quantityFrac = parseFloat(totalUnit.toFixed(4));
   const value = parseFloat((totalUnit * piece.material.baseValue).toFixed(2));
 
   return {

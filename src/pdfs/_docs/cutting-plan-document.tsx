@@ -27,6 +27,7 @@ export interface SheetPlanProps {
   id: string;
   label: string;
   imageBase64: string;
+  sheetMeasure?: [number, number];
 }
 
 export interface MaterialPlanProps {
@@ -37,6 +38,7 @@ export interface MaterialPlanProps {
   cutDirectionLabel: string;
   pieces: PiecePlanProps[];
   sheets: SheetPlanProps[];
+  sheetMeasure?: [number, number];
 }
 
 export interface ProjectPlanProps {
@@ -100,120 +102,167 @@ export const CuttingPlanDocument = ({
           </DataGridCell>
         </DataGridRow>
       </DataGrid>
-      {plan.projects.map((project, projectIndex) => (
+      <SectionTitle>Projetos no plano</SectionTitle>
+      <DataGrid>
+        <DataGridRow isHeader>
+          <DataGridCell width="10%" align="center" isHeader>
+            Nº
+          </DataGridCell>
+          <DataGridCell flex={1} isHeader>
+            Projetos
+          </DataGridCell>
+          <DataGridCell width="15%" align="center" isHeader noBorderRight>
+            Qtde
+          </DataGridCell>
+        </DataGridRow>
+        {plan.projects
+          .filter((p) => p.id !== "grouped")
+          .map((project, index, arr) => (
+            <DataGridRow
+              key={project.id}
+              noBorderBottom={index === arr.length - 1}
+            >
+              <DataGridCell width="10%" align="center">
+                {index + 1}
+              </DataGridCell>
+              <DataGridCell flex={1}>{project.name}</DataGridCell>
+              <DataGridCell width="15%" align="center" noBorderRight>
+                {project.qtde}
+              </DataGridCell>
+            </DataGridRow>
+          ))}
+      </DataGrid>
+      <SectionTitle>Projetos por materiais</SectionTitle>
+      {plan.projects.map((project) => (
         <React.Fragment key={project.id}>
-          {project.materials.map((material, materialIndex) => (
-            <View key={material.id} wrap={true} style={{ marginBottom: 12 }}>
-              {materialIndex === 0 && (
-                <SectionTitle>
-                  {`Projeto ${projectIndex + 1} - ${project.name} (quantidade - ${
-                    project.qtde
-                  })`}
-                </SectionTitle>
-              )}
-              <DataGrid>
-                <DataGridRow isHeader>
-                  <DataGridCell width="10%" align="center" isHeader>
-                    N°
-                  </DataGridCell>
-                  <DataGridCell flex={1} isHeader>
-                    Materiais e peças
-                  </DataGridCell>
-                  <DataGridCell
-                    width="15%"
-                    align="center"
-                    isHeader
-                    noBorderRight
-                  >
-                    Qtde
-                  </DataGridCell>
-                </DataGridRow>
-                <DataGridRow isHeader style={{ backgroundColor: "#f0f0f0" }}>
-                  <DataGridCell width="10%" align="center">
-                    {materialIndex + 1}
-                  </DataGridCell>
-                  <DataGridCell style={{ fontWeight: 700 }} flex={1}>
-                    {`${material.name} - ${material.code}`}
-                  </DataGridCell>
-                  <DataGridCell style={{ fontWeight: 700 }} flex={1}>
-                    {material.cutDirectionLabel}
-                  </DataGridCell>
-                  <DataGridCell width="15%" align="center" noBorderRight>
-                    <></>
-                  </DataGridCell>
-                </DataGridRow>
-                {material.pieces.map((piece, pieceIndex) => (
-                  <DataGridRow key={piece.id}>
+          {project.materials.map((material, materialIndex) => {
+            const measure = material.sheetMeasure;
+            const measureLabel = measure
+              ? `(${measure[0]} x ${measure[1]} cm)`
+              : "";
+
+            return (
+              <View key={material.id} wrap={true} style={{ marginBottom: 12 }}>
+                <DataGrid>
+                  <DataGridRow isHeader style={{ backgroundColor: "#f0f0f0" }}>
                     <DataGridCell width="10%" align="center">
-                      {`${materialIndex + 1}.${pieceIndex + 1}`}
+                      {materialIndex + 1}
                     </DataGridCell>
-                    <DataGridCell flex={1}>
-                      <Text>
-                        {piece.label}
-                        {(piece as any)._measure &&
-                          ` (${(piece as any)._measure[0]} x ${(piece as any)._measure[1]} cm)`}
-                      </Text>
+                    <DataGridCell style={{ fontWeight: 700 }} flex={1}>
+                      {`${material.name} - ${material.code} ${measureLabel}`}
                     </DataGridCell>
-                    <DataGridCell width="15%" align="center" noBorderRight>
-                      {piece.qtde}
+                    <DataGridCell style={{ fontWeight: 700 }}>
+                      {material.cutDirectionLabel}
+                    </DataGridCell>
+                    <DataGridCell
+                      width="15%"
+                      align="center"
+                      isHeader
+                      noBorderRight
+                    >
+                      Qtde
                     </DataGridCell>
                   </DataGridRow>
-                ))}
-                {material.sheets.map((sheet, sheetIndex) => (
-                  <View
-                    key={sheet.id}
-                    wrap={false}
-                    style={{ marginBottom: 12 }}
-                  >
-                    <DataGridRow>
-                      <DataGridCell
-                        width="100%"
-                        noBorderRight
-                        style={{ padding: 0 }}
-                      >
-                        <View style={{ padding: 8 }}>
-                          <View
-                            style={{
-                              justifyContent: "space-between",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              marginBottom: 8,
-                            }}
-                          >
-                            <Text style={{ marginBottom: 4 }}>
-                              {sheet.label}
-                            </Text>
-                            <View style={{ width: 20, height: 20 }}>
-                              <Image
-                                style={{ width: 20, height: 20 }}
-                                src={
-                                  material.cutDirection === "VH"
-                                    ? vhIcon
-                                    : verticalIcon
-                                }
-                              />
-                            </View>
-                          </View>
-                          <Image
-                            src={sheet.imageBase64}
-                            style={{
-                              width: "100%",
-                              height: "auto",
-                              border: "1px solid #999",
-                              backgroundColor: "#f9f9f9",
-                              objectFit: "contain",
-                            }}
-                          />
-                        </View>
+                  {material.pieces.map((piece, pieceIndex, arr) => (
+                    <DataGridRow
+                      key={piece.id}
+                      noBorderBottom={
+                        pieceIndex === arr.length - 1 &&
+                        material.sheets.length === 0
+                      }
+                    >
+                      <DataGridCell width="10%" align="center">
+                        {`${materialIndex + 1}.${pieceIndex + 1}`}
+                      </DataGridCell>
+                      <DataGridCell flex={1}>
+                        <Text>
+                          {piece.label}
+                          {(piece as any)._measure &&
+                            ` (${(piece as any)._measure[0]} x ${(piece as any)._measure[1]} cm)`}
+                        </Text>
+                      </DataGridCell>
+                      <DataGridCell width="15%" align="center" noBorderRight>
+                        {piece.qtde}
                       </DataGridCell>
                     </DataGridRow>
-                  </View>
-                ))}
-              </DataGrid>
-            </View>
-          ))}
+                  ))}
+                  {material.sheets.map((sheet, sheetIndex, arr) => (
+                    <View key={sheet.id} wrap={false}>
+                      <DataGridRow
+                        noBorderBottom={sheetIndex === arr.length - 1}
+                      >
+                        <DataGridCell
+                          width="100%"
+                          noBorderRight
+                          style={{ padding: 0, marginBottom: 4 }}
+                        >
+                          <View style={{ padding: 8 }}>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                marginBottom: 0,
+                                paddingLeft: 5,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  width: 16,
+                                  height: 16,
+                                  marginRight: 10,
+                                }}
+                              >
+                                <Image
+                                  style={{
+                                    width: 16,
+                                    height: 16,
+                                  }}
+                                  src={
+                                    material.cutDirection === "VH"
+                                      ? vhIcon
+                                      : verticalIcon
+                                  }
+                                />
+                              </View>
+                              <View>
+                                <Text style={{ marginBottom: 2, marginTop: 3 }}>
+                                  {sheet.label}
+                                </Text>
+                                <Text
+                                  style={{
+                                    fontSize: 7,
+                                    color: "#444",
+                                    marginBottom: 4,
+                                  }}
+                                >
+                                  Textura/corte:{" "}
+                                  {material.cutDirection === "VH"
+                                    ? "Horizontal e Vertical"
+                                    : "Apenas Horizontal"}
+                                </Text>
+                              </View>
+                            </View>
+                            <Image
+                              src={sheet.imageBase64}
+                              style={{
+                                width: "100%",
+                                height: "auto",
+                                backgroundColor: "#f9f9f9",
+                                objectFit: "contain",
+                              }}
+                            />
+                          </View>
+                        </DataGridCell>
+                      </DataGridRow>
+                    </View>
+                  ))}
+                </DataGrid>
+              </View>
+            );
+          })}
         </React.Fragment>
       ))}
+
       {plan.notes && (
         <TitledTextSection title="Observações e outros:">
           {plan.notes}
