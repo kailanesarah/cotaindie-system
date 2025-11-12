@@ -26,6 +26,10 @@ type FreeRect = Rect;
 interface PlacedRect extends Rect {
   name: string;
   rotated: boolean;
+  origW: number;
+  origH: number;
+  drawnW: number;
+  drawnH: number;
   oversize?: boolean;
 }
 
@@ -81,7 +85,7 @@ export class CuttingPlan {
 
     for (const s of this.sheets) {
       let usedAreaOnThisSheet = s.usedRects.reduce(
-        (sum, u) => sum + (u.oversize ? 0 : u.w * u.h),
+        (sum, u) => sum + (u.oversize ? 0 : u.origW * u.origH),
         0,
       );
 
@@ -105,11 +109,7 @@ export class CuttingPlan {
     };
 
     if (options.includeImages) {
-      const fullResult: ResultsFull = {
-        ...result,
-        base64Images: base64Images,
-      };
-      return fullResult;
+      return { ...result, base64Images };
     }
 
     return result;
@@ -118,7 +118,6 @@ export class CuttingPlan {
   #generateBase64Image(sheet: Sheet, sheetW: number, sheetH: number): string {
     if (typeof document === "undefined") {
       console.warn("Trying to generate canvas on server. Skipping...");
-
       return "";
     }
 
@@ -127,12 +126,7 @@ export class CuttingPlan {
     const ctx = exportCanvas.getContext("2d");
     const padding = 20;
 
-    if (!ctx) {
-      console.error(
-        "Não foi possível obter o contexto 2D para exportar a imagem.",
-      );
-      return "";
-    }
+    if (!ctx) return "";
 
     exportCanvas.width = 1200;
     exportCanvas.height =
@@ -153,13 +147,11 @@ export class CuttingPlan {
     const scaleX = (exportCanvas.width - padding * 2) / sheetW;
     const scaleY = (exportCanvas.height - padding * 2) / sheetH;
 
-    ctx.textBaseline = "top";
-
     for (const u of sheet.usedRects) {
-      const x = u.x * scaleX + padding,
-        y = u.y * scaleY + padding,
-        w = u.w * scaleX,
-        h = u.h * scaleY;
+      const x = u.x * scaleX + padding;
+      const y = u.y * scaleY + padding;
+      const w = u.drawnW * scaleX;
+      const h = u.drawnH * scaleY;
 
       ctx.fillStyle = u.oversize ? "#666666" : "#CCCCCC";
       ctx.fillRect(x + 0.5, y + 0.5, w - 1, h - 1);
@@ -167,27 +159,22 @@ export class CuttingPlan {
       ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
 
       ctx.fillStyle = "#000000";
-      const label = u.name;
-      const originalW = u.rotated ? u.h : u.w;
-      const originalH = u.rotated ? u.w : u.h;
-
-      const widthLabel = `${(Math.round(originalW * 100) / 100).toString()} ${unit}`;
-      const heightLabel = `${(Math.round(originalH * 100) / 100).toString()} ${unit}`;
-
-      ctx.save();
       ctx.font = "bold 16px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      const mainLabelX = x + w / 2;
-      const mainLabelY = y + h / 2;
-      if (h > w && h > 30) {
-        ctx.translate(mainLabelX, mainLabelY);
+
+      if (u.rotated && h > w) {
+        ctx.save();
+        ctx.translate(x + w / 2, y + h / 2);
         ctx.rotate(-Math.PI / 2);
-        ctx.fillText(label, 0, 0, h - 8);
+        ctx.fillText(u.name, 0, 0, h - 8);
+        ctx.restore();
       } else {
-        ctx.fillText(label, mainLabelX, mainLabelY, w - 8);
+        ctx.fillText(u.name, x + w / 2, y + h / 2, w - 8);
       }
-      ctx.restore();
+
+      const widthLabel = `${u.rotated ? u.origH : u.origW} ${unit}`;
+      const heightLabel = `${u.rotated ? u.origW : u.origH} ${unit}`;
 
       ctx.font = "16px sans-serif";
       ctx.textAlign = "center";
@@ -195,14 +182,14 @@ export class CuttingPlan {
       ctx.fillText(widthLabel, x + w / 2, y + 5, w - 8);
 
       ctx.save();
-      ctx.font = "16px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.translate(x + w - 15, y + h / 2);
+      ctx.translate(x + w - 12, y + h / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.fillText(heightLabel, 0, 0, h - 8);
       ctx.restore();
     }
+
     return exportCanvas.toDataURL("image/png");
   }
 
@@ -219,37 +206,56 @@ export class CuttingPlan {
 
     for (const item of sortedItems) {
       let placed = false;
+
       for (const sheet of sheets) {
-        const node = this.#findPositionForNewNode(
+        const pos = this.#findPositionForNewNode(
           sheet,
           item.w,
           item.h,
           allowRotate,
           pieceSpacing,
         );
-        if (node) {
+
+        if (pos) {
           this.#placeRect(
             sheet,
-            { ...node, name: item.name || "Peça" },
+            {
+              ...pos,
+              origW: item.w,
+              origH: item.h,
+              drawnW: pos.rotated ? item.h : item.w,
+              drawnH: pos.rotated ? item.w : item.h,
+              name: item.name || "Peça",
+            },
             pieceSpacing,
           );
+
           placed = true;
           break;
         }
       }
+
       if (!placed) {
         const newSheet = this.#createSheet(sheetW, sheetH, margin);
-        const node = this.#findPositionForNewNode(
+        const pos = this.#findPositionForNewNode(
           newSheet,
           item.w,
           item.h,
           allowRotate,
           pieceSpacing,
         );
-        if (node) {
+
+        if (pos) {
           this.#placeRect(
             newSheet,
-            { ...node, name: item.name || "Peça" },
+            {
+              ...pos,
+              origW: item.w,
+              origH: item.h,
+              drawnW: pos.rotated ? item.h : item.w,
+              drawnH: pos.rotated ? item.w : item.h,
+              name: item.name || "Peça",
+            },
             pieceSpacing,
           );
         } else {
@@ -258,14 +264,20 @@ export class CuttingPlan {
             y: 0,
             w: item.w,
             h: item.h,
+            drawnW: item.w,
+            drawnH: item.h,
+            origW: item.w,
+            origH: item.h,
             name: item.name || "Peça",
             oversize: true,
             rotated: false,
           });
         }
+
         sheets.push(newSheet);
       }
     }
+
     return sheets;
   };
 
@@ -294,16 +306,19 @@ export class CuttingPlan {
   ): void => {
     sheet.usedRects.push(rect);
 
-    const spacedRect = {
-      ...rect,
-      w: rect.w + (rect.oversize ? 0 : pieceSpacing),
-      h: rect.h + (rect.oversize ? 0 : pieceSpacing),
+    const spacedRect: Rect = {
+      x: rect.x,
+      y: rect.y,
+      w: rect.drawnW + (rect.oversize ? 0 : pieceSpacing),
+      h: rect.drawnH + (rect.oversize ? 0 : pieceSpacing),
     };
 
     let newFreeRects: FreeRect[] = [];
+
     for (const freeRect of sheet.freeRects) {
       newFreeRects.push(...this.#splitFreeRect(freeRect, spacedRect));
     }
+
     sheet.freeRects = newFreeRects;
     this.#pruneFreeRects(sheet.freeRects);
   };
@@ -314,8 +329,8 @@ export class CuttingPlan {
     h: number,
     allowRotate: boolean,
     pieceSpacing: number,
-  ): Omit<PlacedRect, "name" | "oversize"> | null => {
-    let bestNode: Omit<PlacedRect, "name" | "oversize"> | null = null;
+  ) => {
+    let bestNode = null;
     let bestShortSideFit = Infinity;
     let bestLongSideFit = Infinity;
 
@@ -333,13 +348,7 @@ export class CuttingPlan {
           shortSideFit < bestShortSideFit ||
           (shortSideFit === bestShortSideFit && longSideFit < bestLongSideFit)
         ) {
-          bestNode = {
-            x: freeRect.x,
-            y: freeRect.y,
-            w: w,
-            h: h,
-            rotated: false,
-          };
+          bestNode = { x: freeRect.x, y: freeRect.y, w, h, rotated: false };
           bestShortSideFit = shortSideFit;
           bestLongSideFit = longSideFit;
         }
@@ -355,25 +364,20 @@ export class CuttingPlan {
           shortSideFit < bestShortSideFit ||
           (shortSideFit === bestShortSideFit && longSideFit < bestLongSideFit)
         ) {
-          bestNode = {
-            x: freeRect.x,
-            y: freeRect.y,
-            w: h,
-            h: w,
-            rotated: true,
-          };
+          bestNode = { x: freeRect.x, y: freeRect.y, w, h, rotated: true };
           bestShortSideFit = shortSideFit;
           bestLongSideFit = longSideFit;
         }
       }
     }
+
     return bestNode;
   };
 
-  readonly #rectFits = (freeRect: FreeRect, w: number, h: number): boolean =>
+  readonly #rectFits = (freeRect: Rect, w: number, h: number) =>
     w <= freeRect.w + 1e-9 && h <= freeRect.h + 1e-9;
 
-  readonly #rectIntersect = (a: Rect, b: Rect): boolean =>
+  readonly #rectIntersect = (a: Rect, b: Rect) =>
     !(
       a.x + a.w <= b.x + 1e-9 ||
       b.x + b.w <= a.x + 1e-9 ||
@@ -381,10 +385,7 @@ export class CuttingPlan {
       b.y + b.h <= a.y + 1e-9
     );
 
-  readonly #splitFreeRect = (
-    freeRect: FreeRect,
-    placedRect: Rect,
-  ): FreeRect[] => {
+  readonly #splitFreeRect = (freeRect: FreeRect, placedRect: Rect) => {
     if (!this.#rectIntersect(freeRect, placedRect)) return [freeRect];
 
     const splits: FreeRect[] = [];
@@ -397,14 +398,12 @@ export class CuttingPlan {
         h: placedRect.y - freeRect.y,
       });
 
-    const bottomY = placedRect.y + placedRect.h;
-    const freeBottomY = freeRect.y + freeRect.h;
-    if (bottomY < freeBottomY - 1e-9)
+    if (placedRect.y + placedRect.h < freeRect.y + freeRect.h - 1e-9)
       splits.push({
         x: freeRect.x,
-        y: bottomY,
+        y: placedRect.y + placedRect.h,
         w: freeRect.w,
-        h: freeBottomY - bottomY,
+        h: freeRect.y + freeRect.h - (placedRect.y + placedRect.h),
       });
 
     if (placedRect.x > freeRect.x + 1e-9)
@@ -415,26 +414,24 @@ export class CuttingPlan {
         h: freeRect.h,
       });
 
-    const rightX = placedRect.x + placedRect.w;
-    const freeRightX = freeRect.x + freeRect.w;
-    if (rightX < freeRightX - 1e-9)
+    if (placedRect.x + placedRect.w < freeRect.x + freeRect.w - 1e-9)
       splits.push({
-        x: rightX,
+        x: placedRect.x + placedRect.w,
         y: freeRect.y,
-        w: freeRightX - rightX,
+        w: freeRect.x + freeRect.w - (placedRect.x + placedRect.w),
         h: freeRect.h,
       });
 
     return splits.filter((r) => r.w > 1e-9 && r.h > 1e-9);
   };
 
-  readonly #pruneFreeRects = (freeRects: FreeRect[]): void => {
+  readonly #pruneFreeRects = (freeRects: FreeRect[]) => {
     for (let i = freeRects.length - 1; i >= 0; i--) {
       const a = freeRects[i];
       for (let j = 0; j < freeRects.length; j++) {
-        if (i === j) continue;
         const b = freeRects[j];
         if (
+          i !== j &&
           a.x >= b.x - 1e-9 &&
           a.y >= b.y - 1e-9 &&
           a.x + a.w <= b.x + b.w + 1e-9 &&

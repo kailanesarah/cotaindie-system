@@ -15,7 +15,7 @@ export const mapOrderToMaterialsDoc = (
     qtde: p.qtde ?? 1,
   }));
 
-  const usedMaterials = order.projects.flatMap((project) => {
+  const rawMaterials = order.projects.flatMap((project) => {
     const projectQtde = project.qtde ?? 1;
 
     return (
@@ -23,21 +23,65 @@ export const mapOrderToMaterialsDoc = (
         const pieceCopy = { ...piece, qtde: piece.qtde * projectQtde };
         const calc = calculatePieceMaterial(pieceCopy);
 
+        const material = piece.material;
+
         return {
-          code: piece.material.code ?? "N/A",
-          name: piece.material.name ?? "Material sem nome",
-          intQtde: calc.quantityInt,
-          qtde: calc.quantityFrac,
-          measure: calc.unit,
-          unitPrice: currency(piece.material.baseValue),
-          total: currency(calc.value),
+          id: material.id,
+          code: material.code ?? "N/A",
+          name: material.name,
+          baseValue: material.baseValue,
+          unit: calc.unit,
+          measure: material.measure,
+          measureType: material.measureType,
+          cutDirection: material.cutDirection,
+          quantityInt: calc.quantityInt,
+          quantityFrac: Number(calc.quantityFrac.toFixed(4)),
+          value: calc.value,
         };
       }) ?? []
     );
   });
 
+  const grouped = new Map<string, (typeof rawMaterials)[0]>();
+
+  for (const mat of rawMaterials) {
+    const key = [
+      mat.id,
+      mat.unit,
+      mat.baseValue,
+      mat.measure,
+      mat.measureType,
+      mat.cutDirection,
+    ].join("|");
+
+    if (!grouped.has(key)) {
+      grouped.set(key, { ...mat });
+    } else {
+      const current = grouped.get(key)!;
+      current.quantityInt += mat.quantityInt;
+      current.quantityFrac = Number(
+        (current.quantityFrac + mat.quantityFrac).toFixed(4),
+      );
+      current.value += mat.value;
+    }
+  }
+
+  const usedMaterials = Array.from(grouped.values()).map((mat) => ({
+    id: mat.id,
+    code: mat.code,
+    name: `${mat.name} (${currency(mat.baseValue)}/${mat.unit})`,
+    intQtde: mat.quantityInt,
+    qtde: Number(mat.quantityFrac.toFixed(4)),
+    measure: mat.unit,
+    unitPrice: currency(mat.baseValue),
+    total: currency(mat.value),
+    measureBase: mat.measure,
+    measureType: mat.measureType,
+    cutDirection: mat.cutDirection,
+  }));
+
   const materialsTotal = currency(
-    usedMaterials.reduce((acc: number, mat: { total: string }) => {
+    usedMaterials.reduce((acc, mat) => {
       const val = parseFloat(
         mat.total.replace(/[^\d,-]/g, "").replace(",", "."),
       );
@@ -55,9 +99,9 @@ export const mapOrderToMaterialsDoc = (
       })) ?? []
     );
   });
-  console.log(otherCosts);
+
   const otherCostsTotal = currency(
-    otherCosts.reduce((acc: number, cost: { total: string }) => {
+    otherCosts.reduce((acc, cost) => {
       const val = parseFloat(
         cost.total.replace(/[^\d,-]/g, "").replace(",", "."),
       );
