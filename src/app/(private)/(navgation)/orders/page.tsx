@@ -84,7 +84,7 @@ export default async function OrdersPage() {
               )}
             </PageContent>
           </ScrollArea>
-          <SearchPagination />
+          {has_orders && <SearchPagination />}
         </SearchProvider>
       </PageMain>
     </DialogProvider>
