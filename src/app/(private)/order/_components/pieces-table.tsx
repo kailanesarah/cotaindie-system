@@ -87,13 +87,9 @@ const PiecesTableRowSingle = ({
             <TableCell>
               <span
                 className="line-clamp-1 whitespace-nowrap lg:line-clamp-none lg:whitespace-normal"
-                title={piece.name}
+                title={`${piece.name} (Q${piece.qtde} - ${formatMeasure(piece.measure, piece.material.unit)} - ${currencyFormatter.format(piece.material.baseValue)})`}
               >
                 {piece.material.name}{" "}
-                <span className="text-muted-foreground">({piece.qtde})</span>{" "}
-                <span className="text-muted-foreground">
-                  ({formatMeasure(piece.measure, piece.material.unit)})
-                </span>
               </span>
             </TableCell>
             <TableCell>{calc.quantityInt}</TableCell>
@@ -142,7 +138,7 @@ const PiecesTableRowGroup = ({
         <TableCell>
           <span
             className="line-clamp-1 whitespace-nowrap lg:line-clamp-none lg:whitespace-normal"
-            title={group.material.name}
+            title={`${group.material.name} (${currencyFormatter.format(group.material.baseValue || 0)} - ${group.material && formatMeasure(group.material.measure || [0, 0], group.material.unit || "N/A")})`}
           >
             {group.material.name}
           </span>
@@ -186,13 +182,9 @@ const PiecesTableRowGroup = ({
               <TableCell>
                 <span
                   className="line-clamp-1 whitespace-nowrap lg:line-clamp-none lg:whitespace-normal"
-                  title={piece.name}
+                  title={`${piece.name} (Q${piece.qtde} - ${formatMeasure(piece.measure, piece.material.unit)})`}
                 >
-                  {piece.name}{" "}
-                  <span className="text-muted-foreground">({piece.qtde})</span>{" "}
-                  <span className="text-muted-foreground">
-                    ({formatMeasure(piece.measure, piece.material.unit)})
-                  </span>
+                  {piece.name}
                 </span>
               </TableCell>
               <TableCell>{calc.quantityInt}</TableCell>

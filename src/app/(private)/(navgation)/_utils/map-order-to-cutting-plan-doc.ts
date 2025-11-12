@@ -35,11 +35,13 @@ export const mapOrderToCuttingPlanDoc = (
         return;
       }
 
-      const matMeasure = material.measure as [number, number];
-      const matKey = `${material.id}-${matMeasure[0]}x${matMeasure[1]}`;
+      const { id, measureType, cutDirection, baseValue } = material;
+      const measure = material.measure;
 
-      if (!materialMap.has(matKey)) {
-        materialMap.set(matKey, {
+      const key = `${id}|${measure}|${measureType}|${cutDirection}|${baseValue}`;
+
+      if (!materialMap.has(key)) {
+        materialMap.set(key, {
           id: material.id,
           name: material.name ?? "Material sem nome",
           code: material.code ?? "N/A",
@@ -50,12 +52,12 @@ export const mapOrderToCuttingPlanDoc = (
               : "Corte: Horizontal",
           pieces: [],
           sheets: [],
-          sheetMeasure: matMeasure,
-          _sheetMeasure: matMeasure,
+          sheetMeasure: measure as [number, number],
+          _sheetMeasure: measure as [number, number],
         });
       }
 
-      const matEntry = materialMap.get(matKey)!;
+      const matEntry = materialMap.get(key)!;
       const totalQtde = Number(piece.qtde ?? 1) * projectQtde;
 
       matEntry.pieces.push({
