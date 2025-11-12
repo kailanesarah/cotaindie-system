@@ -24,6 +24,7 @@ export const Header = ({
       gap: 16,
       alignItems: "center",
       paddingBottom: 8,
+      backgroundColor: "white",
     }}
   >
     <View

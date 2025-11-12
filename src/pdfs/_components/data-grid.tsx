@@ -21,7 +21,6 @@ export const DataGridCell = ({
   noBorderRight = false,
 }: Readonly<DataGridCellProps>) => {
   const cellStyles: any = {
-    ...style,
     width,
     flex,
     padding: 4,
@@ -29,6 +28,7 @@ export const DataGridCell = ({
     fontFamily: isHeader ? "Helvetica-Bold" : "Helvetica",
     borderRightWidth: noBorderRight ? 0 : 1,
     borderColor: "#000",
+    ...style,
   };
 
   if (width) delete cellStyles.flex;
@@ -76,9 +76,9 @@ interface DataGridProps {
 
 export const DataGrid = ({ children, style = {} }: Readonly<DataGridProps>) => {
   const gridStyles = {
-    ...style,
     borderWidth: 1,
     borderColor: "#000",
+    ...style,
   };
   return <View style={gridStyles}>{children}</View>;
 };
