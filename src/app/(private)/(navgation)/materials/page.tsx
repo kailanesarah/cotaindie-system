@@ -66,7 +66,7 @@ export default async function MaterialsPage() {
             {has_materials && <MaterialsSearchContent />}
             {!has_materials && <AddMaterialsCard />}
           </PageContent>
-          <SearchPagination />
+          {has_materials && <SearchPagination />}
         </SearchProvider>
       </PageMain>
     </DialogProvider>
