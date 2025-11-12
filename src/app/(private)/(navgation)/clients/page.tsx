@@ -69,7 +69,7 @@ export default async function ClientsPage() {
               )}
             </PageContent>
           </ScrollArea>
-          <SearchPagination />
+          {has_clients && <SearchPagination />}
         </SearchProvider>
       </PageMain>
     </DialogProvider>

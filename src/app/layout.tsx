@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import "@/styles/material-icons/index.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { ClarityClient } from "./_components/clarity";
 import { HotjarClient } from "./_components/hotjar";
 import { Toast } from "./_components/toast";
 
@@ -58,6 +59,7 @@ export default function RootLayout({
         </aside>
         <div className="flex min-h-dvh flex-col lg:flex-row">{children}</div>
         <HotjarClient />
+        <ClarityClient />
       </body>
     </html>
   );
