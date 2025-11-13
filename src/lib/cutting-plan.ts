@@ -183,14 +183,14 @@ export class CuttingPlan {
       ctx.font = "16px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      ctx.fillText(widthLabel, x + w / 2, y + 5, w - 8);
+      ctx.fillText(widthLabel, x + w / 2, y + 5, Math.max(0, w - 8));
 
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.translate(x + w - 12, y + h / 2);
       ctx.rotate(-Math.PI / 2);
-      ctx.fillText(heightLabel, 0, 0, h - 8);
+      ctx.fillText(heightLabel, 0, 0, Math.max(0, h - 8));
       ctx.restore();
     }
 
@@ -233,7 +233,6 @@ export class CuttingPlan {
             },
             pieceSpacing,
           );
-
           placed = true;
           break;
         }
@@ -335,42 +334,32 @@ export class CuttingPlan {
     pieceSpacing: number,
   ) => {
     let bestNode = null;
-    let bestShortSideFit = Infinity;
-    let bestLongSideFit = Infinity;
+    let bestY = Infinity;
+    let bestX = Infinity;
 
     const spacedW = w + pieceSpacing;
     const spacedH = h + pieceSpacing;
 
     for (const freeRect of sheet.freeRects) {
       if (this.#rectFits(freeRect, spacedW, spacedH)) {
-        const leftoverHoriz = Math.abs(freeRect.w - spacedW);
-        const leftoverVert = Math.abs(freeRect.h - spacedH);
-        const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
-        const longSideFit = Math.max(leftoverHoriz, leftoverVert);
-
         if (
-          shortSideFit < bestShortSideFit ||
-          (shortSideFit === bestShortSideFit && longSideFit < bestLongSideFit)
+          freeRect.y < bestY ||
+          (freeRect.y === bestY && freeRect.x < bestX)
         ) {
           bestNode = { x: freeRect.x, y: freeRect.y, w, h, rotated: false };
-          bestShortSideFit = shortSideFit;
-          bestLongSideFit = longSideFit;
+          bestY = freeRect.y;
+          bestX = freeRect.x;
         }
       }
 
       if (allowRotate && this.#rectFits(freeRect, spacedH, spacedW)) {
-        const leftoverHoriz = Math.abs(freeRect.w - spacedH);
-        const leftoverVert = Math.abs(freeRect.h - spacedW);
-        const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
-        const longSideFit = Math.max(leftoverHoriz, leftoverVert);
-
         if (
-          shortSideFit < bestShortSideFit ||
-          (shortSideFit === bestShortSideFit && longSideFit < bestLongSideFit)
+          freeRect.y < bestY ||
+          (freeRect.y === bestY && freeRect.x < bestX)
         ) {
           bestNode = { x: freeRect.x, y: freeRect.y, w, h, rotated: true };
-          bestShortSideFit = shortSideFit;
-          bestLongSideFit = longSideFit;
+          bestY = freeRect.y;
+          bestX = freeRect.x;
         }
       }
     }
