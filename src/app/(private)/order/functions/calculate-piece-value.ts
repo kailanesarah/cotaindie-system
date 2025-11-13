@@ -8,14 +8,14 @@ interface PieceCalculationResult {
 }
 
 export function calculatePieceMaterial(piece: Piece): PieceCalculationResult {
-  if (piece.material.measureType === "M2") {
+  if (piece.material.measureType === "M2" && piece.material.measure[1]) {
     const config = {
       sheetW: piece.material.measure[0],
-      sheetH: piece.material.measure[1] ?? 0,
+      sheetH: piece.material.measure[1],
       margin: 1,
       pieceSpacing: 0,
       allowRotate: piece.material.cutDirection === "VH",
-      wastePercentage: piece.material.wasteTax ?? 0,
+      wastePercentage: piece.material.wasteTax,
       items: Array.from({ length: piece.qtde }, (_, i) => ({
         name: piece.name ?? `Peça ${i + 1}`,
         w: piece.measure[0] ?? 0,
@@ -27,7 +27,8 @@ export function calculatePieceMaterial(piece: Piece): PieceCalculationResult {
     const results = cuttingPlan.calculate({ includeImages: false });
 
     const quantityFrac = parseFloat(results.totalFractionalSheets.toFixed(4));
-    const quantityInt = Math.ceil(results.totalFractionalSheets);
+    const quantityInt = results.totalIntegerSheets;
+
     const value = parseFloat(
       (quantityFrac * piece.material.baseValue).toFixed(2),
     );

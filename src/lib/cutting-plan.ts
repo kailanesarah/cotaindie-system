@@ -83,7 +83,11 @@ export class CuttingPlan {
     let totalFractionalSheets = 0;
     const sheetTotalArea = sheetW * sheetH;
 
+    let count = 0;
+
     for (const s of this.sheets) {
+      count++;
+
       let usedAreaOnThisSheet = s.usedRects.reduce(
         (sum, u) => sum + (u.oversize ? 0 : u.origW * u.origH),
         0,
@@ -105,7 +109,7 @@ export class CuttingPlan {
     const result: ResultsLite = {
       utilizationPerSheet,
       totalFractionalSheets,
-      totalIntegerSheets: this.sheets.length,
+      totalIntegerSheets: count,
     };
 
     if (options.includeImages) {
