@@ -12,7 +12,10 @@ export const mapOrderToCuttingPlanDoc = (
 
   const materialMap = new Map<
     string,
-    MaterialPlanProps & { _sheetMeasure: [number, number] }
+    MaterialPlanProps & {
+      _sheetMeasure: [number, number];
+      wastePercentage: number;
+    }
   >();
 
   projects.forEach((project) => {
@@ -35,7 +38,7 @@ export const mapOrderToCuttingPlanDoc = (
         return;
       }
 
-      const { id, measureType, cutDirection, baseValue } = material;
+      const { id, measureType, cutDirection, baseValue, wasteTax } = material;
       const measure = material.measure;
 
       const key = `${id}|${measure}|${measureType}|${cutDirection}|${baseValue}`;
@@ -54,6 +57,7 @@ export const mapOrderToCuttingPlanDoc = (
           sheets: [],
           sheetMeasure: measure as [number, number],
           _sheetMeasure: measure as [number, number],
+          wastePercentage: Number(wasteTax),
         });
       }
 
@@ -97,7 +101,7 @@ export const mapOrderToCuttingPlanDoc = (
       margin: 1,
       pieceSpacing: 0,
       allowRotate: mat.cutDirection === "VH",
-      wastePercentage: 5,
+      wastePercentage: mat.wastePercentage * 100,
     });
 
     const result = cuttingPlan.calculate({ includeImages: true });

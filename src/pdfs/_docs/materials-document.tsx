@@ -132,7 +132,7 @@ export const MaterialsDocument = ({
             Material
           </DataGridCell>
           <DataGridCell width="10%" align="center" isHeader>
-            Qtde int
+            N° Mat.
           </DataGridCell>
           <DataGridCell width="10%" align="center" isHeader>
             Qtde
