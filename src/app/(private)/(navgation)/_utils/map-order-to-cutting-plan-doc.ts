@@ -101,7 +101,7 @@ export const mapOrderToCuttingPlanDoc = (
       margin: 1,
       pieceSpacing: 0,
       allowRotate: mat.cutDirection === "VH",
-      wastePercentage: mat.wastePercentage,
+      wastePercentage: mat.wastePercentage * 100,
     });
 
     const result = cuttingPlan.calculate({ includeImages: true });

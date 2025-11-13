@@ -144,7 +144,7 @@ const PiecesTableRowGroup = ({
           </span>
         </TableCell>
         <TableCell>{groupCalc.quantityInt}</TableCell>
-        <TableCell>{groupCalc.quantityFrac.toFixed(4)}</TableCell>
+        <TableCell>{groupCalc.quantityFrac.toFixed(2)}</TableCell>
         <TableCell>{group.material.measureType}</TableCell>
         <TableCell>{currencyFormatter.format(groupCalc.value)}</TableCell>
         <TableCell className="flex h-full items-center justify-center text-right">
@@ -188,7 +188,7 @@ const PiecesTableRowGroup = ({
                 </span>
               </TableCell>
               <TableCell>{calc.quantityInt}</TableCell>
-              <TableCell>{calc.quantityFrac}</TableCell>
+              <TableCell>{calc.quantityFrac.toFixed(2)}</TableCell>
               <TableCell>{calc.unit}</TableCell>
               <TableCell>{currencyFormatter.format(calc.value)}</TableCell>
               <TableCell className="flex items-center justify-center text-right">

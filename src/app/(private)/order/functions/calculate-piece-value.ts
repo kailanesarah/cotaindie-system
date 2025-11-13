@@ -15,7 +15,7 @@ export function calculatePieceMaterial(piece: Piece): PieceCalculationResult {
       margin: 1,
       pieceSpacing: 0,
       allowRotate: piece.material.cutDirection === "VH",
-      wastePercentage: piece.material.wasteTax,
+      wastePercentage: piece.material.wasteTax * 100,
       items: Array.from({ length: piece.qtde }, (_, i) => ({
         name: piece.name ?? `Peça ${i + 1}`,
         w: piece.measure[0] ?? 0,
