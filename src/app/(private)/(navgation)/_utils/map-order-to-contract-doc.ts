@@ -8,8 +8,7 @@ import type {
 } from "@/pdfs/_docs/contract-document";
 import { paymentCategories } from "../../order/_constants/payment-categories";
 import { currencyFormatter } from "../../order/_utils/currency-formatter";
-import { calculatePieceMaterial } from "../../order/functions/calculate-piece-value";
-import { calculateProjectValue } from "../../order/functions/calculate-project-value";
+import { getProjectSummary } from "../../order/functions/projects-summary";
 import { formatDate } from "./format-date";
 import { generateSignatureDateLocation } from "./generate-segnature-date-location";
 
@@ -21,61 +20,28 @@ export const mapOrderToContractDoc = (
   const projects = order.projects ?? [];
 
   const rawAmount =
-    order.projects?.reduce((acc, project) => {
-      const projectPieces = project.pieces ?? [];
-
-      const projectPiecesValue = projectPieces.reduce((sum, piece) => {
-        const { value } = calculatePieceMaterial(piece);
-        return sum + value;
-      }, 0);
-
-      const costValue =
-        project.costs?.reduce((sum, c) => sum + c.value, 0) ?? 0;
-      const { finalValue } = calculateProjectValue(
-        projectPiecesValue,
-        costValue,
-        project.profitRate ?? 0,
-        project.monthlyExpense ?? 0,
-        project.comission ?? 0,
-        project.qtde ?? 1,
-      );
-
-      return acc + finalValue;
+    order.projects?.reduce((acc, project, index) => {
+      const summary = getProjectSummary(project, index);
+      return acc + summary.totalValue;
     }, 0) ?? 0;
 
   const discountPercent = order.discountPercent ?? 0;
   const discountAmount = rawAmount * discountPercent;
   const finalAmount = rawAmount - discountAmount;
+
   const installmentCount = order.installmentCount ?? 1;
   const advanceAmount = order.advanceAmount ?? 0;
   const remainingAmount = finalAmount - advanceAmount;
 
   const contractProjects: ContractProjectProps[] = projects.map(
-    (p: Project) => {
-      const projectPieces = p.pieces ?? [];
-
-      const projectPiecesValue = projectPieces.reduce((acc, piece) => {
-        const { value } = calculatePieceMaterial(piece);
-        return acc + value;
-      }, 0);
-
-      const costValue = p.costs?.reduce((acc, c) => acc + c.value, 0) ?? 0;
-      const { finalValue } = calculateProjectValue(
-        projectPiecesValue,
-        costValue,
-        p.profitRate ?? 0,
-        p.monthlyExpense ?? 0,
-        p.comission ?? 0,
-        p.qtde ?? 1,
-      );
-
-      const unitPrice = finalValue / (p.qtde ?? 1);
+    (project: Project, index) => {
+      const summary = getProjectSummary(project, index);
 
       return {
-        name: p.name || "Projeto sem nome",
-        qtde: p.qtde ?? 1,
-        unitPrice: currency(unitPrice),
-        totalPrice: currency(finalValue),
+        name: summary.name || "Projeto sem nome",
+        qtde: summary.qtde ?? 1,
+        unitPrice: currency(summary.projectValue),
+        totalPrice: currency(summary.totalValue),
       };
     },
   );
@@ -86,6 +52,7 @@ export const mapOrderToContractDoc = (
 
   return {
     company: mockCompany,
+
     client: {
       name: order.client?.name || "",
       document: order.client?.document || "N/A",
@@ -100,6 +67,7 @@ export const mapOrderToContractDoc = (
         cep: order.client?.cep || "",
       },
     },
+
     contract: {
       quoteCode: order.code ?? "",
       saleCode: order.code ?? "",
@@ -115,6 +83,7 @@ export const mapOrderToContractDoc = (
       clauses: contractClauses ?? [],
       signatureDateLocation: generateSignatureDateLocation("Viçosa do Ceará"),
     },
+
     payment: {
       initialDate: order.initialDate ? formatDate(order.initialDate) : "",
       paymentMethod: paymentMethodName ?? "",
