@@ -14,7 +14,12 @@ export function useGetOrderById({ id }: IUseGetOrderById) {
   const query = useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrderByIdAction(id),
+
     enabled: !!id,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   useEffect(() => {

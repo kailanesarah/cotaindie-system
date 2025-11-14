@@ -92,7 +92,7 @@ export const mapOrderToMaterialsDoc = (
   const otherCosts = order.projects.flatMap((project) => {
     return (
       project.costs?.map((cost) => ({
-        name: cost.name,
+        name: `${project.name} - ${cost.name}`,
         qtde: cost.qtde,
         value: currency(cost.value),
         total: currency(cost.value * cost.qtde),
