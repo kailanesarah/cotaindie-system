@@ -4,7 +4,7 @@ import { pieceSchema } from "./piece-form-schema";
 export const costSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório"),
   qtde: z.number().int().min(1, "Quantidade deve ser pelo menos 1"),
-  value: z.number().min(0, "O valor deve a partir de  0"),
+  value: z.number().positive("O valor deve ser maior que 0"),
 });
 
 export type Cost = z.infer<typeof costSchema>;
