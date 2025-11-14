@@ -173,7 +173,7 @@ export const MaterialsDocument = ({
       <SummaryTotalRow label="Total:" value={report.materialsTotal} />
       {report.otherCosts.length > 0 && (
         <>
-          <SectionTitle>Equipe e outros custos</SectionTitle>
+          <SectionTitle>Outros custos</SectionTitle>
           <DataGrid>
             <DataGridRow isHeader>
               <DataGridCell width="15%" align="center" isHeader>

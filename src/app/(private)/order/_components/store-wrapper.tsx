@@ -22,7 +22,7 @@ export function OrderStoreWrapper({
   useEffect(() => {
     if (data) {
       setOrderFull(data);
-      setKey(data.id);
+      setKey(JSON.stringify(data));
 
       setLoading(false);
     }

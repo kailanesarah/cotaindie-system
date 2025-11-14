@@ -89,16 +89,15 @@ export const OrderPaymentForm = () => {
 
   useEffect(() => {
     const percent = form.getValues("discountPercent") ?? 0;
+    const advanceAmount = form.getValues("advanceAmount") ?? 0;
     const discountValue = rawAmount * percent;
-
-    console.log("valor ", discountValue);
 
     form.setValue("discount", discountValue, {
       shouldDirty: false,
       shouldValidate: true,
     });
 
-    form.setValue("advanceAmount", 0, {
+    form.setValue("advanceAmount", advanceAmount, {
       shouldDirty: false,
       shouldValidate: true,
     });
@@ -283,7 +282,9 @@ export const OrderPaymentForm = () => {
           name="advanceAmount"
           render={({ field }) => {
             const handleChange = (values: any) => {
-              field.onChange(values.floatValue ?? 0);
+              const newValue = values.floatValue ?? 0;
+              field.onChange(newValue);
+              setPayment({ advanceAmount: newValue });
             };
 
             return (
@@ -301,11 +302,7 @@ export const OrderPaymentForm = () => {
                     decimalSeparator=","
                     placeholder="Ex: R$ 250,00"
                     customInput={Input}
-                    onBlur={(e) => {
-                      field.onBlur();
-                      console.log(e.target.value);
-                      setPayment({ advanceAmount: field.value });
-                    }}
+                    onBlur={field.onBlur}
                     isAllowed={(values) => {
                       const { floatValue } = values;
                       const maxValue =
@@ -319,6 +316,7 @@ export const OrderPaymentForm = () => {
             );
           }}
         />
+
         <FormField
           control={form.control}
           name="advancePaymentMethod"
