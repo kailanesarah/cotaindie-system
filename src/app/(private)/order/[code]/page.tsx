@@ -45,57 +45,55 @@ export default async function OrderPage({ params }: Readonly<IOrderPage>) {
   const orderCode = code !== "new" ? code : "";
 
   return (
-    <>
+    <OrderStoreWrapper id={id ?? ""}>
       <OrderMenu code={orderCode} />
       <PageMain>
-        <OrderStoreWrapper id={id ?? ""}>
-          <FormGroup>
-            <FormSection>
-              <FormHeading>
-                <FormTitle>Dados do orçamento</FormTitle>
-                <FormDescription>
-                  Gerencie todos os orçamentos e o fechamento dos pedidos.
-                </FormDescription>
-              </FormHeading>
-              <FormSeparator />
-              <FormContent>
-                <OrderReferenceForm />
-              </FormContent>
-            </FormSection>
-            <FormSection>
-              <FormHeading>
-                <FormTitle>Projetos inclusos</FormTitle>
-                <FormDescription>
-                  Projetos que o cliente está orçando e o que está incluso.
-                </FormDescription>
-              </FormHeading>
-              <FormSeparator className="hidden lg:block" />
-              <FormContent>
-                <OrderProjects>
-                  <OrderProjectsSection />
-                </OrderProjects>
-              </FormContent>
-              <FormSeparator />
-              <FormContent>
-                <OrderIncludedForm />
-              </FormContent>
-            </FormSection>
-            <FormSection>
-              <FormHeading>
-                <FormTitle>Pagamento e condições</FormTitle>
-                <FormDescription>
-                  Indique como o cliente vai pagar ao finalizar o pedido.
-                </FormDescription>
-              </FormHeading>
-              <FormSeparator />
-              <FormContent>
-                <OrderPaymentForm />
-              </FormContent>
-            </FormSection>
-            <FormEmptySection />
-          </FormGroup>
-        </OrderStoreWrapper>
+        <FormGroup>
+          <FormSection>
+            <FormHeading>
+              <FormTitle>Dados do orçamento</FormTitle>
+              <FormDescription>
+                Gerencie todos os orçamentos e o fechamento dos pedidos.
+              </FormDescription>
+            </FormHeading>
+            <FormSeparator />
+            <FormContent>
+              <OrderReferenceForm />
+            </FormContent>
+          </FormSection>
+          <FormSection>
+            <FormHeading>
+              <FormTitle>Projetos inclusos</FormTitle>
+              <FormDescription>
+                Projetos que o cliente está orçando e o que está incluso.
+              </FormDescription>
+            </FormHeading>
+            <FormSeparator className="hidden lg:block" />
+            <FormContent>
+              <OrderProjects>
+                <OrderProjectsSection />
+              </OrderProjects>
+            </FormContent>
+            <FormSeparator />
+            <FormContent>
+              <OrderIncludedForm />
+            </FormContent>
+          </FormSection>
+          <FormSection>
+            <FormHeading>
+              <FormTitle>Pagamento e condições</FormTitle>
+              <FormDescription>
+                Indique como o cliente vai pagar ao finalizar o pedido.
+              </FormDescription>
+            </FormHeading>
+            <FormSeparator />
+            <FormContent>
+              <OrderPaymentForm />
+            </FormContent>
+          </FormSection>
+          <FormEmptySection />
+        </FormGroup>
       </PageMain>
-    </>
+    </OrderStoreWrapper>
   );
 }
