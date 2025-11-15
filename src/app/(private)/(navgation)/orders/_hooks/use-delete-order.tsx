@@ -26,6 +26,24 @@ export const useDeleteOrder = () => {
         exact: false,
       });
 
+      await queryClient.invalidateQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
+
       setOpen(false);
 
       toast((t) => (
@@ -37,7 +55,7 @@ export const useDeleteOrder = () => {
         />
       ));
 
-      await revalidate([ROUTES.PRIVATE.ORDERS]);
+      await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
     },
     onError: (err) => {
       toast((t) => (

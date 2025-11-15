@@ -9,10 +9,8 @@ import type { DataTables } from "../_types/data-tables";
 
 export function useGetDataTables() {
   const query = useQuery<DataTables>({
-    queryKey: ["dataTables"],
+    queryKey: ["data-tables"],
     queryFn: getDataTablesAction,
-    refetchInterval: 600_000,
-    refetchIntervalInBackground: true,
   });
 
   useEffect(() => {
@@ -32,7 +30,7 @@ export function useGetDataTables() {
   }, [query.isError, query.error]);
 
   return {
-    data: (query.data as DataTables) || {},
+    data: query.data || ({} as DataTables),
     loading: query.isFetching,
     error: query.error,
     refetch: query.refetch,

@@ -204,7 +204,14 @@ export class OrdersService extends BaseService {
     }
   }
 
-  async getOrders(params?: SearchState): Promise<SearchResult<Order>> {
+  async getOrders(
+    params?: SearchState,
+    options?: {
+      limit?: number;
+      dateRange?: { startDate: string; endDate: string };
+      status?: Order["status"];
+    },
+  ): Promise<SearchResult<Order>> {
     try {
       let query = this.supabase.from("orders").select(
         `
@@ -244,7 +251,9 @@ export class OrdersService extends BaseService {
               .from("orders")
               .select("id")
               .eq("client_id", extra.value);
+
             if (relError) throw relError;
+
             const ids = (orderIds ?? []).map((r) => r.id);
             if (ids.length) query = query.in("id", ids);
           } else {
@@ -253,23 +262,42 @@ export class OrdersService extends BaseService {
         }
       }
 
+      if (options?.status) {
+        query = query.eq("status", options.status);
+      }
+
+      if (options?.dateRange) {
+        const { startDate, endDate } = options.dateRange;
+        query = query.gte("created_at", startDate).lte("created_at", endDate);
+      }
+
       if (params?.sort) {
         query = query.order("created_at", { ascending: params.sort === "ASC" });
       }
 
-      const page = params?.pagination?.page ?? 1;
-      const perPage = params?.pagination?.perPage ?? 10;
-      const from = (page - 1) * perPage;
-      const to = from + perPage - 1;
-      query = query.range(from, to);
+      if (options?.limit != null) {
+        query = query.limit(options.limit);
+      } else {
+        const page = params?.pagination?.page ?? 1;
+        const perPage = params?.pagination?.perPage ?? 10;
+        const from = (page - 1) * perPage;
+        const to = from + perPage - 1;
+        query = query.range(from, to);
+      }
 
       const { data, error, count } = await query;
       if (error) throw error;
 
       const items = (data ?? []).map(mapOrderFromSupabase);
+
+      const perPage = params?.pagination?.perPage ?? 10;
       const totalPages = Math.ceil((count ?? 0) / perPage);
 
-      return { items, page, totalPages };
+      return {
+        items,
+        page: params?.pagination?.page ?? 1,
+        totalPages,
+      };
     } catch (err) {
       this.handleError(err, "OrdersService.getOrders");
     }
@@ -353,15 +381,25 @@ export class OrdersService extends BaseService {
       if (!original) throw new Error("Order not found");
 
       const {
-        id: _oldId,
+        id: _oldOrderId,
         client,
         projects,
-        created_at,
-        updated_at,
+        created_at: _oc,
+        updated_at: _ou,
         ...orderData
       } = original;
 
-      const { data: newOrder, error: insertOrderError } = await this.supabase
+      Object.keys(orderData).forEach((k) => {
+        if (
+          orderData[k] === undefined ||
+          k === "created_at" ||
+          k === "updated_at"
+        ) {
+          delete orderData[k];
+        }
+      });
+
+      const { data: newOrder, error: orderInsertError } = await this.supabase
         .from("orders")
         .insert({
           ...orderData,
@@ -372,64 +410,96 @@ export class OrdersService extends BaseService {
         .select()
         .single();
 
-      if (insertOrderError) throw new Error(insertOrderError.message);
+      if (orderInsertError) throw new Error(orderInsertError.message);
 
-      for (const project of original.projects ?? []) {
+      for (const project of projects ?? []) {
         const {
-          id: _projectOldId,
+          id: _oldProjId,
           pieces,
-          created_at,
-          updated_at,
+          created_at: _pc,
+          updated_at: _pu,
           ...projectData
         } = project;
 
-        const { data: newProject, error: projectError } = await this.supabase
-          .from("orders_projects")
-          .insert({
-            ...projectData,
-            order_id: newOrder.id,
-          })
-          .select()
-          .single();
+        Object.keys(projectData).forEach((k) => {
+          if (
+            projectData[k] === undefined ||
+            k === "created_at" ||
+            k === "updated_at"
+          ) {
+            delete projectData[k];
+          }
+        });
 
-        if (projectError) throw new Error(projectError.message);
-
-        for (const piece of project.pieces ?? []) {
-          const {
-            id: _pieceOldId,
-            material_snapshot,
-            created_at,
-            updated_at,
-            ...pieceData
-          } = piece;
-
-          const { data: newPiece, error: pieceError } = await this.supabase
-            .from("orders_pieces")
+        const { data: newProject, error: projectInsertError } =
+          await this.supabase
+            .from("orders_projects")
             .insert({
-              ...pieceData,
-              project_id: newProject.id,
+              ...projectData,
+              order_id: newOrder.id,
             })
             .select()
             .single();
 
-          if (pieceError) throw new Error(pieceError.message);
+        if (projectInsertError) throw new Error(projectInsertError.message);
+
+        for (const piece of pieces ?? []) {
+          const {
+            id: _oldPieceId,
+            material_snapshot,
+            created_at: _pic,
+            updated_at: _piu,
+            ...pieceData
+          } = piece;
+
+          Object.keys(pieceData).forEach((k) => {
+            if (
+              pieceData[k] === undefined ||
+              k === "created_at" ||
+              k === "updated_at"
+            ) {
+              delete pieceData[k];
+            }
+          });
+
+          const { data: newPiece, error: pieceInsertError } =
+            await this.supabase
+              .from("orders_pieces")
+              .insert({
+                ...pieceData,
+                project_id: newProject.id,
+              })
+              .select()
+              .single();
+
+          if (pieceInsertError) throw new Error(pieceInsertError.message);
 
           if (material_snapshot) {
             const {
-              id: _snapId,
-              created_at: _snapCreated,
-              updated_at: _snapUpdated,
+              id: _oldSnapId,
+              created_at: _sc,
+              updated_at: _su,
               ...snapData
             } = material_snapshot;
 
-            const { error: snapshotError } = await this.supabase
+            Object.keys(snapData).forEach((k) => {
+              if (
+                snapData[k] === undefined ||
+                k === "created_at" ||
+                k === "updated_at"
+              ) {
+                delete snapData[k];
+              }
+            });
+
+            const { error: snapInsertError } = await this.supabase
               .from("orders_pieces_materials_snapshot")
               .insert({
                 ...snapData,
                 piece_id: newPiece.id,
               });
 
-            if (snapshotError) throw new Error(snapshotError.message);
+            if (snapInsertError) throw new Error(snapInsertError.message);
           }
         }
       }

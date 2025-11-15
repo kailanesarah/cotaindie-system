@@ -28,6 +28,24 @@ export const useCopyOrder = () => {
         exact: false,
       });
 
+      await queryClient.invalidateQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
+
       setOpen(false);
 
       toast((t) => (
@@ -39,7 +57,16 @@ export const useCopyOrder = () => {
         />
       ));
 
-      await revalidate([ROUTES.PRIVATE.ORDERS]);
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="info"
+          title="Abrindo orçamento copiado..."
+          text="Seu orçamento foi copiado e aparecerá em uma nova aba."
+        />
+      ));
+
+      await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
 
       window.open(`${ROUTES.PRIVATE.ORDER_ID}/${newId}`, "_blank");
     },

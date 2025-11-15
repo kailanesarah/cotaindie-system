@@ -15,7 +15,7 @@ import { OrderTableActions } from "../../orders/_components/order-table-actions"
 export const TableOrder = ({ orders }: { orders: Order[] }) => {
   return (
     <Table>
-      <TableHeader className="border-t-0 border-none">
+      <TableHeader>
         <TableRow>
           <TableHead>Nome do orçamento</TableHead>
           <TableHead>Cliente</TableHead>
