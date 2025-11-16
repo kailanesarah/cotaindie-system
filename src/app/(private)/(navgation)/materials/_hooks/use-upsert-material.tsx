@@ -18,14 +18,10 @@ export const useUpsertMaterial = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["materials"],
-        exact: false,
       });
       await queryClient.refetchQueries({
         queryKey: ["materials"],
-        exact: false,
       });
-
-      setOpen(false);
 
       toast((t) => (
         <ToastCard
@@ -36,6 +32,7 @@ export const useUpsertMaterial = () => {
         />
       ));
 
+      setOpen(false);
       await revalidate([ROUTES.PRIVATE.ORDER]);
     },
     onError: (err) => {

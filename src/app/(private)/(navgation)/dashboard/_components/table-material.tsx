@@ -19,7 +19,7 @@ export type TMaterialData = {
 export const TableMaterial = ({ data }: { data: TMaterialData[] }) => {
   return (
     <Table>
-      <TableHeader className="bvalue-t-0 bvalue-none">
+      <TableHeader>
         <TableRow>
           <TableHead>Código</TableHead>
           <TableHead>Nome do material</TableHead>
@@ -28,18 +28,13 @@ export const TableMaterial = ({ data }: { data: TMaterialData[] }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.slice(0, 7).map((value: TMaterialData, index) => {
-          const baseMeasure = value.material.measure.reduce(
-            (acc, measure) => acc * measure,
-            1,
-          );
-
+        {data.map((value: TMaterialData, index) => {
           return (
             <TableRow key={index}>
-              <TableCell className="max-w-[7.5rem]">
+              <TableCell className="max-w-[9rem]">
                 <Badge className="max-w-full" title={`${value.material.code}`}>
                   <span className="line-clamp-1 truncate">
-                    {value.material.code}
+                    M - {value.material.code}
                   </span>
                 </Badge>
               </TableCell>
@@ -53,13 +48,11 @@ export const TableMaterial = ({ data }: { data: TMaterialData[] }) => {
               </TableCell>
               <TableCell className="text-title-light w-full max-w-[7rem] whitespace-nowrap">
                 <span className="line-clamp-1 truncate">
-                  {baseMeasure}
-                  {value.material.measureType}
+                  {value.measureBase.toFixed(2)} {value.material.measureType}
                 </span>
               </TableCell>
               <TableCell className="text-title-light max-w-[8rem] whitespace-nowrap">
-                {value.spent}
-                {value.material.measureType}
+                {value.spent.toFixed(2)} {value.material.measureType}
               </TableCell>
             </TableRow>
           );

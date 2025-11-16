@@ -26,7 +26,23 @@ export const useDeleteOrder = () => {
         exact: false,
       });
 
-      setOpen(false);
+      await queryClient.invalidateQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
 
       toast((t) => (
         <ToastCard
@@ -37,7 +53,8 @@ export const useDeleteOrder = () => {
         />
       ));
 
-      await revalidate([ROUTES.PRIVATE.ORDERS]);
+      setOpen(false);
+      await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
     },
     onError: (err) => {
       toast((t) => (

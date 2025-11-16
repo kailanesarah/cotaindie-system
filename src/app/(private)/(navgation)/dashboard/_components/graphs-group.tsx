@@ -18,7 +18,7 @@ import { ChartAreaInteractive } from "./graph-card";
 
 export const GraphsGroup = () => {
   const { data, loading } = useGetMetrics();
-  const { orders, amount, profit, data: chart } = data ?? {};
+  const { orders, amount, profit, data: chart } = data;
 
   if (loading) {
     return (
@@ -70,7 +70,7 @@ export const GraphsGroup = () => {
           <MetricWrap>
             <MetricLabel>Receita de vendas</MetricLabel>
             <MetricTitle>{currencyFormatter.format(amount)}</MetricTitle>
-            <MetricFooter>Pedidos fechados - últimos 30 dias</MetricFooter>
+            <MetricFooter>Pedidos fechados no mês atual</MetricFooter>
           </MetricWrap>
           <MetricIcon name="bar_chart_4_bars" />
         </MetricCard>
@@ -78,7 +78,7 @@ export const GraphsGroup = () => {
           <MetricWrap>
             <MetricLabel>Lucro bruto estimado</MetricLabel>
             <MetricTitle>{currencyFormatter.format(profit)}</MetricTitle>
-            <MetricFooter>Lucro estimado - últimos 30 dias</MetricFooter>
+            <MetricFooter>Lucro estimado no mês atual</MetricFooter>
           </MetricWrap>
           <MetricIcon name="trending_up" />
         </MetricCard>

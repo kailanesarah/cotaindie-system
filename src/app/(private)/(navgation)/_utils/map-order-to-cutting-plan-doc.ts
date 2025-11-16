@@ -116,6 +116,42 @@ export const mapOrderToCuttingPlanDoc = (
     materials.push(mat);
   });
 
+  const projectsWithM2 = projects
+    .map((project) => {
+      const hasM2 = project.pieces.some((piece) => {
+        const material = piece.material;
+        return (
+          material?.measureType === "M2" &&
+          Array.isArray(piece.measure) &&
+          piece.measure.length === 2 &&
+          piece.measure[0] > 0 &&
+          piece.measure[1] > 0
+        );
+      });
+
+      if (!hasM2) return null;
+
+      return {
+        id: project.id ?? crypto.randomUUID(),
+        name: project.name ?? "Projeto sem nome",
+        qtde: Number(project.qtde ?? 1),
+        materials: [],
+      };
+    })
+    .filter(Boolean) as any[];
+
+  const groupedProject =
+    materials.length > 0
+      ? [
+          {
+            id: "grouped",
+            name: "Todos os projetos",
+            qtde: 1,
+            materials,
+          },
+        ]
+      : [];
+
   return {
     client: {
       name: order.client?.name ?? "",
@@ -126,20 +162,7 @@ export const mapOrderToCuttingPlanDoc = (
       planCode: order.code ?? "",
       title: `Plano de corte - ${order.name}`,
       generationDate: formatDate(order.initialDate),
-      projects: [
-        ...projects.map((p) => ({
-          id: p.id ?? crypto.randomUUID(),
-          name: p.name ?? "Projeto sem nome",
-          qtde: Number(p.qtde ?? 1),
-          materials: [],
-        })),
-        {
-          id: "grouped",
-          name: "Todos os projetos",
-          qtde: 1,
-          materials,
-        },
-      ],
+      projects: [...projectsWithM2, ...groupedProject],
       notes: order.notes ?? "",
     },
   };

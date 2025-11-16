@@ -42,7 +42,7 @@ export function calculatePieceMaterial(piece: Piece): PieceCalculationResult {
   }
 
   const unitFraction = piece.measure.reduce(
-    (acc, val, i) => acc * (val / (piece.material.measure[i] || 1)),
+    (acc, val, i) => acc * (val / piece.material.measure[i]),
     1,
   );
 

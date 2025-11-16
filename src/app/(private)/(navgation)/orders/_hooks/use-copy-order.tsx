@@ -15,6 +15,16 @@ export const useCopyOrder = () => {
   const { revalidate } = useRevalidatePaths();
 
   const { execute, isPending } = useAction(copyOrderAction, {
+    onExecute: () => {
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="info"
+          title="Copiando orçamento..."
+          text="Uma nova aba será aberta com o orçamento copiado."
+        />
+      ));
+    },
     onSuccess: async (result) => {
       const newId = result.data?.id;
       if (!newId) return;
@@ -28,7 +38,23 @@ export const useCopyOrder = () => {
         exact: false,
       });
 
-      setOpen(false);
+      await queryClient.invalidateQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["data-tables"],
+        exact: false,
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["metrics"],
+        exact: false,
+      });
 
       toast((t) => (
         <ToastCard
@@ -39,8 +65,17 @@ export const useCopyOrder = () => {
         />
       ));
 
-      await revalidate([ROUTES.PRIVATE.ORDERS]);
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="info"
+          title="Abrindo orçamento copiado..."
+          text="Seu orçamento foi copiado e aparecerá em uma nova aba."
+        />
+      ));
 
+      setOpen(false);
+      await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
       window.open(`${ROUTES.PRIVATE.ORDER_ID}/${newId}`, "_blank");
     },
     onError: (err) => {
