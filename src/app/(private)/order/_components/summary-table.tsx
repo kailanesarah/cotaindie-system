@@ -14,7 +14,7 @@ import { currencyFormatter } from "../_utils/currency-formatter";
 import {
   getProjectSummary,
   type ProjectSummary,
-} from "../functions/projects-summary";
+} from "../functions/project-summary";
 import { OrderEmptyTable } from "./order-empty-table";
 import { SummaryActions } from "./summary-actions";
 

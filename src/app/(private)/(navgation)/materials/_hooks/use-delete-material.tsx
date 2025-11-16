@@ -18,14 +18,10 @@ export const useDeleteMaterial = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["materials"],
-        exact: false,
       });
       await queryClient.refetchQueries({
         queryKey: ["materials"],
-        exact: false,
       });
-
-      setOpen(false);
 
       toast((t) => (
         <ToastCard
@@ -36,6 +32,7 @@ export const useDeleteMaterial = () => {
         />
       ));
 
+      setOpen(false);
       await revalidate([ROUTES.PRIVATE.ORDER]);
     },
     onError: (err: any) => {

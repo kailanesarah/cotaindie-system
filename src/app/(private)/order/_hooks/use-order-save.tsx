@@ -21,14 +21,14 @@ export const useUpsertOrder = () => {
     onSuccess: async (res) => {
       await queryClient.invalidateQueries({
         queryKey: ["orders"],
-        exact: false,
       });
-      await queryClient.refetchQueries({
-        queryKey: ["orders"],
-        exact: false,
+      await queryClient.invalidateQueries({
+        queryKey: ["data-tables"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["metrics"],
       });
 
-      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.code}`);
       setOrderFull(res.data);
 
       toast((t) => (
@@ -40,10 +40,12 @@ export const useUpsertOrder = () => {
         />
       ));
 
-      await revalidate([ROUTES.PRIVATE.ORDERS]);
+      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.code}`);
+      await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
     },
     onError: (err) => {
       console.log(err);
+
       toast((t) => (
         <ToastCard
           id={t.id}

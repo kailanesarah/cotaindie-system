@@ -4,17 +4,25 @@ export const calculateProjectValue = (
   profitRate: number,
   monthlyExpenseRate: number,
   commissionRate: number,
-  quantity: number,
 ) => {
-  const baseCost = (piecesCost + otherCosts) * quantity;
-
+  const baseCost = piecesCost + otherCosts;
   const costWithExpenses = baseCost * (1 + monthlyExpenseRate);
 
-  const priceWithProfit = costWithExpenses * (1 + profitRate);
+  const profitBeforeCommission = costWithExpenses * profitRate;
 
-  const finalValue = priceWithProfit * (1 + commissionRate);
+  const priceWithProfit = costWithExpenses + profitBeforeCommission;
+  const commission = priceWithProfit * commissionRate;
+
+  const finalValue = priceWithProfit + commission;
+  const profit = profitBeforeCommission + commission;
 
   return {
+    baseCost,
+    costWithExpenses,
+    profitBeforeCommission,
+    commission,
+    profit,
+    priceWithProfit,
     finalValue,
   };
 };

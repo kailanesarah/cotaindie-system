@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 import { revalidatePaths } from "../_actions/use-revalidate-paths";
 
@@ -8,7 +6,7 @@ export function useRevalidatePaths() {
 
   async function revalidate(paths: string[]) {
     router.refresh();
-    await revalidatePaths(paths);
+    revalidatePaths(paths);
   }
 
   return { revalidate };

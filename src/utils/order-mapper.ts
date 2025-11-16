@@ -21,6 +21,7 @@ export function mapOrderFromSupabase(rawOrder: any): Order {
     },
     expirationDays: rawOrder.expiration_days,
     initialDate: rawOrder.initial_date,
+    approvedAt: rawOrder.approved_at ?? null,
     projects: (rawOrder.projects ?? []).map((project: any) => ({
       id: project.id,
       name: project.name,
@@ -65,5 +66,6 @@ export function mapOrderFromSupabase(rawOrder: any): Order {
     advancePaymentMethod:
       (rawOrder.advance_payment_method as Payment) ?? undefined,
     notes: rawOrder.notes ?? "",
+    createdAt: rawOrder.created_at,
   };
 }

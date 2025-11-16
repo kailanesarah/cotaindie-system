@@ -5,7 +5,7 @@ import type {
 } from "@/pdfs/_docs/quote-document";
 import { paymentCategories } from "../../order/_constants/payment-categories";
 import { currencyFormatter } from "../../order/_utils/currency-formatter";
-import { getProjectSummary } from "../../order/functions/projects-summary";
+import { getProjectSummary } from "../../order/functions/project-summary";
 import { formatDate } from "./format-date";
 
 export const mapOrderToQuoteDoc = (

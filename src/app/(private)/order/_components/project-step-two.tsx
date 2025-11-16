@@ -54,7 +54,6 @@ export const ProjectStepTwo = () => {
     monthlyExpense,
     profitRate,
     comission,
-    qtde,
   );
 
   return (
@@ -320,7 +319,7 @@ export const ProjectStepTwo = () => {
       <DialogBody className="flex flex-col gap-2 text-right">
         <span>Resumo do projeto</span>
         <h6 className="!text-[1.0625rem]">
-          Valor total: {currencyFormatter.format(totalValue || 0)}
+          Valor total: {currencyFormatter.format(totalValue * qtde || 0)}
         </h6>
       </DialogBody>
     </>

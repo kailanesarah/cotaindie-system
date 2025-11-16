@@ -35,9 +35,14 @@ export default async function DashboardPage() {
           </PageHeaderContent>
         </PageHeader>
         <PageContent className="flex flex-col gap-2 pb-0 lg:gap-4 lg:p-6">
-          {!has_materials && <AddMaterialsCard />}
+          {!has_materials && <AddMaterialsCard className="mx-1 my-1 lg:m-0" />}
           {!has_clients && (
-            <AddClientCard className={cn(!has_materials && "last:mt-2")} />
+            <AddClientCard
+              className={cn(
+                "mx-1 my-1 lg:m-0",
+                !has_materials && "last:mt-1 last:lg:mt-2",
+              )}
+            />
           )}
           {!has_orders && has_clients && has_materials && <AddOrderCard />}
           {has_clients && has_materials && has_orders && (
