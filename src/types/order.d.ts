@@ -10,6 +10,7 @@ type Payment =
 interface Order {
   id: string;
   status: Status;
+  approvedAt?: string;
   code: string;
 
   //base infor
@@ -37,4 +38,6 @@ interface Order {
   advancePaymentMethod?: Payment;
 
   notes?: string;
+
+  createdAt: string;
 }

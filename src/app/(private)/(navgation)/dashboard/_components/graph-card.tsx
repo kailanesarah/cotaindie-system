@@ -140,7 +140,10 @@ export const ChartAreaInteractive = ({
                 <ChartTooltipContent
                   className="min-w-[10rem] p-1.5 lg:p-2.5"
                   labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("pt-BR", {
+                    new Date(
+                      new Date(value + "T00:00:00Z").getTime() +
+                        24 * 60 * 60 * 1000,
+                    ).toLocaleDateString("pt-BR", {
                       day: "2-digit",
                       month: "short",
                     })

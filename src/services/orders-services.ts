@@ -10,28 +10,61 @@ export class OrdersService extends BaseService {
   constructor(supabase: SupabaseClient) {
     super(supabase);
   }
+
   async upsertOrder(order: OrderType): Promise<Order> {
     try {
       const {
         data: { user },
         error: authError,
       } = await this.supabase.auth.getUser();
-      if (authError) throw new Error(`Auth error: ${authError.message}`);
-      if (!user) throw new Error("Auth error: User not authenticated");
+
+      if (authError) {
+        throw new Error(`Auth error: ${authError.message}`);
+      }
+
+      if (!user) {
+        throw new Error("Auth error: User not authenticated");
+      }
 
       let orderCode: string;
+
       if (!order.id) {
         orderCode = await generateId();
       } else {
-        const { data: existingOrder, error: fetchCodeError } =
+        const { data: existingOrderCode, error: fetchCodeError } =
           await this.supabase
             .from("orders")
             .select("code")
             .eq("id", order.id)
             .single();
-        if (fetchCodeError)
+
+        if (fetchCodeError) {
           throw new Error(`Fetch order code error: ${fetchCodeError.message}`);
-        orderCode = existingOrder.code;
+        }
+        orderCode = existingOrderCode.code;
+      }
+
+      let approvedAt: string | null = null;
+
+      if (order.status === "OPEN") {
+        approvedAt = null;
+      } else if (order.status === "APPROVED") {
+        if (order.id) {
+          const { data: existingOrder, error: fetchApprovedError } =
+            await this.supabase
+              .from("orders")
+              .select("approved_at")
+              .eq("id", order.id)
+              .single();
+
+          if (fetchApprovedError) {
+            throw new Error(fetchApprovedError.message);
+          }
+
+          approvedAt = existingOrder.approved_at ?? new Date().toISOString();
+        } else {
+          approvedAt = new Date().toISOString();
+        }
       }
 
       const {
@@ -67,11 +100,12 @@ export class OrdersService extends BaseService {
         advance_payment_method: advancePaymentMethod ?? null,
         installment_count: installmentCount ?? 1,
         team_notes: teamNotes,
+        approved_at: approvedAt,
       };
 
       const { data: orderData, error: orderError } = await this.supabase
         .from("orders")
-        .upsert({ ...orderToUpsert, code: orderCode })
+        .upsert(orderToUpsert)
         .select()
         .single();
       if (orderError)
@@ -181,17 +215,17 @@ export class OrdersService extends BaseService {
         .from("orders")
         .select(
           `
+      *,
+      client:clients(*),
+      projects:orders_projects(
         *,
-        client:clients(*),
-        projects:orders_projects(
+        pieces:orders_pieces(
           *,
-          pieces:orders_pieces(
-            *,
-            material:materials(id, name, code, description),
-            material_snapshot:orders_pieces_materials_snapshot(*)
-          )
+          material:materials(id, name, code, description),
+          material_snapshot:orders_pieces_materials_snapshot(*)
         )
-      `,
+      )
+    `,
         )
         .eq("id", orderData.id)
         .single();
@@ -210,12 +244,14 @@ export class OrdersService extends BaseService {
       limit?: number;
       dateRange?: { startDate: string; endDate: string };
       status?: Order["status"];
+      approvedPeriod?: boolean;
     },
   ): Promise<SearchResult<Order>> {
     try {
       let query = this.supabase.from("orders").select(
         `
       *,
+      approved_at,
       client:clients(*),
       projects:orders_projects(
         *,
@@ -268,7 +304,8 @@ export class OrdersService extends BaseService {
 
       if (options?.dateRange) {
         const { startDate, endDate } = options.dateRange;
-        query = query.gte("created_at", startDate).lte("created_at", endDate);
+        const dateField = options.approvedPeriod ? "approved_at" : "created_at";
+        query = query.gte(dateField, startDate).lte(dateField, endDate);
       }
 
       if (params?.sort) {
@@ -310,6 +347,7 @@ export class OrdersService extends BaseService {
         .select(
           `
         *,
+        approved_at,
         client:clients(*),
         projects:orders_projects(
           *,
@@ -380,23 +418,13 @@ export class OrdersService extends BaseService {
       if (fetchError) throw new Error(fetchError.message);
       if (!original) throw new Error("Order not found");
 
-      const {
-        id: _oldOrderId,
-        client,
-        projects,
-        created_at: _oc,
-        updated_at: _ou,
-        ...orderData
-      } = original;
+      const { id: _oldOrderId, client, projects, ...orderData } = original;
+
+      delete orderData.created_at;
+      delete orderData.updated_at;
 
       Object.keys(orderData).forEach((k) => {
-        if (
-          orderData[k] === undefined ||
-          k === "created_at" ||
-          k === "updated_at"
-        ) {
-          delete orderData[k];
-        }
+        if (orderData[k] === undefined) delete orderData[k];
       });
 
       const { data: newOrder, error: orderInsertError } = await this.supabase
@@ -406,6 +434,8 @@ export class OrdersService extends BaseService {
           name: `(Cópia) ${orderData.name ?? ""}`.trim(),
           code: await generateId(),
           user_id: user.id,
+          status: "OPEN",
+          approved_at: null,
         })
         .select()
         .single();
@@ -413,22 +443,13 @@ export class OrdersService extends BaseService {
       if (orderInsertError) throw new Error(orderInsertError.message);
 
       for (const project of projects ?? []) {
-        const {
-          id: _oldProjId,
-          pieces,
-          created_at: _pc,
-          updated_at: _pu,
-          ...projectData
-        } = project;
+        const { id: _oldProjId, pieces, ...projectData } = project;
+
+        delete projectData.created_at;
+        delete projectData.updated_at;
 
         Object.keys(projectData).forEach((k) => {
-          if (
-            projectData[k] === undefined ||
-            k === "created_at" ||
-            k === "updated_at"
-          ) {
-            delete projectData[k];
-          }
+          if (projectData[k] === undefined) delete projectData[k];
         });
 
         const { data: newProject, error: projectInsertError } =
@@ -444,22 +465,13 @@ export class OrdersService extends BaseService {
         if (projectInsertError) throw new Error(projectInsertError.message);
 
         for (const piece of pieces ?? []) {
-          const {
-            id: _oldPieceId,
-            material_snapshot,
-            created_at: _pic,
-            updated_at: _piu,
-            ...pieceData
-          } = piece;
+          const { id: _oldPieceId, material_snapshot, ...pieceData } = piece;
+
+          delete pieceData.created_at;
+          delete pieceData.updated_at;
 
           Object.keys(pieceData).forEach((k) => {
-            if (
-              pieceData[k] === undefined ||
-              k === "created_at" ||
-              k === "updated_at"
-            ) {
-              delete pieceData[k];
-            }
+            if (pieceData[k] === undefined) delete pieceData[k];
           });
 
           const { data: newPiece, error: pieceInsertError } =
@@ -475,21 +487,13 @@ export class OrdersService extends BaseService {
           if (pieceInsertError) throw new Error(pieceInsertError.message);
 
           if (material_snapshot) {
-            const {
-              id: _oldSnapId,
-              created_at: _sc,
-              updated_at: _su,
-              ...snapData
-            } = material_snapshot;
+            const { id: _oldSnapId, ...snapData } = material_snapshot;
+
+            delete snapData.created_at;
+            delete snapData.updated_at;
 
             Object.keys(snapData).forEach((k) => {
-              if (
-                snapData[k] === undefined ||
-                k === "created_at" ||
-                k === "updated_at"
-              ) {
-                delete snapData[k];
-              }
+              if (snapData[k] === undefined) delete snapData[k];
             });
 
             const { error: snapInsertError } = await this.supabase

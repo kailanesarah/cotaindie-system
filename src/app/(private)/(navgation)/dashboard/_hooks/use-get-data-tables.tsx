@@ -30,7 +30,7 @@ export function useGetDataTables() {
   }, [query.isError, query.error]);
 
   return {
-    data: query.data || ({} as DataTables),
+    data: query.data || {},
     loading: query.isFetching,
     error: query.error,
     refetch: query.refetch,

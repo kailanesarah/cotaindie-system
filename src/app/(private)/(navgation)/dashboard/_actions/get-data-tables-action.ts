@@ -4,6 +4,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { OrdersService } from "@/services/orders-services";
 import type { TMaterialData } from "../_components/table-material";
 import type { DataTables } from "../_types/data-tables";
+import { getCurrentMonthRange } from "../_utils/get-current-month-range";
 
 function calculateMeasureBase(mat: any) {
   if (mat.measureType === "M2") {
@@ -48,6 +49,8 @@ export async function getDataTablesAction(): Promise<DataTables> {
     const supabase = await supabaseServer();
     const ordersService = new OrdersService(supabase);
 
+    const { startDate, endDate } = getCurrentMonthRange();
+
     const { items: approvedOrders } = await ordersService.getOrders(
       {
         text: [],
@@ -55,7 +58,11 @@ export async function getDataTablesAction(): Promise<DataTables> {
         pagination: { page: 1, perPage: 999, totalPages: 1 },
         extras: [],
       },
-      { status: "APPROVED" },
+      {
+        status: "APPROVED",
+        dateRange: { startDate, endDate },
+        approvedPeriod: true,
+      },
     );
 
     const map = new Map<string, TMaterialData>();
@@ -88,7 +95,7 @@ export async function getDataTablesAction(): Promise<DataTables> {
       }
     }
 
-    let materialsArray = Array.from(map.values())
+    const materialsArray = Array.from(map.values())
       .sort((a, b) => b.spent - a.spent)
       .slice(0, 5);
 
@@ -108,7 +115,6 @@ export async function getDataTablesAction(): Promise<DataTables> {
     };
   } catch (error) {
     console.error(error);
-
     throw new Error("Erro ao gerar data table de materiais.");
   }
 }

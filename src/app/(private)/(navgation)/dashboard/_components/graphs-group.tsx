@@ -18,7 +18,7 @@ import { ChartAreaInteractive } from "./graph-card";
 
 export const GraphsGroup = () => {
   const { data, loading } = useGetMetrics();
-  const { orders, amount, profit, data: chart } = data ?? {};
+  const { orders, amount, profit, data: chart } = data;
 
   if (loading) {
     return (
