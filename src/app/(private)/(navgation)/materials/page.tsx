@@ -64,7 +64,7 @@ export default async function MaterialsPage() {
           )}
           <PageContent className="p-3 lg:p-6">
             {has_materials && <MaterialsSearchContent />}
-            {!has_materials && <AddMaterialsCard />}
+            {!has_materials && <AddMaterialsCard className="m-1 lg:m-0" />}
           </PageContent>
           {has_materials && <SearchPagination />}
         </SearchProvider>
