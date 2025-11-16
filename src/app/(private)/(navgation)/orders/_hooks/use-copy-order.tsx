@@ -15,6 +15,16 @@ export const useCopyOrder = () => {
   const { revalidate } = useRevalidatePaths();
 
   const { execute, isPending } = useAction(copyOrderAction, {
+    onExecute: () => {
+      toast((t) => (
+        <ToastCard
+          id={t.id}
+          status="info"
+          title="Copiando orçamento..."
+          text="Uma nova aba será aberta com o orçamento copiado."
+        />
+      ));
+    },
     onSuccess: async (result) => {
       const newId = result.data?.id;
       if (!newId) return;
@@ -46,8 +56,6 @@ export const useCopyOrder = () => {
         exact: false,
       });
 
-      setOpen(false);
-
       toast((t) => (
         <ToastCard
           id={t.id}
@@ -66,8 +74,8 @@ export const useCopyOrder = () => {
         />
       ));
 
+      setOpen(false);
       await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
-
       window.open(`${ROUTES.PRIVATE.ORDER_ID}/${newId}`, "_blank");
     },
     onError: (err) => {

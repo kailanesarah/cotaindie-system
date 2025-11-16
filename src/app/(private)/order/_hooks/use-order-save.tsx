@@ -21,32 +21,14 @@ export const useUpsertOrder = () => {
     onSuccess: async (res) => {
       await queryClient.invalidateQueries({
         queryKey: ["orders"],
-        exact: false,
       });
-      await queryClient.refetchQueries({
-        queryKey: ["orders"],
-        exact: false,
-      });
-
       await queryClient.invalidateQueries({
         queryKey: ["data-tables"],
-        exact: false,
       });
-      await queryClient.refetchQueries({
-        queryKey: ["data-tables"],
-        exact: false,
-      });
-
       await queryClient.invalidateQueries({
         queryKey: ["metrics"],
-        exact: false,
-      });
-      await queryClient.refetchQueries({
-        queryKey: ["metrics"],
-        exact: false,
       });
 
-      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.code}`);
       setOrderFull(res.data);
 
       toast((t) => (
@@ -58,6 +40,7 @@ export const useUpsertOrder = () => {
         />
       ));
 
+      router.replace(`${ROUTES.PRIVATE.ORDER_ID}/${res.data.code}`);
       await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
     },
     onError: (err) => {

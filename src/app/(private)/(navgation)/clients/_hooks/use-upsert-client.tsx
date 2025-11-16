@@ -18,14 +18,10 @@ export const useUpsertClient = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["clients"],
-        exact: false,
       });
       await queryClient.refetchQueries({
         queryKey: ["clients"],
-        exact: false,
       });
-
-      setOpen(false);
 
       toast((t) => (
         <ToastCard
@@ -36,6 +32,7 @@ export const useUpsertClient = () => {
         />
       ));
 
+      setOpen(false);
       await revalidate([ROUTES.PRIVATE.ORDER]);
     },
     onError: (err) => {

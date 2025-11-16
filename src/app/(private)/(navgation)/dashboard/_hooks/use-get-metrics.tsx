@@ -11,8 +11,6 @@ export function useGetMetrics() {
   const query = useQuery<Metrics>({
     queryKey: ["metrics"],
     queryFn: getMetricsAction,
-    refetchInterval: 600_000,
-    refetchIntervalInBackground: true,
   });
 
   useEffect(() => {

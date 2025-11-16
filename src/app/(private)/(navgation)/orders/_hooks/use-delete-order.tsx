@@ -44,8 +44,6 @@ export const useDeleteOrder = () => {
         exact: false,
       });
 
-      setOpen(false);
-
       toast((t) => (
         <ToastCard
           id={t.id}
@@ -55,6 +53,7 @@ export const useDeleteOrder = () => {
         />
       ));
 
+      setOpen(false);
       await revalidate([ROUTES.PRIVATE.ORDERS, ROUTES.PRIVATE.DASHBOARD]);
     },
     onError: (err) => {
