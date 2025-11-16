@@ -1,6 +1,6 @@
 "use server";
 
-import { getProjectSummary } from "@/app/(private)/order/functions/projects-summary";
+import { getProjectSummary } from "@/app/(private)/order/functions/project-summary";
 import { supabaseServer } from "@/lib/supabase/server";
 import { OrdersService } from "@/services/orders-services";
 import type { Metrics } from "../_types/metrics";
@@ -10,6 +10,7 @@ export async function getMetricsAction(): Promise<Metrics> {
   try {
     const supabase = await supabaseServer();
     const ordersService = new OrdersService(supabase);
+
     const { startDate, endDate } = getCurrentMonthRange();
 
     const { items: approvedOrders } = await ordersService.getOrders(undefined, {
@@ -65,7 +66,7 @@ export async function getMetricsAction(): Promise<Metrics> {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    for (let d = new Date(start); d <= end; ) {
+    for (let d = start; d <= end; ) {
       const dateStr = d.toISOString().split("T")[0];
       dailyMap[dateStr] = { revenue: 0, approved: 0, profit: 0 };
 
@@ -100,7 +101,6 @@ export async function getMetricsAction(): Promise<Metrics> {
         profit: d.profit,
       }));
 
-    console.log(data);
     return {
       orders: {
         total: allOrders.length,
@@ -113,6 +113,7 @@ export async function getMetricsAction(): Promise<Metrics> {
     };
   } catch (err) {
     console.error(err);
+
     throw new Error("Ocorreu um erro inesperado ao buscar as métricas");
   }
 }

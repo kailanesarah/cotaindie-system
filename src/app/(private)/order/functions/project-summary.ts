@@ -8,6 +8,7 @@ export type ProjectSummary = {
   baseCost: number;
   costWithExpenses: number;
   profit: number;
+  profitPerProject: number;
   priceWithProfit: number;
   commission: number;
   projectValue: number;
@@ -26,10 +27,7 @@ export const getProjectSummary = (
     ) ?? 0;
 
   const totalCosts =
-    project.costs?.reduce(
-      (acc, cost) => acc + (cost.qtde || 0) * (cost.value || 0),
-      0,
-    ) ?? 0;
+    project.costs?.reduce((acc, cost) => acc + cost.qtde * cost.value, 0) ?? 0;
 
   const {
     baseCost,
@@ -44,18 +42,18 @@ export const getProjectSummary = (
     project.profitRate,
     project.monthlyExpense,
     project.comission,
-    1,
   );
 
-  const totalValue = projectValue * (project.qtde || 1);
+  const totalValue = projectValue * project.qtde;
 
   return {
     index: index + 1,
     name: project.name,
     qtde: project.qtde,
     baseCost,
+    profit: profit * project.qtde,
     costWithExpenses,
-    profit,
+    profitPerProject: profit,
     priceWithProfit,
     commission,
     projectValue,
