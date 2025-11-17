@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "url": "@NEXT_PUBLIC_SUPABASE_URL/functions/v1/activate",
+      "path": "/api/activate",
       "schedule": "0 0 * * *"
     }
   ]
